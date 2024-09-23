@@ -1,0 +1,1 @@
+var PC=PC||{};PC.angles=Backbone.Collection.extend({url:function(){return ajaxurl+"?action="+PC.actionParameter+"&data=angles"},model:PC.layer,nextOrder:function(){return this.length?this.last().get("order")+1:1},comparator:function(e){return e.get("order")}});
