@@ -215,7 +215,8 @@ PC.fe.views.choice = Backbone.View.extend({
 			PC.fe.config.close_choices_when_selecting_choice 
 			&& ( $( 'body' ).is('.is-mobile' ) || PC.utils._isMobile() ) 
 			|| PC.fe.config.close_choices_when_selecting_choice_desktop
-			|| 'dropdown' == layer.get( 'display_mode' );
+			|| 'dropdown' == layer.get( 'display_mode' )
+			|| ( 'full-screen' == layer.get( 'display_mode' ) && 'simple' == layer.get( 'type' ) );
 
 		if ( layer ) {
 			// Maybe close the choice list
@@ -273,7 +274,7 @@ PC.fe.views.choices = Backbone.View.extend({
 		return this.render();
 	},
 	events: {
-		'click .layer-choices-title a.close': 'close_choices'
+		'click .choices-close': 'close_choices'
 	},
 	render: function() {
 		this.$el.append( this.template( wp.hooks.applyFilters( 'PC.fe.configurator.layer_data', this.model.attributes ) ) ); 
@@ -612,14 +613,14 @@ PC.fe.views.form = Backbone.View.extend({
 				if ( error.layer ) {
 					error.layer.set( 'has_error', error.message );
 				}
-				messages.push( error.message );
+				messages.push( PC.utils.strip_html( error.message ) );
 			} );
 			alert( messages.join( "\n" ) );
 			return false;
 		}
 		return data;
 	},
-
+	
 	populate_form_input: function( data, e ) {
 
 		if ( PC.fe.config.cart_item_key && $( e.currentTarget ).is( '.edit-cart-item' ) ) {

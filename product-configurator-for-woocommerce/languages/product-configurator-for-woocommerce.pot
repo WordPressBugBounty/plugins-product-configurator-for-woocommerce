@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2024-07-17 20:11+0000\n"
+"POT-Creation-Date: 2024-10-17 15:05+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -189,7 +189,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/inc/languages.php:313, src/inc/languages.php:313, src/inc/admin/settings/angle.php:39, src/inc/admin/settings/choice.php:85, src/inc/admin/settings/layer.php:134
+#: src/inc/languages.php:313, src/inc/languages.php:313, src/inc/admin/settings/angle.php:39, src/inc/admin/settings/choice.php:85, src/inc/admin/settings/layer.php:142
 msgid "Description"
 msgstr ""
 
@@ -861,7 +861,7 @@ msgstr ""
 msgid "Angle Name"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:45, src/inc/admin/settings/choice.php:160, src/inc/admin/settings/layer.php:242
+#: src/inc/admin/settings/angle.php:45, src/inc/admin/settings/choice.php:159, src/inc/admin/settings/layer.php:250
 msgid "CSS Class"
 msgstr ""
 
@@ -869,11 +869,11 @@ msgstr ""
 msgid "Use this view to generate the image in the cart"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:73, src/inc/admin/settings/choice.php:230, src/inc/admin/settings/layer.php:349
+#: src/inc/admin/settings/angle.php:73, src/inc/admin/settings/choice.php:229, src/inc/admin/settings/layer.php:357
 msgid "General"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:81, src/inc/admin/settings/choice.php:261, src/inc/admin/settings/layer.php:375
+#: src/inc/admin/settings/angle.php:81, src/inc/admin/settings/choice.php:260, src/inc/admin/settings/layer.php:383
 msgid "Advanced settings"
 msgstr ""
 
@@ -881,7 +881,7 @@ msgstr ""
 msgid "Choice label"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:47, src/inc/admin/settings/layer.php:74
+#: src/inc/admin/settings/choice.php:47, src/inc/admin/settings/layer.php:82
 msgid "Admin label"
 msgstr ""
 
@@ -921,95 +921,95 @@ msgstr ""
 msgid "Hide the layer in the cart if this choice is selected"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:116, src/inc/admin/settings/layer.php:228
+#: src/inc/admin/settings/choice.php:115, src/inc/admin/settings/layer.php:236
 msgid "Automatic angle switch"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:121
+#: src/inc/admin/settings/choice.php:120
 msgctxt "Automatic angle switch - Choose an angle, or no switch"
 msgid "No"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:126
+#: src/inc/admin/settings/choice.php:125
 msgid "Switch to"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:132
+#: src/inc/admin/settings/choice.php:131
 msgid "Content of this group is hidden by default, toggled when clicking the title"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:137
+#: src/inc/admin/settings/choice.php:136
 msgid "Use global setting"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:141
+#: src/inc/admin/settings/choice.php:140
 msgid "Yes"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:145
+#: src/inc/admin/settings/choice.php:144
 msgctxt "Content of this group is hidden by default - Yes, No, Inherit"
 msgid "No"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:153
+#: src/inc/admin/settings/choice.php:152
 msgid "Weight"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:169, src/inc/admin/settings/choice.php:174
+#: src/inc/admin/settings/choice.php:168, src/inc/admin/settings/choice.php:173
 msgid "Stock management and linked product"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:174
+#: src/inc/admin/settings/choice.php:173
 msgctxt "First placeholder is the add-on name, second and third are the link tags to the add-on"
 msgid "%s is available as %san add-on%s."
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:175
+#: src/inc/admin/settings/choice.php:174
 msgid "Manage stock, add a linked product to the cart."
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:176
+#: src/inc/admin/settings/choice.php:175
 msgid "Create complex composite products, and easily export your order data to third party services and ERP platforms."
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:177, src/inc/admin/settings/choice.php:193, src/inc/admin/settings/choice.php:211
+#: src/inc/admin/settings/choice.php:176, src/inc/admin/settings/choice.php:192, src/inc/admin/settings/choice.php:210
 msgid "Hide this notice"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:186, src/inc/admin/settings/choice.php:190, src/inc/admin/settings/choice.php:237
+#: src/inc/admin/settings/choice.php:185, src/inc/admin/settings/choice.php:189, src/inc/admin/settings/choice.php:236
 msgid "Extra price"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:190, src/inc/admin/settings/choice.php:208, src/inc/admin/views/html-product-configurator-templates.php:131
+#: src/inc/admin/settings/choice.php:189, src/inc/admin/settings/choice.php:207, src/inc/admin/views/html-product-configurator-templates.php:131
 msgctxt "First placeholder is the add-on name, second and third are the link tags to the add-on"
 msgid "%s is available as %san add-on%s"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:191
+#: src/inc/admin/settings/choice.php:190
 msgid "Add a price to your choices."
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:192
+#: src/inc/admin/settings/choice.php:191
 msgid "Together with the Form fields add-on, calculate complex prices."
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:203, src/inc/admin/settings/choice.php:208, src/inc/admin/settings/choice.php:252
+#: src/inc/admin/settings/choice.php:202, src/inc/admin/settings/choice.php:207, src/inc/admin/settings/choice.php:251
 msgid "Form fields"
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:209
+#: src/inc/admin/settings/choice.php:208
 msgid "Add form fields to your choices: text, number, files and more."
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:210
+#: src/inc/admin/settings/choice.php:209
 msgid "Together with the Extra price add-on, calculate complex prices."
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:272, src/inc/admin/settings/layer.php:387
+#: src/inc/admin/settings/choice.php:271, src/inc/admin/settings/layer.php:395
 msgid "Translations"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:34, src/inc/admin/settings/layer.php:261
+#: src/inc/admin/settings/layer.php:34, src/inc/admin/settings/layer.php:269
 msgid "Default"
 msgstr ""
 
@@ -1025,163 +1025,167 @@ msgstr ""
 msgid "Compact list"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:67
+#: src/inc/admin/settings/layer.php:59
+msgid "Full screen"
+msgstr ""
+
+#: src/inc/admin/settings/layer.php:75
 msgid "Layer name"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:82
+#: src/inc/admin/settings/layer.php:90
 msgid "This layer does not have choices"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:83
+#: src/inc/admin/settings/layer.php:91
 msgid "For exemple if the layer is a shadow, a static element or custom HTML"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:102
+#: src/inc/admin/settings/layer.php:110
 msgid "Layer type"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:106
+#: src/inc/admin/settings/layer.php:114
 msgid "Simple"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:110
+#: src/inc/admin/settings/layer.php:118
 msgid "Group"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:114
+#: src/inc/admin/settings/layer.php:122
 msgid "Multiple choice"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:114, src/inc/admin/settings/layer.php:121
+#: src/inc/admin/settings/layer.php:122, src/inc/admin/settings/layer.php:129
 msgid "(available as an add-on)"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:121
+#: src/inc/admin/settings/layer.php:129
 msgid "Form"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:143
+#: src/inc/admin/settings/layer.php:151
 msgid "Display mode"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:151
+#: src/inc/admin/settings/layer.php:159
 msgid "Hide this layer in the cart / checkout / order"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:152
+#: src/inc/admin/settings/layer.php:160
 msgid "Useful if you only need to show this in the configurator, but do not need to display it in the order"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:159
+#: src/inc/admin/settings/layer.php:167
 msgid "Hide this layer in the summary"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:166
+#: src/inc/admin/settings/layer.php:174
 msgid "Hide this layer in the menu"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:167
+#: src/inc/admin/settings/layer.php:175
 msgid "Useful if you only need to show this in the order, but do not need to display it in the configurator menu"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:176
+#: src/inc/admin/settings/layer.php:184
 msgid "Default selection"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:181
+#: src/inc/admin/settings/layer.php:189
 msgid "Select the first choice by default, or the one set to default"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:185
+#: src/inc/admin/settings/layer.php:193
 msgid "Select nothing"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:190
+#: src/inc/admin/settings/layer.php:198
 msgid "Choose whether a choice should be selected by default"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:194
+#: src/inc/admin/settings/layer.php:202
 msgid "Require a choice"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:205
+#: src/inc/admin/settings/layer.php:213
 msgid "If \"Require a choice\" is enabled and \"Default selection\" is set to \"Select the first choice by default\", the first choice will be considered as null (the user will need to select an other one)"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:212
+#: src/inc/admin/settings/layer.php:220
 msgid "The user can deselect the current choice"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:219
+#: src/inc/admin/settings/layer.php:227
 msgid "Custom HTML"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:224
+#: src/inc/admin/settings/layer.php:232
 msgid "Content entered here will be rendered in the configurator menu."
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:224
+#: src/inc/admin/settings/layer.php:232
 msgid "To add HTML to the viewer, add it to the custom HTML field in the content section."
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:248
+#: src/inc/admin/settings/layer.php:256
 msgid "ID"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:257
+#: src/inc/admin/settings/layer.php:265
 msgid "Number of columns"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:265
+#: src/inc/admin/settings/layer.php:273
 msgid "4"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:269
+#: src/inc/admin/settings/layer.php:277
 msgid "3"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:273
+#: src/inc/admin/settings/layer.php:281
 msgid "2"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:277
+#: src/inc/admin/settings/layer.php:285
 msgid "1"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:289
+#: src/inc/admin/settings/layer.php:297
 msgid "Color swatch size"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:293
+#: src/inc/admin/settings/layer.php:301
 msgid "Small"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:297
+#: src/inc/admin/settings/layer.php:305
 msgid "Medium"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:301
+#: src/inc/admin/settings/layer.php:309
 msgid "Large"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:312, src/inc/frontend/views/parts/summary.php:6
+#: src/inc/admin/settings/layer.php:320, src/inc/frontend/views/parts/summary.php:6
 msgid "Summary"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:319
+#: src/inc/admin/settings/layer.php:327
 msgid "Next step button label"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:341
+#: src/inc/admin/settings/layer.php:349
 msgid "Layer"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:358
+#: src/inc/admin/settings/layer.php:366
 msgid "Display settings"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:366
+#: src/inc/admin/settings/layer.php:374
 msgid "Selection settings"
 msgstr ""
 
@@ -1367,6 +1371,10 @@ msgstr ""
 
 #: src/inc/frontend/views/html-product-configurator-templates.php:33
 msgid "Loading Data"
+msgstr ""
+
+#: src/inc/frontend/views/html-product-configurator-templates.php:209
+msgid "Confirm selection and continue configuring the product"
 msgstr ""
 
 #: src/inc/themes/clean/theme.php:35

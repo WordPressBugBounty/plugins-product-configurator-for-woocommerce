@@ -211,7 +211,20 @@ PC.actionParameter = 'pc_get_data';
 				wp.hooks.addAction( 'PC.fe.choice.activate', 'mkl/product_configurator', auto_angle_switch, 20 );	
 			}, 310 );
 		}, 55 );
+		
+		/* Display mode Full Screen - on activate layer */
+		wp.hooks.addAction( 'PC.fe.layer.activate', 'mkl/product_configurator', function( view ) {
+			if ( 'full-screen' === view.model.get( 'display_mode' ) ) {
+				$( 'body' ).addClass( 'pc-full-screenlayer--opened' );
+			}
+		} );
 
+		/* Display mode Full Screen - on deactivate layer */
+		wp.hooks.addAction( 'PC.fe.layer.deactivate', 'mkl/product_configurator', function( view ) {
+			if ( 'full-screen' === view.model.get( 'display_mode' ) ) {
+				$( 'body' ).removeClass( 'pc-full-screenlayer--opened' );
+			}
+		} );
 
 		if ( PC_config.config.open_first_layer ) {
 			wp.hooks.addAction( 'PC.fe.start', 'mkl/product_configurator', function( configurator ) {
@@ -585,6 +598,11 @@ PC.utils = PC.utils || {
 		wp.hooks.addFilter( 'PC.fe.configurator.layer_data', 'mkl/product_configurator', maybe_change_name_and_description, 10 );
 		wp.hooks.addFilter( 'PC.fe.configurator.choice_data', 'mkl/product_configurator', maybe_change_name_and_description, 10 );
 		wp.hooks.addFilter( 'PC.fe.configurator.angle_data', 'mkl/product_configurator', maybe_change_name_and_description, 10 );
-	}	
+	},
+	strip_html: function( html ) {
+		let doc = new DOMParser().parseFromString(html, 'text/html');
+		return doc.body.textContent || "";
+	},
+
 
 };
