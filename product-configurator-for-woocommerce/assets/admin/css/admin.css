@@ -124,7 +124,7 @@ html .media-modal.pc-modal {
   html .media-modal.pc-modal .multiple-edit--action {
     border-bottom: 1px solid #e8e8e8;
     padding: 16px; }
-    html .media-modal.pc-modal .multiple-edit--action .form-details h3 {
+    html .media-modal.pc-modal .multiple-edit--action > h3, html .media-modal.pc-modal .multiple-edit--action .form-details h3 {
       padding: 0;
       padding-bottom: 16px; }
     html .media-modal.pc-modal .multiple-edit--action .order {
@@ -567,6 +567,12 @@ CONTENT
       position: sticky;
       top: 0;
       z-index: 3; }
+    .content-choices-list .mkl-choice-list-inner .paste {
+      position: sticky;
+      bottom: 0;
+      background: #ffffff;
+      padding: 5px;
+      text-align: center; }
   .content-choices-list .active-layer {
     display: block;
     position: absolute;
