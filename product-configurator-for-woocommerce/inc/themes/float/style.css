@@ -649,7 +649,7 @@ nav.mkl-pc--steps {
           display: none;
           position: relative;
           transition: all 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01); }
-          .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices > li > ul {
+          .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices > li ul[data-layer-id], .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices > li ul.choices-list--children {
             list-style-type: none;
             display: flex;
             flex-wrap: wrap;
@@ -1395,7 +1395,7 @@ body.configurator_is_inline .layer_choices {
   display: none;
   position: relative;
   transition: all 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01); }
-  body.configurator_is_inline .layer_choices > li > ul {
+  body.configurator_is_inline .layer_choices > li ul[data-layer-id], body.configurator_is_inline .layer_choices > li ul.choices-list--children {
     list-style-type: none;
     display: flex;
     flex-wrap: wrap;

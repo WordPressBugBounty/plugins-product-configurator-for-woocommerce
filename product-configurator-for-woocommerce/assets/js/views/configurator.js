@@ -7,6 +7,65 @@ PC.options = PC.options || {};
 !( function( $, _ ) {
 
 'use strict';
+/**
+ * Add to cart modal view
+ */
+PC.fe.views.add_to_cart_modal = Backbone.View.extend({
+	tagName: 'div',
+	className: 'adding-to-cart--modal',
+	template: wp.template( 'mkl-pc-configurator-add-to-cart--modal' ),
+	initialize: function( options ) {
+		this.render();
+		$( document.body ).on( 'adding_to_cart', this.on_adding.bind( this ) );
+		$( document.body ).on( 'added_to_cart', this.on_added.bind( this ) );
+		$( document.body ).on( 'added_to_cart_with_redirection', this.on_added_with_redirection.bind( this ) );
+		$( document.body ).on( 'not_added_to_cart_with_error', this.on_not_added_to_cart.bind( this ) );
+	},
+	events: {
+		'click button.continue-shopping': 'close',
+	},
+	/**
+	 * Add the modal to the page
+	 */
+	render: function() {
+		this.$el.empty().append( this.template() );
+		if ( PC.fe.inline ) {
+			this.$el.appendTo( $( 'body' ) );
+		} else {
+			this.$el.appendTo( PC.fe.modal.$main_window );
+		}
+	},
+	/**
+	 * Close modal
+	 */
+	close: function() {
+		$( document.body ).removeClass( 'show-add-to-cart-modal' );
+	},
+	/**
+	 * Show messages
+	 */
+	on_adding: function() {
+		$( document.body ).addClass( 'show-add-to-cart-modal' );
+		this.show_message( 'adding' );
+	},
+	on_added: function( event, fragments, cart_hash, button, response ) {
+		this.show_message( 'added', response.messages );
+	},
+	on_added_with_redirection: function() {
+		this.show_message( 'added-redirect' );
+	},
+	on_not_added_to_cart: function( e, response ) {
+		this.show_message( 'not-added', response.messages );
+	},
+	/**
+	 * Show the notice
+	 * @param {string} type 
+	 * @param {string} messages
+	 */
+	show_message: function( type, messages ) {
+		this.$el.empty().append( wp.template( 'mkl-pc-atc-' + type )( { messages: messages || '' } ) );
+	}
+} )
 PC.fe.views.angles = Backbone.View.extend({ 
 	tagName: 'div', 
 	className: 'angles-select',
@@ -659,7 +718,7 @@ PC.fe.views.form = Backbone.View.extend({
 		 * @param object  $cart - The jQuery object
 		 */
 		if ( wp.hooks.applyFilters( 'PC.fe.trigger_add_to_cart', true, this.$cart ) ) {
-			$( document.body ).one( 'adding_to_cart', this.on_adding_to_cart );
+
 			$( e.currentTarget ).addClass( 'adding-to-cart' );
 
 			var btn;
@@ -668,6 +727,84 @@ PC.fe.views.form = Backbone.View.extend({
 			} else if ( this.$cart.find( '.single_add_to_cart_button' ).length ) {
 				btn = this.$cart.find( '.single_add_to_cart_button' );
 			}
+
+			if ( PC_config.config.enable_configurator_ajax_add_to_cart ) {
+
+				if ( ! PC.fe.add_to_cart_modal ) PC.fe.add_to_cart_modal = new PC.fe.views.add_to_cart_modal();
+
+				/*
+					Prepare data 
+				*/
+				if ( this.$cart.find( '[name="add-to-cart"]' ).length ) {
+					// var request_body = new FormData( this.$cart[0], this.$cart.find( '[name="add-to-cart"]' )[0] );
+				} else {
+				}
+				var request_body = new FormData( this.$cart[0] );
+
+				var data = {
+					product_id: PC.fe.active_product,
+					mkl_pc_ajax: 1
+				};
+				if ( btn ) {
+					$.each( btn.data(), function( key, value ) {
+						data[ key ] = value;
+					});
+		
+					// Fetch data attributes in $thisbutton. Give preference to data-attributes because they can be directly modified by javascript
+					// while `.data` are jquery specific memory stores.
+					$.each( btn[0].dataset, function( key, value ) {
+						data[ key ] = value;
+					});
+
+					$( document.body ).trigger( 'adding_to_cart', [ btn, data ] );
+				}
+
+				$.each( data, function( key, value ) {
+					if ( ! request_body.has( key ) ) {
+						request_body.append( key, value );
+					}
+				});
+
+				/* 
+					Add to cart request
+				*/
+				fetch(
+					wc_add_to_cart_params.ajax_url + '?action=pc_add_to_cart', {
+						method: 'POST',
+						body: request_body
+					}
+				)
+				.then( response => response.json() )
+				.then( data => {
+
+					if ( data.error ) {
+						if ( data.product_url ) {
+							window.location = data.product_url;
+							return;
+						}
+
+						$( document.body ).trigger( 'not_added_to_cart_with_error', [ data ] );
+						return;
+					}
+
+					// Redirect to cart option
+					if ( 'yes' === wc_add_to_cart_params.cart_redirect_after_add ) {
+						$( document.body ).trigger( 'added_to_cart_with_redirection' );
+						window.location = wc_add_to_cart_params.cart_url;
+						return;
+					}
+					
+					$( document.body ).trigger( 'added_to_cart', [ data.fragments, data.cart_hash, false, data] );
+				} )
+				.catch( error => {
+					console.error( error );
+					alert( 'Error submitting form' );
+				} );
+
+				return;
+			}
+
+			$( document.body ).one( 'adding_to_cart', this.on_adding_to_cart );
 
 			if ( btn ) {
 				if ( btn.is( '.ajax_add_to_cart' ) ) {
@@ -1322,6 +1459,10 @@ PC.fe.save_data = {
 		}
 
 		wp.hooks.doAction( 'PC.fe.save_data.parse_choices.after', model, this );
+	},
+
+	ajax_add_to_cart: function() {
+		
 	}
 
 };
