@@ -6,7 +6,7 @@
 * Description: Allow customers to configure and customize their products using a live preview powered by a system of layers
 * Author: Marc Lacroix
 * Author URI: http://mklacroix.com
-* Version: 1.3.9
+* Version: 1.3.10
 * WC requires at least: 8
 * WC tested up to: 9
 *
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-define( 'MKL_PC_VERSION', '1.3.9' );
+define( 'MKL_PC_VERSION', '1.3.10' );
 define( 'MKL_PC_PREFIX', '_mkl_pc_' );
 define( 'MKL_PC_EXTENDS', 'woocommerce' ); 
 define( 'MKL_PC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
@@ -33,7 +33,7 @@ define( 'MKL_PC_PLUGIN_BASE_NAME', plugin_basename( __FILE__ ) );
 
 require_once MKL_PC_INCLUDE_PATH . 'plugin.php';
 
-add_action( 'plugins_loaded', 'mkl_pc_load_plugin_textdomain', 30 );
+add_action( 'init', 'mkl_pc_load_plugin_textdomain', 30 );
 add_action( 'plugins_loaded', 'mkl_pc_init', 90 );
 
 /**

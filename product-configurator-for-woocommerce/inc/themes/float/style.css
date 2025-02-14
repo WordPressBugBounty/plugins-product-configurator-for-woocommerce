@@ -1075,6 +1075,7 @@ nav.mkl-pc--steps {
       height: var(--mkl_pc-footer-height);
       z-index: 2;
       padding: 1em;
+      width: auto;
       background: transparent;
       z-index: 2;
       display: flex;

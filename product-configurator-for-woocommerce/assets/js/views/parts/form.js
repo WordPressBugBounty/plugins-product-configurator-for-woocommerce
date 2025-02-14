@@ -19,15 +19,24 @@ PC.fe.views.form = Backbone.View.extend({
 		} else if ( PC.fe.config.cart_item_key && this.$( '.edit-cart-item' ).length ) { 
 			this.$el.addClass( 'edit-cart-item-is-displayed');
 		}
+
+		var atc = $( '[name=add-to-cart][value=' + PC.fe.active_product + ']' );
+		var input = PC.fe.modal.$( 'input[name=pc_configurator_data]' );
 		
-		// Get the input
-		this.$input = $( 'input[name=pc_configurator_data]' );
-		
+		if ( ! input.length && ! atc.length ) return;
+
+		if ( input.length ) {
+			// Get the input
+			this.$input = input.first();
+			// The cart must be the one containing the input
+			this.$cart = this.$input.closest( 'form.cart' );
+		} else {
+			this.$input = atc.closest( 'form.cart' ).find( 'input[name=pc_configurator_data]' ).first();
+			this.$cart = this.$input.closest( 'form.cart' );
+		}
+
 		// If the input isn't in the page, check in this view
 		if ( ! this.$input.length || PC.fe.currentProductData.product_info.force_form ) this.$input = this.$( 'input[name=pc_configurator_data]' );
-
-		// The cart must be the one containing the input
-		this.$cart = this.$input.closest( 'form.cart' );
 
 		if ( ! this.$cart.find( '[name=add-to-cart]' ).length ) {
 			this.$( '.configurator-add-to-cart' ).remove();
@@ -146,6 +155,9 @@ PC.fe.views.form = Backbone.View.extend({
 				}
 				var request_body = new FormData( this.$cart[0] );
 
+				// Remove 'add-to-cart' to prevent triggering default WC's actions
+				request_body.delete( 'add-to-cart' );
+
 				var data = {
 					product_id: PC.fe.active_product,
 					mkl_pc_ajax: 1
@@ -161,8 +173,9 @@ PC.fe.views.form = Backbone.View.extend({
 						data[ key ] = value;
 					});
 
-					$( document.body ).trigger( 'adding_to_cart', [ btn, data ] );
 				}
+				
+				$( document.body ).trigger( 'adding_to_cart', [ btn, data ] );
 
 				$.each( data, function( key, value ) {
 					if ( ! request_body.has( key ) ) {
@@ -202,8 +215,8 @@ PC.fe.views.form = Backbone.View.extend({
 					$( document.body ).trigger( 'added_to_cart', [ data.fragments, data.cart_hash, false, data] );
 				} )
 				.catch( error => {
+					console.error( 'Configurator: Error in form submission' );
 					console.error( error );
-					alert( 'Error submitting form' );
 				} );
 
 				return;
