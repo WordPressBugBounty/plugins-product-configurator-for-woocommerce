@@ -5,7 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-#[\AllowDynamicProperties]
 class Choice { 
 
 	private $layer; 

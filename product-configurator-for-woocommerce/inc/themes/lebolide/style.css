@@ -491,9 +491,6 @@ Supports: color_swatches, steps, columns, display mode: compact list
               width: calc((100% / 3) - ( var(--mkl_pc-choice-spacing) * 2 / 3 ));
               box-shadow: inset 0 0 0 1px var(--choice-border-color, var(--mkl_pc_color-border));
               transition: .2s all; }
-              @media (max-width: 990px) {
-                .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.choice:not(.is-group) {
-                  width: 100%; } }
               .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.choice:not(.is-group)::before {
                 content: '';
                 position: absolute;
@@ -1539,8 +1536,5 @@ nav.mkl-pc--steps {
 .mkl_pc_summary {
   width: 100%;
   margin-top: 30px; }
-
-body.show-add-to-cart-modal .mkl_pc_container .adding-to-cart--modal {
-  position: fixed; }
 
 /*# sourceMappingURL=../../../maps/inc/themes/lebolide/style.css.map */
