@@ -761,6 +761,8 @@ Supports: color_swatches, steps
         @media (max-width: 660px) {
           .mkl_pc .mkl_pc_container .quantity input.qty {
             border: 2px solid #36383a; } }
+      .mkl_pc .mkl_pc_container .quantity.buttons_added {
+        display: inline-flex; }
     .mkl_pc .mkl_pc_container .price-container {
       text-align: right;
       padding-right: 10px; }

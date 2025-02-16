@@ -982,6 +982,8 @@ nav.mkl-pc--steps {
           @media (max-width: 660px) {
             .mkl_pc .mkl_pc_container .form.form-cart .quantity input.qty {
               border: 2px solid #36383a; } }
+        .mkl_pc .mkl_pc_container .form.form-cart .quantity.buttons_added {
+          display: inline-flex; }
       .mkl_pc .mkl_pc_container .form.form-cart .extra-cost {
         visibility: hidden;
         position: fixed;

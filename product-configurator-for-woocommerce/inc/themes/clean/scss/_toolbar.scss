@@ -155,6 +155,8 @@
 				background: transparent;
 				transition: 0.2s all;
 				text-align: center;
+				white-space: normal;
+				word-break: break-word;
 				span.choice-price {
 					display: inline-block;
 					padding: 0 6px;
@@ -773,4 +775,10 @@
 		padding: .2em;
 		width: 100%;
 	}
+}
+
+@import "../../../themes-common/scss/summary";
+
+.mkl_pc_summary {
+	padding: 15px;
 }

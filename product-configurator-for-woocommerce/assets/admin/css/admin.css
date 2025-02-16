@@ -121,6 +121,8 @@ html .media-modal.pc-modal {
   html .media-modal.pc-modal .media-frame-content .form-details > h2, html .media-modal.pc-modal .media-frame-content .form-details h3 {
     padding: 16px;
     margin: 0; }
+  html .media-modal.pc-modal .media-frame-content .form-details .multiple-edit--action h3 {
+    padding-left: 0; }
   html .media-modal.pc-modal .multiple-edit--action {
     border-bottom: 1px solid #e8e8e8;
     padding: 16px; }
