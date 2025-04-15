@@ -214,6 +214,11 @@ Supports: color_swatches, steps, columns, display mode: compact list
     .mkl_pc .mkl_pc_container footer {
       position: relative;
       padding: 1em; }
+    @media (max-width: 660px) {
+      .mkl_pc .mkl_pc_container .mkl_pc_viewer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; } }
     .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers {
       position: absolute;
       top: var(--mkl_pc-layers-spacing, 30px);
@@ -224,7 +229,13 @@ Supports: color_swatches, steps, columns, display mode: compact list
       user-select: none; }
       @media (max-width: 660px) {
         .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers {
-          --mkl_pc-layers-spacing: 10px; } }
+          --mkl_pc-layers-spacing: 10px;
+          position: relative;
+          top: auto;
+          left: auto;
+          right: auto;
+          bottom: auto;
+          flex: 1; } }
       .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
         transition: .2s all;
         position: absolute;
@@ -302,10 +313,13 @@ Supports: color_swatches, steps, columns, display mode: compact list
           transform: rotate(-45deg); }
       @media (max-width: 660px) {
         .mkl_pc .mkl_pc_container .mkl_pc_viewer > header {
+          position: relative;
+          top: auto;
+          order: -1;
           width: 100%;
-          height: 40px;
+          height: auto;
           background: #36383a;
-          padding-top: 8px;
+          padding: 8px;
           color: #FFF;
           font-size: 1rem;
           box-sizing: border-box; }
@@ -319,7 +333,8 @@ Supports: color_swatches, steps, columns, display mode: compact list
             margin-right: 40px; }
           .mkl_pc .mkl_pc_container .mkl_pc_viewer > header .cancel {
             position: absolute;
-            top: 10px;
+            top: 50%;
+            transform: translateY(-50%);
             right: 10px; }
             .mkl_pc .mkl_pc_container .mkl_pc_viewer > header .cancel::after, .mkl_pc .mkl_pc_container .mkl_pc_viewer > header .cancel::before {
               background: #FFF; } }
@@ -922,14 +937,13 @@ Supports: color_swatches, steps, columns, display mode: compact list
     .mkl_pc .mkl_pc_container .single_add_to_cart_button {
       visibility: visible; }
     .mkl_pc .mkl_pc_container .quantity {
-      display: inline-block; }
+      display: inline-flex;
+      align-items: center; }
       .mkl_pc .mkl_pc_container .quantity input.qty {
         background: #fff; }
         @media (max-width: 660px) {
           .mkl_pc .mkl_pc_container .quantity input.qty {
             border: 2px solid #36383a; } }
-      .mkl_pc .mkl_pc_container .quantity.buttons_added {
-        display: inline-flex; }
     .mkl_pc .mkl_pc_container .price-container {
       text-align: right;
       width: 100%;
@@ -962,6 +976,7 @@ Supports: color_swatches, steps, columns, display mode: compact list
       line-height: 1;
       padding-top: 4px; }
     .mkl_pc .mkl_pc_container .pc_configurator_form {
+      align-items: center;
       padding-top: 20px;
       display: flex;
       gap: 5px; }
@@ -1033,7 +1048,8 @@ Supports: color_swatches, steps, columns, display mode: compact list
         display: none; }
       .mkl_pc .mkl_pc_container footer .footer__section-center {
         flex: 1;
-        display: flex; }
+        display: flex;
+        align-items: center; }
         .mkl_pc .mkl_pc_container footer .footer__section-center:empty {
           display: none; }
       .mkl_pc .mkl_pc_container footer .footer__section-right {
@@ -1046,86 +1062,112 @@ Supports: color_swatches, steps, columns, display mode: compact list
             justify-content: end; }
             .mkl_pc.has-steps .pc_configurator_form {
               width: calc( 100% - 75px); } }
-      .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
-      .mkl_pc .mkl_pc_container footer a.save-your-design,
-      .mkl_pc .mkl_pc_container footer button.reset-configuration {
-        margin: 0;
-        padding: 4px 9px;
-        background: transparent;
-        color: inherit;
-        text-transform: none;
-        font-size: 1em;
-        text-transform: none;
-        font-weight: normal;
-        appearance: none;
-        box-shadow: none;
-        border: none;
+      .mkl_pc .mkl_pc_container footer .mkl-footer--action-button {
         color: var(--mkl_pc_color-primary); }
-        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf::before,
-        .mkl_pc .mkl_pc_container footer a.save-your-design::before,
-        .mkl_pc .mkl_pc_container footer button.reset-configuration::before {
+        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button::before {
           content: unset;
           display: none; }
-        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg,
-        .mkl_pc .mkl_pc_container footer a.save-your-design svg,
-        .mkl_pc .mkl_pc_container footer button.reset-configuration svg {
-          height: 23px;
+        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button svg {
+          height: 24px;
           fill: currentColor;
-          width: 23px;
-          margin-right: 6px;
+          width: 24px;
           vertical-align: middle; }
-        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf.icon-only span,
-        .mkl_pc .mkl_pc_container footer a.save-your-design.icon-only span,
-        .mkl_pc .mkl_pc_container footer button.reset-configuration.icon-only span {
+        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button.icon-only span {
           display: none; }
-        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf.icon-only svg,
-        .mkl_pc .mkl_pc_container footer a.save-your-design.icon-only svg,
-        .mkl_pc .mkl_pc_container footer button.reset-configuration.icon-only svg {
+        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button.icon-only svg {
           margin-right: 0; }
-        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:hover, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:focus,
-        .mkl_pc .mkl_pc_container footer a.save-your-design:hover,
-        .mkl_pc .mkl_pc_container footer a.save-your-design:focus,
-        .mkl_pc .mkl_pc_container footer button.reset-configuration:hover,
-        .mkl_pc .mkl_pc_container footer button.reset-configuration:focus {
+        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button:hover, .mkl_pc .mkl_pc_container footer .mkl-footer--action-button:focus {
           opacity: .5; }
         @media (max-width: 660px) {
-          .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
-          .mkl_pc .mkl_pc_container footer a.save-your-design,
-          .mkl_pc .mkl_pc_container footer button.reset-configuration {
+          .mkl_pc .mkl_pc_container footer .mkl-footer--action-button {
             font-size: 12px;
             width: auto; }
-            .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg,
-            .mkl_pc .mkl_pc_container footer a.save-your-design svg,
-            .mkl_pc .mkl_pc_container footer button.reset-configuration svg {
+            .mkl_pc .mkl_pc_container footer .mkl-footer--action-button svg {
               transform: none; } }
       .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal {
-        right: 0;
-        left: auto;
         border-radius: 15px; }
-        .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal::after {
-          left: auto;
-          right: 10px;
-          width: 15px;
-          height: 15px;
-          bottom: -5px; }
-        .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal .mkl-pc-modal-list h4 {
+        @media (min-width: 720px) {
+          .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal {
+            left: 0;
+            right: auto; }
+            .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal::after {
+              left: 24px;
+              right: auto;
+              width: 15px;
+              height: 15px;
+              bottom: -5px; } }
+        .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal .mkl-pc-modal-list h4,
+        .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal .mkl-pc-modal > h4 {
           background: #f5f5f7;
           border-radius: 15px 15px 0 0; }
       .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container {
         padding-right: 0; }
-      .mkl_pc .mkl_pc_container footer .footer__section-center .mkl-pc-syd-modal {
-        left: 0;
-        right: auto; }
-        .mkl_pc .mkl_pc_container footer .footer__section-center .mkl-pc-syd-modal::after {
-          left: 35px;
-          right: auto;
-          width: 15px;
-          height: 15px;
-          bottom: -5px; }
       .mkl_pc .mkl_pc_container footer a.save-your-design svg path,
       .mkl_pc .mkl_pc_container footer .mkl_pc .mkl_pc_container .mkl-pc-show-form svg path,
       .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg path {
         fill: var(--mkl_pc_color-primary); }
+    .mkl_pc .mkl_pc_container > .share-your-design--container {
+      display: none;
+      position: absolute;
+      z-index: 400; }
+      .mkl_pc .mkl_pc_container > .share-your-design--container .mkl-pc-syd-modal {
+        z-index: 2;
+        border-radius: 15px 15px 0 0;
+        left: 0;
+        right: auto;
+        top: auto;
+        bottom: 0; }
+        .mkl_pc .mkl_pc_container > .share-your-design--container .mkl-pc-syd-modal .mkl-pc-modal-list h4,
+        .mkl_pc .mkl_pc_container > .share-your-design--container .mkl-pc-syd-modal .mkl-pc-modal > h4 {
+          background: #f5f5f7;
+          border-radius: 15px 15px 0 0; }
+    .mkl_pc .mkl_pc_container.opened > .share-your-design--container {
+      display: block;
+      height: 100%;
+      width: 100%; }
+      .mkl_pc .mkl_pc_container.opened > .share-your-design--container .mkl-pc-syd-modal {
+        visibility: visible;
+        opacity: 1;
+        transform: none; }
+      .mkl_pc .mkl_pc_container.opened > .share-your-design--container::before {
+        content: '';
+        display: block;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #000000cc; }
+    .mkl_pc .mkl_pc_container a.syd-share-close {
+      position: absolute;
+      top: -60px;
+      width: 40px;
+      height: 40px;
+      left: calc(50% - 20px);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      color: #000; }
+    body.syd-modal-opened .mkl_pc .mkl_pc_container::before {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #000000cc;
+      z-index: 10; }
+    body.syd-modal-opened .mkl_pc .mkl_pc_container > .mkl-pc-syd-modal {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      top: auto;
+      bottom: 0;
+      border-radius: 15px 15px 0 0;
+      z-index: 20; }
   .mkl_pc.opened {
     visibility: visible; }
     .mkl_pc.opened .overlay {

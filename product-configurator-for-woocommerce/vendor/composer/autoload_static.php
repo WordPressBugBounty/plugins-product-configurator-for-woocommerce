@@ -8,6 +8,7 @@ class ComposerStaticInit12d1b65af8d56612b3deb5ff09e0089e
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '256558b1ddf2fa4366ea7d7602798dd1' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p5.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -28,8 +29,8 @@ class ComposerStaticInit12d1b65af8d56612b3deb5ff09e0089e
     public static $prefixDirsPsr4 = array (
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Intervention\\Image\\' => 
         array (

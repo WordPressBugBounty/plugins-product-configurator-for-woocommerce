@@ -167,12 +167,12 @@ PC.fe.views.choice = Backbone.View.extend({
 		 */
 		wp.hooks.doAction( 'PC.fe.configurator.choice-item.before.render', this );
 		
-		var data = _.extend({
+		var data = _.extend( {
 			thumbnail: this.model.get_image( 'thumbnail' ),
 			disable_selection: ! this.model.get( 'available' ) && ! PC.fe.config.enable_selection_when_outofstock
-		}, this.options.model.attributes );
+		}, wp.hooks.applyFilters( 'PC.fe.configurator.choice_data', this.model.attributes ) );
 		
-		this.$el.html( this.template( wp.hooks.applyFilters( 'PC.fe.configurator.choice_data', data ) ) );
+		this.$el.html( this.template( wp.hooks.applyFilters( 'PC.fe.configurator.template_choice_data', data ) ) );
 
 		wp.hooks.doAction( 'PC.fe.configurator.choice-item.render.after-template', this );
 
@@ -1810,12 +1810,15 @@ PC.fe.steps = {
 };
 
 PC.fe.views.summary = Backbone.View.extend( {
-	tagName: 'div',
-	className: 'mkl_pc_summary',
+	tagName: 'li',
+	className: 'layers-list-item mkl_pc_summary type-summary',
 	template: wp.template( 'mkl-pc-configurator-summary' ),
 	layers: [],
 	initialize: function() {
 		this.render();
+		console.log( this.tagName );
+		console.log( this.className );
+		
 		if ( PC.conditionalLogic ) {
 			wp.hooks.addAction( 'mkl_checked_conditions', 'mkl/pc/summary', this.render.bind( this ), 1000 );
 		} 

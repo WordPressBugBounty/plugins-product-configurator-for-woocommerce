@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2025-02-16 09:12+0000\n"
+"POT-Creation-Date: 2025-04-15 10:29+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -47,6 +47,10 @@ msgstr ""
 
 #: src/inc/ajax.php:315
 msgid "Error processing the request:"
+msgstr ""
+
+#: src/inc/ajax.php:471, src/inc/admin/settings-page.php:956
+msgid "Successfully added to cart, now redirecting..."
 msgstr ""
 
 #: src/inc/db.php:36
@@ -121,7 +125,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: src/inc/languages.php:46, src/inc/admin/settings-page.php:218, src/inc/frontend/frontend-woocommerce.php:142, src/inc/frontend/frontend-woocommerce.php:243, src/inc/frontend/product.php:108
+#: src/inc/languages.php:46, src/inc/admin/settings-page.php:218, src/inc/frontend/frontend-woocommerce.php:142, src/inc/frontend/frontend-woocommerce.php:247, src/inc/frontend/product.php:108
 msgid "Configure"
 msgstr ""
 
@@ -129,7 +133,7 @@ msgstr ""
 msgid ""
 msgstr ""
 
-#: src/inc/languages.php:48, src/inc/admin/settings-page.php:651, src/inc/frontend/cart.php:179, src/inc/frontend/order.php:93, src/inc/admin/settings/choice.php:68
+#: src/inc/languages.php:48, src/inc/admin/settings-page.php:651, src/inc/frontend/cart.php:185, src/inc/frontend/order.php:93, src/inc/admin/settings/choice.php:68
 msgid "SKU"
 msgstr ""
 
@@ -149,7 +153,7 @@ msgstr ""
 msgid "Reset configuration"
 msgstr ""
 
-#: src/inc/languages.php:53, src/inc/admin/settings-page.php:842, src/inc/admin/settings-page.php:848, src/inc/frontend/cart.php:435, src/inc/frontend/cart.php:579
+#: src/inc/languages.php:53, src/inc/admin/settings-page.php:842, src/inc/admin/settings-page.php:848, src/inc/frontend/cart.php:441, src/inc/frontend/cart.php:595
 msgid "Edit configuration"
 msgstr ""
 
@@ -162,7 +166,7 @@ msgctxt "Label displayed in the cart / order"
 msgid "Configuration"
 msgstr ""
 
-#: src/inc/languages.php:56, src/inc/admin/settings-page.php:908, src/inc/frontend/frontend-woocommerce.php:247
+#: src/inc/languages.php:56, src/inc/admin/settings-page.php:908, src/inc/frontend/frontend-woocommerce.php:251
 msgid "Loading the configurator..."
 msgstr ""
 
@@ -445,7 +449,7 @@ msgstr ""
 msgid "Configure button label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:218, src/inc/admin/settings-page.php:836, src/inc/admin/settings-page.php:848, src/inc/admin/settings-page.php:860, src/inc/admin/settings-page.php:872, src/inc/admin/settings-page.php:884, src/inc/admin/settings-page.php:896, src/inc/admin/settings-page.php:908, src/inc/admin/settings-page.php:920, src/inc/admin/settings-page.php:932, src/inc/admin/settings-page.php:944
+#: src/inc/admin/settings-page.php:218, src/inc/admin/settings-page.php:836, src/inc/admin/settings-page.php:848, src/inc/admin/settings-page.php:860, src/inc/admin/settings-page.php:872, src/inc/admin/settings-page.php:884, src/inc/admin/settings-page.php:896, src/inc/admin/settings-page.php:908, src/inc/admin/settings-page.php:920, src/inc/admin/settings-page.php:932, src/inc/admin/settings-page.php:944, src/inc/admin/settings-page.php:956
 msgid "Default:"
 msgstr ""
 
@@ -681,6 +685,10 @@ msgstr ""
 msgid "Disable caching of configurations"
 msgstr ""
 
+#: src/inc/admin/settings-page.php:754
+msgid "Can be usefull when using CDNs such as CloudFlare"
+msgstr ""
+
 #: src/inc/admin/settings-page.php:760
 msgid "Disable GZIP compression of the configuration data (only affects the ajax request)"
 msgstr ""
@@ -702,7 +710,7 @@ msgid "Use layer names for previous and next button labels"
 msgstr ""
 
 #: src/inc/admin/settings-page.php:807
-msgid "Make all steps clickable in the breadcrumb"
+msgid "Make all steps clickable in the breadcrumb instead of the completed ones"
 msgstr ""
 
 #: src/inc/admin/settings-page.php:823
@@ -713,7 +721,7 @@ msgstr ""
 msgid "Configuration (meta label in the cart)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:896, src/inc/compatibility/yith-quote-request.php:247, src/inc/frontend/cart.php:195, src/inc/frontend/order.php:87, src/inc/frontend/order.php:229, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
+#: src/inc/admin/settings-page.php:896, src/inc/compatibility/yith-quote-request.php:248, src/inc/frontend/cart.php:201, src/inc/frontend/order.php:87, src/inc/frontend/order.php:229, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
 msgid "Configuration"
 msgstr ""
 
@@ -737,68 +745,76 @@ msgstr ""
 msgid "Next step label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:959
+#: src/inc/admin/settings-page.php:950
+msgid "Redirection message after Successfully adding to the cart"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:971
 msgid "Disable TranslatePress Dynamic translation for the condigurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:965
+#: src/inc/admin/settings-page.php:977
 msgid "Activate this setting if you wish to translate the configuration data from within the configurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:985
+#: src/inc/admin/settings-page.php:997
 msgid "Edit the theme settings in the customizer"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1086
+#: src/inc/admin/settings-page.php:1122
 msgid "Get the official Product Configurator themes"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1087
+#: src/inc/admin/settings-page.php:1123
 msgid "Beautiful design, integrated live configuring interface, widgetized homepage, flexible, lightweight and much more..."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1147, src/inc/admin/settings-page.php:1182
+#: src/inc/admin/settings-page.php:1183, src/inc/admin/settings-page.php:1218
 msgid "Theme preview"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1149, src/inc/admin/settings-page.php:1184
+#: src/inc/admin/settings-page.php:1185, src/inc/admin/settings-page.php:1220
 msgid "No preview"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1158
+#: src/inc/admin/settings-page.php:1194
 msgid "No theme is in use."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1159
+#: src/inc/admin/settings-page.php:1195
 msgid "Select a theme"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1168
+#: src/inc/admin/settings-page.php:1204
 msgid "Select the theme"
 msgstr ""
 
-#: src/inc/base/configuration.php:75
+#: src/inc/base/configuration.php:79
 msgid "Configuration not found"
 msgstr ""
 
-#: src/inc/base/configuration.php:77
+#: src/inc/base/configuration.php:81
 msgid "Unauthorized action, author issue"
 msgstr ""
 
-#: src/inc/base/configuration.php:83
+#: src/inc/base/configuration.php:87
 msgid "The configuration type does not match the requested item"
 msgstr ""
 
-#: src/inc/base/configuration.php:159
+#: src/inc/base/configuration.php:165
 msgid "You have already saved this configuration!"
 msgstr ""
 
-#: src/inc/base/configuration.php:188
+#: src/inc/base/configuration.php:193
 msgid "The configuration was saved successfully!"
 msgstr ""
 
-#: src/inc/base/configuration.php:207
+#: src/inc/base/configuration.php:221
 msgid "Invalid configuration_id ID"
+msgstr ""
+
+#: src/inc/compatibility/elementor-pro-form.php:34
+msgid "Request a quote"
 msgstr ""
 
 #: src/inc/compatibility/yith-catalogue-mode.php:26
@@ -817,23 +833,23 @@ msgstr ""
 msgid "Show the configure button and hide the add to cart button"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:122, src/inc/frontend/frontend-woocommerce.php:217
+#: src/inc/frontend/frontend-woocommerce.php:122, src/inc/frontend/frontend-woocommerce.php:221
 msgid "A product id must be set in order for this shortcode to work."
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:136, src/inc/frontend/frontend-woocommerce.php:237
+#: src/inc/frontend/frontend-woocommerce.php:136, src/inc/frontend/frontend-woocommerce.php:241
 msgid "The provided ID is not a valid product."
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:222
+#: src/inc/frontend/frontend-woocommerce.php:226
 msgid "The global product variable is not a WC_Product instance"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:391
+#: src/inc/frontend/frontend-woocommerce.php:400
 msgid "%s is required"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:604
+#: src/inc/frontend/frontend-woocommerce.php:613
 msgid "SKU:"
 msgstr ""
 

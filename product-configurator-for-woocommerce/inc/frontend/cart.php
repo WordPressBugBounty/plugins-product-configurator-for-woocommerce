@@ -59,14 +59,16 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 			if ( ! mkl_pc_is_configurable( $product_id ) || ! isset( $form_data['pc_configurator_data'] ) || '' == $form_data['pc_configurator_data'] ) return $quote_item_data;
 			if ( $data = json_decode( stripcslashes( $form_data['pc_configurator_data'] ) ) ) {
 				$data = Plugin::instance()->db->sanitize( $data );
-				$layers = array();
-				if ( is_array( $data ) ) { 
-					foreach( $data as $layer_data ) {
-						$layers[] = new Choice( $product_id, $variation_id, $layer_data->layer_id, $layer_data->choice_id, $layer_data->angle_id, $layer_data );
-					}
-				}
-				$quote_item_data['configurator_data'] = $layers; 
-				$quote_item_data['configurator_data_raw'] = $data;
+				$configuration = new Configuration( 
+					null,
+					[
+						'product_id' => $product_id, 
+						'variation_id' => $variation_id,
+						'content' => $data
+					] 
+				);
+				$quote_item_data['configurator_data'] = $configuration->get_layers(); 
+				$quote_item_data['configurator_data_raw'] = $configuration->content;
 			}
 
 			// if ( $data = json_decode( stripcslashes( $form_data['pc_configurator_data'] ) ) ) {
@@ -100,21 +102,25 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 						$item_weight = 0;
 						$layers = array();
 						if ( is_array( $data ) ) { 
-							foreach( $data as $layer_data ) {
-								$choice = new Choice( $product_id, $variation_id, $layer_data->layer_id, $layer_data->choice_id, $layer_data->angle_id, $layer_data );
-								$layers[] = $choice;
-								if ( $weight = $choice->get_choice( 'weight' ) ) {
-									$item_weight += apply_filters( 'mkl_pc/wc_cart_add_item_data/choice_weight', floatval( $weight ), $choice );
+							$configuration = new Configuration( null, [
+								'content' => $data, 
+								'product_id' => $product_id, 
+								'variation_id'=> $variation_id 
+							] );
+							$layers = $configuration->get_layers();
+
+							foreach( $configuration->get_layers() as $layer ) {
+								if ( $weight = $layer->get_choice( 'weight' ) ) {
+									$item_weight += apply_filters( 'mkl_pc/wc_cart_add_item_data/choice_weight', floatval( $weight ), $layer );
 								}
-								do_action_ref_array( 'mkl_pc/wc_cart_add_item_data/adding_choice', array( $choice, &$data ) );
 							}
 						}
 
 						if ( $item_weight ) {
 							$cart_item_data['configuration_weight'] = $item_weight; 
 						}
-						$cart_item_data['configurator_data'] = $layers; 
-						$cart_item_data['configurator_data_raw'] = $data;
+						$cart_item_data['configurator_data'] = $layers;
+						$cart_item_data['configurator_data_raw'] = $configuration->content;
 					}
 				} 
 			} 
@@ -181,7 +187,7 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 					);
 				}
 
-				if ( 'block' == $this->_get_cart_item_context() ) {
+				if ( 'block' == $this->_get_cart_item_context( $cart_item ) ) {
 					$value = '&nbsp;';
 				} else {
 					$value = $this->get_choices_html( $choices );
@@ -196,7 +202,7 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 					'value' => $value
 				);
 
-				if ( 'block' == $this->_get_cart_item_context() ) {
+				if ( 'block' == $this->_get_cart_item_context( $cart_item ) ) {
 
 					$data = array_merge( $data, array_map( function( $item ) {
 						if ( isset( $item['choice'] ) ) unset( $item['choice'] );
@@ -375,7 +381,7 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 				$classes = $choice[ 'className' ];
 				$before = apply_filters( 'mkl_pc_cart_item_choice_before', '<div' . ( $classes ? ' class="' . esc_attr( $classes ) . '"' : '' ) . '>', $choice['choice'] );
 				$after = apply_filters( 'mkl_pc_cart_item_choice_after', '</div>', $choice['choice'] );
-				$output .= apply_filters( 'mkl_pc_cart_item_choice', $before . '<strong>' . stripslashes( $choice['key'] ) .'</strong><span class="semicol">:</span> ' . stripslashes( $choice['value'] ) . $after, $choice['key'], $choice['value'], $before, $after );
+				$output .= apply_filters( 'mkl_pc_cart_item_choice', $before . '<strong>' . stripslashes( $choice['key'] ) .'</strong>' . ( $choice['key'] ? '<span class="semicol">:</span> ' : ' ' ) . stripslashes( $choice['value'] ) . $after, $choice['key'], $choice['value'], $before, $after );
 			}
 
 			return $output;
@@ -425,7 +431,7 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 			$_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 			$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
 
-			if ( ! mkl_pc_is_configurable( $product_id ) || ! isset( $cart_item['configurator_data'] ) ) return '';
+			if ( ! mkl_pc_is_configurable( $product_id ) || ! isset( $cart_item['configurator_data_raw'] ) ) return '';
 
 			if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
 				$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
@@ -450,7 +456,7 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 			}
 			return $cart_item;
 		}
-
+		
 		/**
 		 * Maybe add the extra weight to the original item
 		 *
@@ -466,18 +472,28 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 		}
 
 
-		private function _get_cart_item_context() {
-			if ( ( is_cart() || is_checkout() ) && has_blocks() && ( has_block( 'woocommerce/cart' ) || has_block( 'woocommerce/checkout' ) ) ) {
-				return 'block';
-			}
-
-			$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 10 );
-			foreach( $trace as $call ) {
-				// [class] => Automattic\WooCommerce\StoreApi\Schemas\V1\CartItemSchema
-				if ( isset( $call['class'] ) && false !== strpos( $call['class'], 'CartItemSchema' ) ) {
+		private function _get_cart_item_context( $cart_item = false ) {
+			if ( 
+				( is_cart() || is_checkout() ) 
+				|| (
+					$cart_item && isset( $cart_item['context'] ) && 'cart' == $cart_item['context']
+				)
+			) {
+				if ( ( is_cart() || is_checkout() ) && has_blocks() && ( has_block( 'woocommerce/cart' ) || has_block( 'woocommerce/checkout' ) ) ) {
 					return 'block';
 				}
+
+				$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 10 );
+				foreach( $trace as $call ) {
+					// [class] => Automattic\WooCommerce\StoreApi\Schemas\V1\CartItemSchema
+					if ( isset( $call['class'] ) && false !== strpos( $call['class'], 'CartItemSchema' ) ) {
+						return 'block';
+					}
+				}
+				return 'default';
 			}
+			
+			if ( $cart_item && isset( $cart_item['context'] ) ) return $cart_item['context'];
 			return 'default';
 		}
 

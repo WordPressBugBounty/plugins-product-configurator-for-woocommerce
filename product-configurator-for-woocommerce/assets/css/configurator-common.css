@@ -29,6 +29,7 @@
     margin: 0; }
 
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li.active > .mkl-pc-choice-qty--container,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar ul.layer_choices li.active > .text-field .mkl-pc-choice-qty--container,
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li.active > .mkl_quantity .mkl-pc-choice-qty--container {
   display: flex; }
 
@@ -54,6 +55,45 @@
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li .mkl-pc-choice-qty--btn:hover svg use,
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li .mkl-pc-choice-qty--btn:focus svg use {
   fill: var(--mkl_pc_color-primary); }
+
+.footer__section-center {
+  display: inline-flex;
+  align-items: center; }
+
+.mkl-footer--action-button {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 6px 12px;
+  line-height: 1.2;
+  text-transform: none;
+  font-size: 12px;
+  font-weight: 400;
+  background: transparent;
+  appearance: none;
+  box-shadow: none;
+  border: none;
+  color: inherit;
+  text-decoration: none; }
+  .mkl-footer--action-button svg {
+    fill: currentColor;
+    height: 24px;
+    width: 24px;
+    margin-right: 8px;
+    vertical-align: middle; }
+    @media (max-width: 720px) {
+      .mkl-footer--action-button svg {
+        margin-right: 3; } }
+  .mkl-footer--action-button span {
+    vertical-align: middle; }
+    @media (max-width: 720px) {
+      .mkl-footer--action-button span {
+        display: none; } }
+  @media (max-width: 720px) {
+    .mkl-footer--action-button {
+      display: block;
+      height: 100%;
+      width: 60px; } }
 
 .adding-to-cart--modal {
   display: none; }

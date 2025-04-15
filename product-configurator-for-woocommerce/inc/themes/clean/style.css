@@ -630,6 +630,7 @@ Supports: columns, color_swatches
             padding: 15px;
             border: none;
             border-bottom: 1px solid var(--mkl_pc_color-border-color);
+            border-radius: 0;
             background-color: transparent;
             position: relative;
             line-height: 1.3;
@@ -871,14 +872,18 @@ Supports: columns, color_swatches
       box-sizing: border-box; }
       .mkl_pc .mkl_pc_container footer .footer__section-left {
         display: none; }
+        .mkl_pc .mkl_pc_container footer .footer__section-left h3 {
+          display: none; }
       .mkl_pc .mkl_pc_container footer .footer__section-center {
-        display: flex; }
+        display: flex;
+        align-items: center; }
       .mkl_pc .mkl_pc_container footer .single_add_to_cart_button {
         visibility: visible; }
       .mkl_pc .mkl_pc_container footer .form,
       .mkl_pc .mkl_pc_container footer form,
       .mkl_pc .mkl_pc_container footer .quantity {
-        display: inline-block; }
+        display: inline-flex;
+        padding: 0; }
         .mkl_pc .mkl_pc_container footer .form input.qty,
         .mkl_pc .mkl_pc_container footer form input.qty,
         .mkl_pc .mkl_pc_container footer .quantity input.qty {
@@ -890,6 +895,11 @@ Supports: columns, color_swatches
               border: 2px solid #36383a; } }
       .mkl_pc .mkl_pc_container footer form.cart {
         margin: 0; }
+      .mkl_pc .mkl_pc_container footer form.save-form {
+        display: block; }
+      .mkl_pc .mkl_pc_container footer .sent-email form.save-form,
+      .mkl_pc .mkl_pc_container footer .sending-email form.save-form {
+        display: none; }
       .mkl_pc .mkl_pc_container footer .extra-cost {
         visibility: hidden;
         position: fixed;
@@ -934,6 +944,7 @@ Supports: columns, color_swatches
           margin-left: 4px; }
         .mkl_pc .mkl_pc_container footer .pc_configurator_form .quantity {
           border: 2px solid var(--mkl_pc_color-primary);
+          border-radius: 0;
           border-top-left-radius: 12px;
           border-bottom-left-radius: 12px;
           padding-right: 0;
@@ -954,6 +965,8 @@ Supports: columns, color_swatches
           width: 60px;
           padding-left: 15px;
           padding-right: 12px;
+          padding-top: 0;
+          padding-bottom: 0;
           color: var(--mkl_pc_color-primary);
           box-sizing: content-box; }
       .mkl_pc .mkl_pc_container footer h3.product-name {
@@ -1084,27 +1097,49 @@ body.configurator_is_inline .mkl_pc {
   height: 100%;
   z-index: 3; }
 
-.save-your-design-modal-container a {
+.save-your-design-modal-container a,
+.share-your-design-modal-container a {
   color: var(--mkl_pc_color-primary); }
-  .save-your-design-modal-container a.save-your-design {
-    display: block; }
-  .save-your-design-modal-container a:hover, .save-your-design-modal-container a:focus, .save-your-design-modal-container a:active {
+  .save-your-design-modal-container a.mkl-footer--action-button,
+  .share-your-design-modal-container a.mkl-footer--action-button {
+    display: block;
+    text-decoration: none; }
+  .save-your-design-modal-container a:hover, .save-your-design-modal-container a:focus, .save-your-design-modal-container a:active,
+  .share-your-design-modal-container a:hover,
+  .share-your-design-modal-container a:focus,
+  .share-your-design-modal-container a:active {
     color: var(--mkl_pc_color-primary_hover); }
 
-.save-your-design-modal-container a.save-your-design span {
+.save-your-design-modal-container a.mkl-footer--action-button span,
+.share-your-design-modal-container a.mkl-footer--action-button span {
   display: block;
   font-size: 10px;
   line-height: 1;
   text-transform: uppercase; }
 
-.save-your-design-modal-container a.save-your-design svg {
+.save-your-design-modal-container a.mkl-footer--action-button svg,
+.share-your-design-modal-container a.mkl-footer--action-button svg {
   transform: none;
   margin-right: auto;
   margin-left: auto;
   display: block; }
 
+.mkl_pc .icon-only {
+  width: 44px; }
+  .mkl_pc .icon-only span {
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute; }
+
 a.save-your-design--pdf {
-  color: var(--mkl_pc_color-primary); }
+  color: var(--mkl_pc_color-primary);
+  text-decoration: none;
+  display: block; }
   a.save-your-design--pdf:hover, a.save-your-design--pdf:focus, a.save-your-design--pdf:active {
     color: var(--mkl_pc_color-primary_hover); }
   a.save-your-design--pdf span {
@@ -1342,7 +1377,12 @@ body:not(.is-mobile) .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices >
 .mkl-pc-syd-modal {
   left: 0; }
   .mkl-pc-syd-modal::after {
-    left: 52px; }
+    left: 24px; }
+  @media (max-width: 760px) {
+    .mkl-pc-syd-modal {
+      left: calc( -1 * var( --container-offset, 0 )); }
+      .mkl-pc-syd-modal::after {
+        left: calc( 24px + var( --container-offset, 0 )); } }
 
 nav.mkl-pc--steps {
   display: inline-flex;
