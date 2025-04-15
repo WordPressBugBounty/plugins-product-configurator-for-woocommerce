@@ -45,13 +45,15 @@
 	}
 
 	.quantity {
-		display: inline-flex;
-		align-items: center;
+		display: inline-block;
 		input.qty {
 			background: #fff;
 			@media (max-width: $small_screen_width) {
-				// border: 2px solid #36383a;
+				border: 2px solid #36383a;
 			}
+		}
+		&.buttons_added {
+			display: inline-flex;
 		}
 	}
 	.extra-cost {

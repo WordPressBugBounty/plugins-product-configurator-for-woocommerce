@@ -21,7 +21,6 @@ class Cache {
 
 	private function _hooks() {
 		add_action( 'woocommerce_settings_saved', array( $this, 'purge' ) );
-		add_action( 'template_redirect', array( $this, 'check_and_regenerate_js_file' ) );
 	}
 
 	public function cache( $key, $data, $options = [] ) {
@@ -35,7 +34,7 @@ class Cache {
 	public function get_config_file( $product_id, $generate_file = true ) {
 		$location = $this->get_cache_location();
 		$file_name = $this->get_config_file_name( $product_id );
-		$default_url = apply_filters( 'mkl_pc_default_config_url', admin_url( 'admin-ajax.php?action=pc_get_data&data=init&view=js&fe=1&id=' . $product_id ) );
+		$default_url = admin_url( 'admin-ajax.php?action=pc_get_data&data=init&view=js&fe=1&id=' . $product_id );
 		if ( current_user_can( 'edit_posts' ) || mkl_pc( 'settings' )->get( 'disable_caching' ) ) {
 			return $default_url;
 		}
@@ -64,18 +63,10 @@ class Cache {
 		));
 	}
 
-	/**
-	 * Save a configuration file
-	 *
-	 * @param int $product_id
-	 * @param null|array $config_data
-	 * @return string The file path when successful, empty otherwise
-	 */
-	public function save_config_file( $product_id, $config_data = null ) {
-		if ( ! $config_data ) {
-			$config_data = Plugin::instance()->db->escape( Plugin::instance()->db->get_front_end_data( $product_id ) );
-			$config_data = apply_filters( 'mkl_pc_get_configurator_data', $config_data, $product_id );
-		}
+	public function save_config_file( $product_id ) {
+		$config_data = Plugin::instance()->db->escape( Plugin::instance()->db->get_front_end_data( $product_id ) );
+
+		$config_data = apply_filters( 'mkl_pc_get_configurator_data', $config_data, $product_id );
 
 		$data =  'var PC = PC || {};'.PHP_EOL;
 		$data .= 'PC.productData = PC.productData || {};'.PHP_EOL;
@@ -94,9 +85,7 @@ class Cache {
 				fwrite( $file_handle, $data );
 				fclose( $file_handle );
 			}
-			return trailingslashit( $location['path'] ) . $file_name;
 		}
-		return '';
 	}
 
 	/**
@@ -136,41 +125,4 @@ class Cache {
 
 		}
 	}
-
-	/**
-	 * Maybe regenerate the JS FILE if a 404 is encountered
-	 */
-	public function check_and_regenerate_js_file() {
-		if ( is_404() ) {
-			
-			$request_uri = $_SERVER['REQUEST_URI'];
-	
-			// Check if the requested file is a missing JS file
-			if ( strpos( $request_uri, 'wp-content/uploads/mkl_product_configurations/product_configuration_') !== false && strpos($request_uri, '.js') !== false ) {
-				preg_match('/product_configuration_(\d+)\.js/', $request_uri, $matches);
-				if ( $matches ) {
-					$product_id = $matches[1];
-					// $file_path = WP_CONTENT_DIR . "/uploads/mkl_product_configurations/product_configuration_{$product_id}.js";
-	
-					// Regenerate the JavaScript content
-					$file_path = $this->save_config_file( $product_id );
-
-					if ( ! $file_path || ! file_exists( $file_path ) ) return;
-					
-					$content = file_get_contents( $file_path );
-	
-					// Change the response code to 200 (OK) instead of 404
-					status_header(200);
-	
-					// Set the correct Content-Type header for JavaScript
-					header('Content-Type: application/javascript');
-	
-					// Output the regenerated content
-					echo $content;
-					exit;
-				}
-			}
-		}
-	}
-	
 }

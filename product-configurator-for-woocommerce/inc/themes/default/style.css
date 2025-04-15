@@ -409,11 +409,9 @@ Description:  Default theme, with sliding menu
             .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li button {
               display: block;
               width: 100%;
-              height: auto;
               text-align: left;
               padding: 30px 14px;
               border: none;
-              border-radius: 0;
               border-bottom: 1px solid var(--mkl_pc_color-light-gray);
               background-color: transparent;
               position: relative;
@@ -855,19 +853,18 @@ Description:  Default theme, with sliding menu
       .mkl_pc .mkl_pc_container footer .form,
       .mkl_pc .mkl_pc_container footer form,
       .mkl_pc .mkl_pc_container footer .quantity {
-        display: inline-flex;
-        align-items: center; }
+        display: inline-block; }
         .mkl_pc .mkl_pc_container footer .form input.qty,
         .mkl_pc .mkl_pc_container footer form input.qty,
         .mkl_pc .mkl_pc_container footer .quantity input.qty {
           background: #fff; }
+          @media (max-width: 660px) {
+            .mkl_pc .mkl_pc_container footer .form input.qty,
+            .mkl_pc .mkl_pc_container footer form input.qty,
+            .mkl_pc .mkl_pc_container footer .quantity input.qty {
+              border: 2px solid #36383a; } }
       .mkl_pc .mkl_pc_container footer form.cart {
         margin: 0; }
-      .mkl_pc .mkl_pc_container footer form.save-form {
-        display: block; }
-      .mkl_pc .mkl_pc_container footer .sent-email form.save-form,
-      .mkl_pc .mkl_pc_container footer .sending-email form.save-form {
-        display: none; }
       .mkl_pc .mkl_pc_container footer .extra-cost {
         visibility: hidden;
         position: fixed;
@@ -914,12 +911,37 @@ Description:  Default theme, with sliding menu
           display: none; }
         .mkl_pc .mkl_pc_container footer .form.edit-cart-item-is-displayed button.configurator-add-to-cart.edit-cart-item span {
           display: inline-block; } }
-      .mkl_pc .mkl_pc_container footer .footer__section-center {
-        display: flex;
-        align-items: center; }
+      .mkl_pc .mkl_pc_container footer button.reset-configuration,
+      .mkl_pc .mkl_pc_container footer a.save-your-design, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf {
+        margin: 0;
+        text-transform: none;
+        font-size: 14px;
+        font-weight: 400;
+        display: inline-block;
+        padding: 6px 12px;
+        line-height: 1.2;
+        background: transparent;
+        appearance: none;
+        box-shadow: none;
+        border: none;
+        color: inherit;
+        text-decoration: none; }
+        .mkl_pc .mkl_pc_container footer button.reset-configuration:hover, .mkl_pc .mkl_pc_container footer button.reset-configuration:focus,
+        .mkl_pc .mkl_pc_container footer a.save-your-design:hover,
+        .mkl_pc .mkl_pc_container footer a.save-your-design:focus, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:hover, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:focus {
+          opacity: .5; }
+        @media (max-width: 660px) {
+          .mkl_pc .mkl_pc_container footer button.reset-configuration,
+          .mkl_pc .mkl_pc_container footer a.save-your-design, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf {
+            width: 40px; }
+            .mkl_pc .mkl_pc_container footer button.reset-configuration svg,
+            .mkl_pc .mkl_pc_container footer a.save-your-design svg, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg {
+              transform: none; } }
       @media (max-width: 760px) {
         .mkl_pc .mkl_pc_container footer {
           text-align: center; }
+          .mkl_pc .mkl_pc_container footer .footer__section-center {
+            display: flex; }
           .mkl_pc .mkl_pc_container footer [class*=save-your-design] ~ .reset-configuration {
             display: none; } }
       @media (max-width: 660px) {

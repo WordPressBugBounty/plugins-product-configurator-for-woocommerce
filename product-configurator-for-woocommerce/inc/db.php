@@ -603,11 +603,7 @@ class DB {
 	}
 
 	public function sanitize_image( $image ) {
-		// Image IDs
 		if ( is_int( $image ) ) return intval( $image );
-		// Temporary image names
-		if ( is_string( $image ) && ! strpos( $image, '.' ) ) return sanitize_key( $image );
-		// Other images (assumed to be urls)
 		return esc_url_raw( $image );
 	}
 

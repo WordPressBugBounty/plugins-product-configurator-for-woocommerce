@@ -83,7 +83,6 @@ var PC = PC || {};
 					if ( ! activate ) choice.set( 'active', false );
 				}
 			}
-			
 			wp.hooks.doAction( 'PC.fe.choice.change', choice );
 		},
 		getType: function() {

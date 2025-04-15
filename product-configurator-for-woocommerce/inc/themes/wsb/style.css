@@ -182,10 +182,6 @@ nav.mkl-pc--steps {
         display: inline-block;
         margin-right: 5px; }
 
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul.layers > .mkl_pc_summary {
-  padding: 20px;
-  padding-left: 60px; }
-
 .mkl_pc_summary {
   width: 100%; }
 
@@ -749,8 +745,7 @@ nav.mkl-pc--steps {
           .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul button.layer-item {
             padding-left: 60px;
             padding-right: 50px;
-            transition: .2s all;
-            height: auto; }
+            transition: .2s all; }
             .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul button.layer-item::after {
               transition: .2s all;
               content: ' ';
@@ -981,10 +976,14 @@ nav.mkl-pc--steps {
       .mkl_pc .mkl_pc_container .form.form-cart form.cart {
         margin: 0; }
       .mkl_pc .mkl_pc_container .form.form-cart .quantity {
-        display: inline-flex;
-        align-items: center; }
+        display: inline-block; }
         .mkl_pc .mkl_pc_container .form.form-cart .quantity input.qty {
           background: #fff; }
+          @media (max-width: 660px) {
+            .mkl_pc .mkl_pc_container .form.form-cart .quantity input.qty {
+              border: 2px solid #36383a; } }
+        .mkl_pc .mkl_pc_container .form.form-cart .quantity.buttons_added {
+          display: inline-flex; }
       .mkl_pc .mkl_pc_container .form.form-cart .extra-cost {
         visibility: hidden;
         position: fixed;
@@ -1107,10 +1106,29 @@ nav.mkl-pc--steps {
       @media (min-width: 660px) {
         .mkl_pc .mkl_pc_container footer {
           justify-content: left; } }
+      .mkl_pc .mkl_pc_container footer button.reset-configuration,
+      .mkl_pc .mkl_pc_container footer a.save-your-design, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf {
+        margin: 0;
+        text-transform: none;
+        font-size: 14px;
+        font-weight: 400;
+        display: inline-block;
+        padding: 6px 12px;
+        line-height: 1.2;
+        background: transparent;
+        appearance: none;
+        box-shadow: none;
+        border: none;
+        color: inherit;
+        text-decoration: none; }
+        .mkl_pc .mkl_pc_container footer button.reset-configuration:hover, .mkl_pc .mkl_pc_container footer button.reset-configuration:focus,
+        .mkl_pc .mkl_pc_container footer a.save-your-design:hover,
+        .mkl_pc .mkl_pc_container footer a.save-your-design:focus, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:hover, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:focus {
+          opacity: .5; }
       @media (max-width: 660px) {
-        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button {
+        .mkl_pc .mkl_pc_container footer a.save-your-design, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf {
           width: 40px; }
-          .mkl_pc .mkl_pc_container footer .mkl-footer--action-button svg {
+          .mkl_pc .mkl_pc_container footer a.save-your-design svg, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg {
             transform: none; } }
       .mkl_pc .mkl_pc_container footer h3.product-name {
         line-height: 1;
@@ -1125,8 +1143,7 @@ nav.mkl-pc--steps {
         display: none; }
       .mkl_pc .mkl_pc_container footer .footer__section-center {
         flex: 1;
-        display: flex;
-        align-items: center; }
+        display: flex; }
         @media (max-width: 660px) {
           .mkl_pc .mkl_pc_container footer .footer__section-center {
             width: 100%;
@@ -1413,8 +1430,7 @@ a.save-your-design svg, a.save-your-design--pdf svg {
 
 a.save-your-design svg path,
 .mkl_pc .mkl_pc_container .mkl-pc-show-form svg path,
-.save-your-design--pdf svg path,
-.mkl-footer--action-button svg path {
+.save-your-design--pdf svg path {
   fill: var(--mkl_pc_color-primary); }
 
 /* Divi fix */

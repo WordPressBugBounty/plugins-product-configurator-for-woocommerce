@@ -5,7 +5,7 @@
 		
 		if ( window.tippy ) {
 
-			var btns = view.$( '.reset-configuration, .save-your-design, .save-your-design--pdf, .share-your-design' );
+			var btns = view.$( '.reset-configuration, .save-your-design, .save-your-design--pdf' );
 			btns.each( function( index, btn ) {
 				/**
 				 * 

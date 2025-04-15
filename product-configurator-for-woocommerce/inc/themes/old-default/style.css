@@ -411,12 +411,10 @@ Description:  The old default theme, kept for compatibility and users who prefer
               text-align: left;
               padding: 30px 14px;
               border: none;
-              border-radius: 0;
               border-bottom: 1px solid #efefef;
               background-color: transparent;
               position: relative;
               line-height: 1.3;
-              height: auto;
               color: var(--mkl_pc_color-layers_button_text_color);
               font-weight: normal;
               white-space: normal; }
@@ -808,16 +806,12 @@ Description:  The old default theme, kept for compatibility and users who prefer
       justify-content: space-between;
       align-items: center;
       box-sizing: border-box; }
-      .mkl_pc .mkl_pc_container footer .footer__section-center {
-        display: flex;
-        align-items: center; }
       .mkl_pc .mkl_pc_container footer .single_add_to_cart_button {
         visibility: visible; }
       .mkl_pc .mkl_pc_container footer .form,
       .mkl_pc .mkl_pc_container footer form,
       .mkl_pc .mkl_pc_container footer .quantity {
-        display: inline-flex;
-        align-items: center; }
+        display: inline-block; }
         .mkl_pc .mkl_pc_container footer .form input.qty,
         .mkl_pc .mkl_pc_container footer form input.qty,
         .mkl_pc .mkl_pc_container footer .quantity input.qty {
@@ -893,22 +887,57 @@ Description:  The old default theme, kept for compatibility and users who prefer
           display: none; }
         .mkl_pc .mkl_pc_container footer .form.edit-cart-item-is-displayed button.configurator-add-to-cart.edit-cart-item span {
           display: inline-block; } }
-      .mkl_pc .mkl_pc_container footer .mkl-footer--action-button {
+      .mkl_pc .mkl_pc_container footer a.save-your-design,
+      .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
+      .mkl_pc .mkl_pc_container footer button.reset-configuration {
+        margin: 0;
+        padding: 4px 9px;
+        background: transparent;
+        color: inherit;
+        text-transform: none;
+        font-size: 1em;
+        text-transform: none;
+        font-weight: normal;
+        appearance: none;
+        box-shadow: none;
+        border: none;
         color: var(--mkl_pc_color-primary); }
-        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button svg {
+        .mkl_pc .mkl_pc_container footer a.save-your-design svg,
+        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg,
+        .mkl_pc .mkl_pc_container footer button.reset-configuration svg {
+          height: 23px;
           fill: currentColor;
-          margin-right: 6px; }
-        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button.icon-only span {
+          width: 23px;
+          margin-right: 6px;
+          vertical-align: middle; }
+          @media (max-width: 660px) {
+            .mkl_pc .mkl_pc_container footer a.save-your-design svg,
+            .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg,
+            .mkl_pc .mkl_pc_container footer button.reset-configuration svg {
+              transform: none; } }
+        .mkl_pc .mkl_pc_container footer a.save-your-design.icon-only span,
+        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf.icon-only span,
+        .mkl_pc .mkl_pc_container footer button.reset-configuration.icon-only span {
           display: none; }
-        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button.icon-only svg {
+        .mkl_pc .mkl_pc_container footer a.save-your-design.icon-only svg,
+        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf.icon-only svg,
+        .mkl_pc .mkl_pc_container footer button.reset-configuration.icon-only svg {
           margin-right: 0; }
-        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button:hover, .mkl_pc .mkl_pc_container footer .mkl-footer--action-button:focus {
+        .mkl_pc .mkl_pc_container footer a.save-your-design:hover, .mkl_pc .mkl_pc_container footer a.save-your-design:focus,
+        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:hover,
+        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:focus,
+        .mkl_pc .mkl_pc_container footer button.reset-configuration:hover,
+        .mkl_pc .mkl_pc_container footer button.reset-configuration:focus {
           opacity: .5; }
         @media (max-width: 660px) {
-          .mkl_pc .mkl_pc_container footer .mkl-footer--action-button {
+          .mkl_pc .mkl_pc_container footer a.save-your-design,
+          .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
+          .mkl_pc .mkl_pc_container footer button.reset-configuration {
             font-size: 12px; } }
         @media (max-height: 500px) and (orientation: landscape) {
-          .mkl_pc .mkl_pc_container footer .mkl-footer--action-button svg + span {
+          .mkl_pc .mkl_pc_container footer a.save-your-design svg + span,
+          .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg + span,
+          .mkl_pc .mkl_pc_container footer button.reset-configuration svg + span {
             display: none; } }
       @media (max-width: 760px) {
         .mkl_pc .mkl_pc_container footer {

@@ -44,7 +44,6 @@ footer {
 	.footer__section-center {
 		flex: 1;
 		display: flex;
-		align-items: center;
 		&:empty {
 			display: none;
 		}
@@ -77,7 +76,6 @@ footer {
 	}
 
 	a.save-your-design--pdf,
-	a.share-your-design,
 	button.reset-configuration {
 		margin: 0;
 		padding: 4px 9px;
@@ -93,9 +91,9 @@ footer {
 		border:  none;
 		color: var(--mkl_pc_color-primary);
 		svg {
-			height: 24px;
+			height: 23px;
 			fill: currentColor;
-			width: 24px;
+			width: 23px;
 			margin-right: 6px;
 			vertical-align: middle;					
 		}
@@ -121,46 +119,30 @@ footer {
 	}
 
 	.mkl-pc-syd-modal {
+		right: 0;
+		left: auto;
 		border-radius: 15px;
-		h4 {
+
+		&::after {
+			left: auto;
+			right: 10px;
+			width: 15px;
+			height: 15px;
+			bottom: -5px;
+		}
+		.mkl-pc-modal-list h4 {
 			background: #f5f5f7;
 			border-radius: 15px 15px 0 0;
 		}
-	}
 
-	@media (min-width: $small_screen_width) {
-		.share-your-design-modal-container .mkl-pc-syd-modal {
-			left: 0;
-		}
-		
-		.share-your-design-modal-container .mkl-pc-syd-modal::after {
-			left: 24px;
-			width: 10px;
-			height: 10px;
-			bottom: -5px;
-		}
-	}
-	@media (min-width: $small_screen_width) {
-		.footer__section-right .mkl-pc-syd-modal {
-			right: 0;
-			left: auto;
-
-			&::after {
-				left: auto;
-				right: 10px;
-				width: 15px;
-				height: 15px;
-				bottom: -5px;
-			}
-		}
 	}
 
 	span.save-your-design-modal-container {
-		// @media(min-width: $small_screen_width) {
-		// 	padding-right: 5px;
-		// 	padding-left: 5px;
-		// 	padding-top: 4px;
-		// }
+		@media(min-width: $small_screen_width) {
+			padding-right: 5px;
+			padding-left: 5px;
+			padding-top: 4px;
+		}
 
 		a.save-your-design {
 			span {
@@ -179,20 +161,20 @@ footer {
 		}
 	}
 
-	// .footer__section-center {
-	// 	.mkl-pc-syd-modal {
-	// 		left: 0;
-	// 		right: auto;
+	.footer__section-center {
+		.mkl-pc-syd-modal {
+			left: 0;
+			right: auto;
 	
-	// 		&::after {
-	// 			left: 10px;
-	// 			right: auto;
-	// 			width: 15px;
-	// 			height: 15px;
-	// 			bottom: -5px;
-	// 		}
-	// 	}	
-	// }
+			&::after {
+				left: 10px;
+				right: auto;
+				width: 15px;
+				height: 15px;
+				bottom: -5px;
+			}
+		}	
+	}
 
 
 	a.save-your-design svg path,

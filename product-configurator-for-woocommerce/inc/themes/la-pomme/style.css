@@ -168,8 +168,7 @@ Supports: color_swatches, steps
           font-weight: normal;
           color: var(--mkl_pc_color-layers_button_text_color);
           word-break: break-word;
-          white-space: normal;
-          height: auto; }
+          white-space: normal; }
     .mkl_pc .mkl_pc_container .mkl_pc_viewer {
       position: sticky;
       z-index: 1;
@@ -738,16 +737,12 @@ Supports: color_swatches, steps
           bottom: var(--mkl_pc_footer_height); }
           .mkl_pc .mkl_pc_container .mkl_pc_toolbar .form.form-cart {
             display: none; } }
-    .mkl_pc .mkl_pc_container .pc_configurator_form {
-      display: flex;
-      align-items: center;
-      gap: 5px; }
     .mkl_pc .mkl_pc_container form.cart {
       display: inline-block;
       margin: 0; }
     .mkl_pc .mkl_pc_container .form.form-cart {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       flex-direction: row;
       justify-content: flex-end;
       position: relative; }
@@ -760,8 +755,7 @@ Supports: color_swatches, steps
     .mkl_pc .mkl_pc_container .single_add_to_cart_button {
       visibility: visible; }
     .mkl_pc .mkl_pc_container .quantity {
-      display: inline-flex;
-      align-items: center; }
+      display: inline-block; }
       .mkl_pc .mkl_pc_container .quantity input.qty {
         background: #fff; }
         @media (max-width: 660px) {
@@ -876,8 +870,7 @@ Supports: color_swatches, steps
         display: none; }
       .mkl_pc .mkl_pc_container footer .footer__section-center {
         flex: 1;
-        display: flex;
-        align-items: center; }
+        display: flex; }
         .mkl_pc .mkl_pc_container footer .footer__section-center:empty {
           display: none; }
         @media (max-width: 660px) {
@@ -902,7 +895,6 @@ Supports: color_swatches, steps
             .mkl_pc.has-steps .pc_configurator_form {
               width: calc( 100% - 75px); } }
       .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
-      .mkl_pc .mkl_pc_container footer a.share-your-design,
       .mkl_pc .mkl_pc_container footer button.reset-configuration {
         margin: 0;
         padding: 4px 9px;
@@ -917,60 +909,48 @@ Supports: color_swatches, steps
         border: none;
         color: var(--mkl_pc_color-primary); }
         .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg,
-        .mkl_pc .mkl_pc_container footer a.share-your-design svg,
         .mkl_pc .mkl_pc_container footer button.reset-configuration svg {
-          height: 24px;
+          height: 23px;
           fill: currentColor;
-          width: 24px;
+          width: 23px;
           margin-right: 6px;
           vertical-align: middle; }
         .mkl_pc .mkl_pc_container footer a.save-your-design--pdf.icon-only span,
-        .mkl_pc .mkl_pc_container footer a.share-your-design.icon-only span,
         .mkl_pc .mkl_pc_container footer button.reset-configuration.icon-only span {
           display: none; }
         .mkl_pc .mkl_pc_container footer a.save-your-design--pdf.icon-only svg,
-        .mkl_pc .mkl_pc_container footer a.share-your-design.icon-only svg,
         .mkl_pc .mkl_pc_container footer button.reset-configuration.icon-only svg {
           margin-right: 0; }
         .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:hover, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:focus,
-        .mkl_pc .mkl_pc_container footer a.share-your-design:hover,
-        .mkl_pc .mkl_pc_container footer a.share-your-design:focus,
         .mkl_pc .mkl_pc_container footer button.reset-configuration:hover,
         .mkl_pc .mkl_pc_container footer button.reset-configuration:focus {
           opacity: .5; }
         @media (max-width: 660px) {
           .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
-          .mkl_pc .mkl_pc_container footer a.share-your-design,
           .mkl_pc .mkl_pc_container footer button.reset-configuration {
             font-size: 12px;
             width: auto; }
             .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg,
-            .mkl_pc .mkl_pc_container footer a.share-your-design svg,
             .mkl_pc .mkl_pc_container footer button.reset-configuration svg {
               transform: none; } }
       .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal {
+        right: 0;
+        left: auto;
         border-radius: 15px; }
-        .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal h4 {
+        .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal::after {
+          left: auto;
+          right: 10px;
+          width: 15px;
+          height: 15px;
+          bottom: -5px; }
+        .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal .mkl-pc-modal-list h4 {
           background: #f5f5f7;
           border-radius: 15px 15px 0 0; }
       @media (min-width: 660px) {
-        .mkl_pc .mkl_pc_container footer .share-your-design-modal-container .mkl-pc-syd-modal {
-          left: 0; }
-        .mkl_pc .mkl_pc_container footer .share-your-design-modal-container .mkl-pc-syd-modal::after {
-          left: 24px;
-          width: 10px;
-          height: 10px;
-          bottom: -5px; } }
-      @media (min-width: 660px) {
-        .mkl_pc .mkl_pc_container footer .footer__section-right .mkl-pc-syd-modal {
-          right: 0;
-          left: auto; }
-          .mkl_pc .mkl_pc_container footer .footer__section-right .mkl-pc-syd-modal::after {
-            left: auto;
-            right: 10px;
-            width: 15px;
-            height: 15px;
-            bottom: -5px; } }
+        .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container {
+          padding-right: 5px;
+          padding-left: 5px;
+          padding-top: 4px; } }
       .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container a.save-your-design span {
         display: none; }
       .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container a.save-your-design svg {
@@ -982,6 +962,15 @@ Supports: color_swatches, steps
       @media (max-width: 660px) {
         .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container a.save-your-design {
           width: auto; } }
+      .mkl_pc .mkl_pc_container footer .footer__section-center .mkl-pc-syd-modal {
+        left: 0;
+        right: auto; }
+        .mkl_pc .mkl_pc_container footer .footer__section-center .mkl-pc-syd-modal::after {
+          left: 10px;
+          right: auto;
+          width: 15px;
+          height: 15px;
+          bottom: -5px; }
       .mkl_pc .mkl_pc_container footer a.save-your-design svg path,
       .mkl_pc .mkl_pc_container footer .mkl_pc .mkl_pc_container .mkl-pc-show-form svg path,
       .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg path {

@@ -1,9 +1,4 @@
 .mkl_pc_viewer {
-	@media( max-width: $small_screen_width ) {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
 
 	// LAYERS
 	.mkl_pc_layers {
@@ -17,14 +12,6 @@
 
 		@media( max-width: $small_screen_width ) {
 			--mkl_pc-layers-spacing: 10px;
-
-			position: relative;
-			top: auto;
-			left: auto;
-			right: auto;
-			bottom: auto;
-			flex: 1;	
-
 		}
 		img {
 			transition: .2s all;
@@ -124,13 +111,10 @@
 		}
 
 		@media( max-width: $small_screen_width ) {
-			position: relative;
-			top: auto;
-			order: -1;
 			width: 100%;
-			height: auto;
+			height: 40px;
 			background: #36383a;
-			padding: 8px;
+			padding-top: 8px;
 			color: #FFF;
 			font-size: 1rem;
 			box-sizing: border-box;
@@ -146,8 +130,7 @@
 			}
 			.cancel {
 				position: absolute;
-				top: 50%; 
-				transform: translateY(-50%);
+				top: 10px; 
 				right: 10px;
 				&::after, &::before {
 					background: #FFF;

@@ -158,12 +158,8 @@ class Frontend_Woocommerce {
 			$data_attributes['force_form'] = 1;
 		}
 
-		if ( isset( $atts[ 'view' ] ) ) {
-			$data_attributes['view'] = $atts[ 'view' ];
-		}
-
-		
 		$data_attributes = apply_filters( 'mkl_configurator_button_data_attributes', $data_attributes, $product_id, $atts );
+		
 		return '<' . $tag_name . ' class="'.$button_class.' is-shortcode configure-product-simple configure-product '.$shortcode_class.'" ' . implode( ' ', $this->_output_data_attributes( $data_attributes ) ) . '>'.$content.'</' . $tag_name_close . '>';
 	}
 
@@ -252,10 +248,6 @@ class Frontend_Woocommerce {
 
 		if ( isset( $atts[ 'product_id' ] ) ) {
 			$data_attributes['force_form'] = 1;
-		}
-
-		if ( isset( $atts[ 'view' ] ) ) {
-			$data_attributes['view'] = $atts[ 'view' ];
 		}
 
 		$data_attributes = apply_filters( 'mkl_configurator_data_attributes', $data_attributes, $product_id, $atts );
@@ -390,7 +382,6 @@ class Frontend_Woocommerce {
 
 		$args = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'image_endpoint' => get_rest_url() . 'mkl_pc/v1/merge/',
 			'lang' => array(
 				'money_precision' => wc_get_price_decimals(),
 				'money_symbol' => get_woocommerce_currency_symbol( get_woocommerce_currency() ),

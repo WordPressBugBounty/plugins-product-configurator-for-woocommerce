@@ -754,7 +754,6 @@ Tags: Horizontal
         text-align: left;
         padding: 6px 20px;
         line-height: 1.5;
-        height: auto;
         text-transform: uppercase;
         background-color: var(--mkl_pc_color-add_to_cart_bg_color);
         color: var(--mkl_pc_color-add_to_cart_text_color);
@@ -779,17 +778,15 @@ Tags: Horizontal
             color: var(--mkl_pc_color-add_to_cart_text_color_hover); }
       .mkl_pc .mkl_pc_container .form.form-cart .pc_configurator_form.has-qty {
         display: flex; }
-        .mkl_pc .mkl_pc_container .form.form-cart .pc_configurator_form.has-qty .quantity {
-          border-radius: 4px; }
-          .mkl_pc .mkl_pc_container .form.form-cart .pc_configurator_form.has-qty .quantity input.qty {
-            margin-right: 0;
-            height: 100%;
-            border: none;
-            background: transparent;
-            font-size: 1.3em;
-            padding: 0;
-            width: 60px;
-            box-shadow: none; }
+        .mkl_pc .mkl_pc_container .form.form-cart .pc_configurator_form.has-qty .quantity input.qty {
+          margin-right: 0;
+          height: 100%;
+          border: none;
+          background: transparent;
+          font-size: 1.3em;
+          padding: 0;
+          width: 60px;
+          box-shadow: none; }
       .mkl_pc .mkl_pc_container .form.form-cart .pc-total-price {
         width: 100%;
         text-align: right; }
@@ -804,16 +801,12 @@ Tags: Horizontal
           display: none; } }
     .mkl_pc .mkl_pc_container form {
       display: inline-block; }
-    .mkl_pc .mkl_pc_container form.save-form {
-      display: block; }
     .mkl_pc .mkl_pc_container .quantity {
-      display: inline-flex; }
-      .mkl_pc .mkl_pc_container .quantity align-items
-input.qty {
+      display: inline-block; }
+      .mkl_pc .mkl_pc_container .quantity input.qty {
         background: var(--mkl_pc_color-default-bg); }
         @media (max-width: 660px) {
-          .mkl_pc .mkl_pc_container .quantity align-items
-input.qty {
+          .mkl_pc .mkl_pc_container .quantity input.qty {
             border: 2px solid #36383a; } }
     .mkl_pc .mkl_pc_container form.cart {
       margin: 0;
@@ -931,7 +924,9 @@ input.qty {
         @media (min-width: 660px) {
           .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal::after {
             left: 40px; } }
-      .mkl_pc .mkl_pc_container footer .mkl-footer--action-button {
+      .mkl_pc .mkl_pc_container footer a.save-your-design,
+      .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
+      .mkl_pc .mkl_pc_container footer button.reset-configuration {
         margin: 0;
         text-transform: none;
         font-size: 14px;
@@ -946,11 +941,17 @@ input.qty {
         text-decoration: none;
         color: var(--mkl_pc_color-primary); }
         @media (max-width: 760px) {
-          .mkl_pc .mkl_pc_container footer .mkl-footer--action-button {
+          .mkl_pc .mkl_pc_container footer a.save-your-design,
+          .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
+          .mkl_pc .mkl_pc_container footer button.reset-configuration {
             max-width: 110px;
             white-space: normal;
             font-size: 10px; } }
-        .mkl_pc .mkl_pc_container footer .mkl-footer--action-button:hover, .mkl_pc .mkl_pc_container footer .mkl-footer--action-button:focus {
+        .mkl_pc .mkl_pc_container footer a.save-your-design:hover, .mkl_pc .mkl_pc_container footer a.save-your-design:focus,
+        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:hover,
+        .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:focus,
+        .mkl_pc .mkl_pc_container footer button.reset-configuration:hover,
+        .mkl_pc .mkl_pc_container footer button.reset-configuration:focus {
           opacity: .5; }
       @media (max-width: 760px) {
         .mkl_pc .mkl_pc_container footer {

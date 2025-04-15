@@ -751,7 +751,7 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				'general_settings',
 				[ 
 					'setting_name' => 'disable_caching',
-					'description'  => __( 'Can be usefull when using CDNs such as CloudFlare', 'product-configurator-for-woocommerce' ),
+					'description'  => __( 'Can be usefull when using CDNs such as CloudFlare', 'mkl-pc-stock-management' ),
 				]
 			);
 
@@ -804,7 +804,7 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				);
 				add_settings_field(
 					'steps_progress_enable_click_all',
-					__( 'Make all steps clickable in the breadcrumb instead of the completed ones', 'product-configurator-for-woocommerce' ),
+					__( 'Make all steps clickable in the breadcrumb', 'product-configurator-for-woocommerce' ),
 					[ $this, 'callback_checkbox' ],
 					'mlk_pc_settings', 
 					'general_settings',
@@ -945,18 +945,6 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				]
 			);
 
-			add_settings_field(
-				'add_to_cart_success__redirection',
-				__( 'Redirection message after Successfully adding to the cart', 'product-configurator-for-woocommerce' ),
-				[ $this, 'callback_text_field' ],
-				'mlk_pc_settings',
-				'labels',
-				[
-					'setting_name' => 'add_to_cart_success__redirection',
-					'placeholder' => __( 'Default:', 'product-configurator-for-woocommerce' ) . ' ' . __( 'Successfully added to cart, now redirecting...', 'product-configurator-for-woocommerce' )
-				]
-			);
-
 			// Translatepress options
 			if ( function_exists( 'trp_translate' ) ) {
 				add_settings_section(
@@ -996,30 +984,6 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			</div>
 			<p><a href="<?php echo add_query_arg( [ 'autofocus[section]' => 'mlk_pc', 'return' => urlencode( esc_url_raw( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) ], wp_customize_url() ); ?>"><?php _e( 'Edit the theme settings in the customizer', 'product-configurator-for-woocommerce' ); ?></a></p>
 			<?php
-		}
-
-		public function callback_multiple_checkboxes_setting( $field_options = [] ) {
-			$options = get_option( 'mkl_pc__settings' );
-			if ( ! isset( $field_options[ 'setting_name' ] ) ) return;
-
-			$default = [];
-			if ( isset( $field_options[ 'default' ] ) ) {
-				$default = $field_options[ 'default' ];
-			}
-
-			$value = array_keys( $this->get_setting( $field_options[ 'setting_name' ], $default ) );
-			?>
-			<fieldset class="checkboxes">
-			
-			<?php foreach ( $field_options[ 'options' ] as $key => $label ) {
-				printf( '<label><input name="mkl_pc__settings[' . esc_attr( $field_options[ 'setting_name' ] ) .'][' . esc_attr( $key ) .']" id="mkl_pc__settings-' . esc_attr( $field_options['setting_name'] ) . '-' . esc_attr( $key ) .'" type="checkbox" value="%s"%s>%s</label>', 'on', checked( in_array( $key, $value ), true, false ), $label );
-			} ?>
-
-			</fieldset>
-			<?php
-			if ( isset( $field_options['description'] ) ) { ?>
-				<span class="field-description"><?php echo $field_options['description']; ?></span>
-			<?php }
 		}
 
 		public function callback_html( $field_options = [] ) {

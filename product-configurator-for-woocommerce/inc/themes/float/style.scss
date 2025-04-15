@@ -369,8 +369,7 @@ $inner_space: 1em;
 							margin-bottom: 1em;
 							box-shadow: 0 15px 30px rgba(63, 67, 74, .10);
 							border-radius: 8px;
-							&.not-a-choice,
-							&.type-summary {
+							&.not-a-choice {
 								box-shadow: none;
 								border-radius: 0;
 							}
@@ -1143,7 +1142,7 @@ body.configurator_is_inline.pc-full-screenlayer--opened {
 	animation: configurator-load 1.0s infinite ease-in-out; 
 }
 
-a.save-your-design, a.save-your-design--pdf, a.mkl-footer--action-button {
+a.save-your-design, a.save-your-design--pdf {
 	svg {
 		transform: translateY(0);
 		fill: color(primary);
