@@ -3,6 +3,8 @@ Theme Name:   Default
 Description:  Default theme, with sliding menu
 */
 
+
+
 // COLORS
 $colors: (
 	light-gray: #e3e3e3,
@@ -16,6 +18,7 @@ $colors: (
 	active_choice_button_bg_color: #eaeaea,
 	active_choice_button_text_color: #000000
 );
+
 
 @function color($color-name) {
 	@return var(--mkl_pc_color-#{$color-name});
@@ -132,16 +135,17 @@ $inner_space: 1em;
 /* CUSTOMIZER */
 .mkl_pc {
 
-	@media (max-width: $medium_screen_width) {
-		--mkl_pc_toolbar_width: 220px;
-	}
-
 	position: fixed;
 	top:0;
 	left:0;
 	bottom: 0;
 	width: 100%; 
 	z-index: 10000;
+	
+	@media (max-width: $medium_screen_width) {
+		--mkl_pc_toolbar_width: 220px;
+	}
+
 	.loader {
 		display: none;
 		position: absolute;
@@ -186,7 +190,6 @@ $inner_space: 1em;
 		height: 100%; 
 		width: 100%; 
 
-		background: transparentize($overlay_bg, 0.2); 
 		visibility: hidden;
 		opacity: 0;
 		transition: all 0.3s;
@@ -257,7 +260,7 @@ $inner_space: 1em;
 				z-index: 2;
 				box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 				border-radius: 3px;
-				background: transparentize(#fff, 0.06);
+				background: #fff;
 				> a {
 					display: block;
 					padding: 4px 10px;
@@ -297,7 +300,7 @@ $inner_space: 1em;
 					transform: translateY(0);
 				}
 				li {
-					background: transparentize(#fff, 0.06);
+					background: #fff;
 					a {
 						display: block;						
 						padding: 3px 11px; 
@@ -568,9 +571,11 @@ $inner_space: 1em;
 						button {
 							display: block;
 							width: 100%;
+							height: auto;
 							text-align: left; 
 							padding: 30px 14px; 
 							border: none;
+							border-radius: 0;
 							border-bottom: 1px solid color(light-gray); 
 							background-color: transparent;
 							position: relative; 
@@ -1205,32 +1210,50 @@ $inner_space: 1em;
 			.form,
 			form,
 			.quantity {
-				display: inline-block;
+				display: inline-flex;
+				align-items: center;
 				input.qty {
 					background: #fff;
-					@media (max-width: $small_screen_width) {
-						border: 2px solid #36383a;
-					}
+					// @media (max-width: $small_screen_width) {
+					// 	border: 2px solid #36383a;
+					// }
 				}
 			}
 			form.cart {
 				margin: 0;
 			}
-			.extra-cost {
-				visibility: hidden;
-				position: fixed;
-				margin-bottom: 0;
+			form.save-form {
+				display: block;
 			}
-			.extra-cost.show {
-				visibility: visible;
-				position: relative;
+			.sent-email form.save-form,
+			.sending-email form.save-form {
+				display: none;
+			}
+			.pc-total-price--container {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: end;
 				padding-right: 10px;
-				display: inline-block !important;
-			}
-			span.pc-total-price {
-				font-weight: bold;
-				display: inline-block; 
-				margin-right: .5em;
+				text-align: right;
+
+				.extra-cost {
+					visibility: hidden;
+					position: fixed;
+					margin-bottom: 0;
+					font-size: 1rem;
+					width: 100%;
+				}
+				.extra-cost.show {
+					visibility: visible;
+					position: relative;
+					padding: 0;
+					display: inline-block !important;
+					height: auto !important;
+				}
+				span.pc-total-price {
+					font-weight: bold;
+					display: inline-block; 
+				}
 			}
 
 			.pc_configurator_form {
@@ -1290,38 +1313,13 @@ $inner_space: 1em;
 				}
 			}
 
-			button.reset-configuration,
-			a.save-your-design, a.save-your-design--pdf {
-				margin: 0;
-				text-transform: none;
-				font-size: 14px;
-				font-weight: 400;
-				display: inline-block;
-				padding: 6px 12px;
-				line-height: 1.2;
-				background: transparent;
-				appearance: none;
-				box-shadow: none;
-				border:  none;
-				color: inherit;
-				text-decoration: none;
-				&:hover, &:focus {
-					opacity: .5;
-				}
-				@media (max-width: $small_screen_width) {
-					width: 40px;
-					svg {
-						transform: none;
-					}
-				}
+			.footer__section-center {
+				display: flex;
+				align-items: center;
 			}
 
 			@media (max-width: $medium_screen_width) {
 				text-align: center;
-				.footer__section-center {
-					display: flex;
-				}
-
 				[class*=save-your-design] ~ .reset-configuration {
 					display: none;
 				}
@@ -1650,4 +1648,11 @@ body.configurator_is_inline .mkl_pc {
 /* Divi fix */
 .et_divi_theme:not(.configurator_is_inline) .mkl_pc {
 	z-index: 100000;
+}
+
+@import '../../themes-common/scss/summary';
+
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li.layers-list-item.mkl_pc_summary.type-summary {
+    font-size: 1rem;
+    padding: 19px;
 }
