@@ -215,6 +215,7 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 				array('backbone/views/import', 'views/import.js'),
 				array('backbone/views/app', 'views/app.js'),
 				array('backbone/views/product_selector', 'views/product_selector.js'),
+				array('backbone/views/field_repeater', 'views/field-repeater.js'),
 				//APP
 				array('backbone/app', 'pc_app.js'), 
 				// array('backbone', 'admin.js'),
@@ -231,7 +232,9 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 				// TO ADD OR REMOVE DEFAULT SCRIPTS, only works for scripts in the plugins JS folder
 				$scripts = apply_filters( 'mkl_pc_admin_scripts', $scripts );
 
-				// wp_enqueue_script( 'jquery-ui-accordion' );
+				wp_enqueue_style( 'wp-color-picker' );
+				wp_enqueue_script( 'wp-color-picker' );
+
 				// LOAD BACKBONE SCRIPTS
 				foreach($scripts as $script) {
 					list( $key, $file ) = $script;

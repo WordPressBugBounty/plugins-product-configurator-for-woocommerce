@@ -1553,6 +1553,9 @@ body.configurator_is_inline .mkl_pc .mkl_pc_container {
 body.configurator_is_inline .mkl_pc .mkl_pc_container header .cancel {
   display: none;
 }
+body.configurator_is_inline .mkl_pc .mkl_pc_container .mkl_pc_toolbar {
+  align-self: stretch;
+}
 body.configurator_is_inline .mkl_pc .mkl_pc_container .mkl_pc_toolbar > header {
   display: none;
 }
@@ -1713,6 +1716,13 @@ body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choic
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors.swatches-size--large {
   --mkl_pc_color_thumnail_size: 70px;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors .choices-list .colors li.choice button.choice-item span.choice-text--container {
+  display: block;
+  padding-left: 0;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors .choices-list .colors li.choice button.choice-item .choice-text {
+  display: none;
 }
 
 .mkl_pc:not(.no-tooltip) .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choice > button span.description,

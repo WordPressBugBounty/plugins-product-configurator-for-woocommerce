@@ -42,7 +42,7 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 			add_filter( 'addify_add_quote_item_data', array( $this, 'addify_add_quote_item_data' ), 20, 5 );
 
 			// Attach short description filter.
-			add_filter( 'rest_request_after_callbacks', array( $this, 'filter_cart_item_data' ), 10, 3 );
+			// add_filter( 'rest_request_after_callbacks', array( $this, 'filter_cart_item_data' ), 10, 3 );
 		}
 
 		/**
@@ -473,6 +473,7 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 
 
 		private function _get_cart_item_context( $cart_item = false ) {
+			if ( WC()->is_store_api_request() ) return 'block';
 			if ( 
 				( is_cart() || is_checkout() ) 
 				|| (
@@ -492,7 +493,6 @@ if ( ! class_exists('MKL\PC\Frontend_Cart') ) {
 				}
 				return 'default';
 			}
-			
 			if ( $cart_item && isset( $cart_item['context'] ) ) return $cart_item['context'];
 			return 'default';
 		}

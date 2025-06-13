@@ -21,6 +21,8 @@ class Cache {
 
 	private function _hooks() {
 		add_action( 'woocommerce_settings_saved', array( $this, 'purge' ) );
+		add_action( 'wpo_cache_flush', array( $this, 'purge' ) );
+		add_action( 'after_rocket_clean_domain', array( $this, 'purge' ) );
 		add_action( 'template_redirect', array( $this, 'check_and_regenerate_js_file' ) );
 	}
 
@@ -75,11 +77,14 @@ class Cache {
 		if ( ! $config_data ) {
 			$config_data = Plugin::instance()->db->escape( Plugin::instance()->db->get_front_end_data( $product_id ) );
 			$config_data = apply_filters( 'mkl_pc_get_configurator_data', $config_data, $product_id );
-		}
+		}	
 
+		$json_data = json_encode( $config_data );
+		// if the data is empty, return an empty string to use the ajax call instead
+		if ( ! $json_data ) return '';
 		$data =  'var PC = PC || {};'.PHP_EOL;
 		$data .= 'PC.productData = PC.productData || {};'.PHP_EOL;
-		$data .= 'PC.productData.prod_'.$product_id.' = ' . json_encode( $config_data ) . ';'.PHP_EOL;
+		$data .= 'PC.productData.prod_'.$product_id.' = ' . $json_data . ';'.PHP_EOL;
 
 		/**
 		 * Filter the product's configuration JavaScript object which will be used in the frontend

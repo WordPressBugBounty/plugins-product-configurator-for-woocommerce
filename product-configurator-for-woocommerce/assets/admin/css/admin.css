@@ -358,6 +358,9 @@ html .media-modal.pc-modal .no-data {
   padding: 5px 20px;
 }
 
+html .pc-modal-container {
+  /* Color picker settings */
+}
 html .pc-modal-container.loading .loading-screen {
   display: block;
 }
@@ -435,6 +438,29 @@ html .pc-modal-container .mkl-pc-image-settings {
   width: 100%;
   padding: 16px;
   box-sizing: border-box;
+}
+html .pc-modal-container .setting > .wp-picker-container {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+html .pc-modal-container .setting > .wp-picker-container .wp-picker-input-wrap {
+  display: flex !important;
+  width: 100%;
+}
+html .pc-modal-container .setting > .wp-picker-container .wp-picker-input-wrap label {
+  display: block;
+  width: 100%;
+}
+html .pc-modal-container .setting > .wp-picker-container input.components-select-control__input.color-hex.wp-color-picker {
+  width: 100%;
+  padding-left: 40px;
+}
+html .pc-modal-container .setting > .wp-picker-container span.wp-color-result-text {
+  display: none;
+}
+html .pc-modal-container .setting > .wp-picker-container .wp-color-result.button {
+  position: absolute;
 }
 
 .pc-modal-opened .mkl_pc span.select2-container {
@@ -1053,6 +1079,63 @@ a.mkl-pc-link--external::before {
 .floating-add.showing button.mkl-floating-add-item {
   visibility: visible;
   opacity: 1;
+}
+
+.pc-sidebar .setting .field-repeater {
+  border: 1px solid #CCC;
+}
+.pc-sidebar .setting .field-repeater button .dashicons {
+  vertical-align: middle;
+}
+.pc-sidebar .setting .field-repeater button.remove-option span {
+  display: none;
+}
+.pc-sidebar .setting .field-repeater button.add-option {
+  margin: 10px;
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option {
+  display: flex;
+  align-items: end;
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option label {
+  flex: 1;
+  margin-right: 5px;
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option label input {
+  display: block;
+  width: 100%;
+  float: none;
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option .remove-option {
+  border: none;
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option .remove-option i.dashicons {
+  transform: translateY(-3px);
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option .remove-option i.dashicons + span {
+  display: none;
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option .order {
+  display: flex;
+  flex-direction: column;
+  margin-right: 3px;
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option .order button.button {
+  border: none;
+  padding-right: 3px;
+  padding-left: 3px;
+  font-size: 10px;
+  line-height: 1;
+  height: auto;
+  min-height: 20px;
+}
+.pc-sidebar .setting .field-repeater .field-repeater--option .order button.button .dashicons {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  line-height: 1;
 }
 
 @keyframes mkl-slide-down {

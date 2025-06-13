@@ -339,8 +339,8 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .angles-select {
   position: absolute;
-  left: 75px;
-  top: 2em;
+  left: 85px;
+  top: 25px;
   z-index: 2;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .angles-select > a {
@@ -517,7 +517,7 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   width: 20px;
   height: 20px;
   padding: 0;
-  top: 2.1em;
+  top: 30px;
   left: 30px;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar > header > .cancel span {
@@ -1184,6 +1184,10 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   font-size: 0.7em;
   color: var(--mkl_pc_color-light-gray);
 }
+.mkl_pc .mkl_pc_container .form.form-cart .pc_configurator_form {
+  display: flex;
+  justify-content: flex-end;
+}
 .mkl_pc .mkl_pc_container .form.form-cart form {
   display: inline-block;
 }
@@ -1193,9 +1197,13 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
 .mkl_pc .mkl_pc_container .form.form-cart .quantity {
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
+  margin-right: 8px;
 }
 .mkl_pc .mkl_pc_container .form.form-cart .quantity input.qty {
   background: #fff;
+  height: 100%;
+  box-sizing: border-box;
 }
 @media (max-width: 660px) {
   .mkl_pc .mkl_pc_container .form.form-cart .quantity input.qty {
@@ -1219,6 +1227,7 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
 .mkl_pc .mkl_pc_container .form.form-cart .pc-total-price--container {
   width: 100%;
   padding: var(--mkl_pc-float-spacing);
+  box-sizing: border-box;
 }
 .mkl_pc .mkl_pc_container .form.form-cart span.pc-total-price {
   width: 100%;

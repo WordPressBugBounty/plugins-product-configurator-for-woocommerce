@@ -106,6 +106,7 @@ PC.fe.views.angle = Backbone.View.extend({
 		this.options = options || {};
 		this.render(); 
 		this.listenTo( this.model, 'change active', this.activate ); 
+		wp.hooks.doAction( 'PC.fe.angle_view.init', this );
 		return this;
 	},
 
@@ -463,8 +464,8 @@ PC.fe.views.configurator = Backbone.View.extend({
 		if ( this.toolbar ) this.toolbar.remove();
 		if ( this.viewer ) this.viewer.remove();
 		if ( this.footer ) this.footer.remove();
-
-		this.viewer = new PC.fe.views.viewer( { parent: this } );
+		const Viewer_View = wp.hooks.applyFilters( 'PC.fe.viewer.main_view', PC.fe.views.viewer );
+		this.viewer = new Viewer_View( { parent: this } );
 		this.$main_window.append( this.viewer.render() );
 		
 		if ( ! PC.fe.angles.length || ! PC.fe.layers.length || ! PC.fe.contents.content.length ) {
@@ -1013,12 +1014,13 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 		this.options = options || {};
 		this.layer_type = this.model.get( 'type' );
 		this.listenTo( this.options.model, 'change:active', this.activate );
+		this.listenTo( this.options.model, 'activate_layer', this.on_activate_layer );
 		this.listenTo( this.options.model, 'change:hide_in_configurator', this.hide_in_configurator );
 		wp.hooks.doAction( 'PC.fe.layers_list_item.init', this );
 	},
 
 	events: {
-		'click > button.layer-item': 'show_choices', 
+		'click > button.layer-item': 'on_click_layer', 
 	},
 
 	render: function() {
@@ -1105,7 +1107,7 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 		}
 		wp.hooks.doAction( 'PC.fe.add.choices', this.choices.$el, this );
 	},
-	show_choices: function( event ) {
+	on_click_layer( event ) {
 		if ( event ) {
 			// Allow clicking on link tags
 			if ( event.target.tagName && 'A' == event.target.tagName || $( event.target ).closest( 'a' ).length ) {
@@ -1114,11 +1116,22 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 			event.stopPropagation();
 			event.preventDefault();
 		}
-
+		this.show_choices( event );
+	},
+	// Used for external activation
+	on_activate_layer( force_activation ) {
+		this.show_choices( null, force_activation );
+	},
+	/**
+	 * show_choices handles activating and deactivating the layer and its siblings, 
+	 * taking into account the layer type / display type,
+	 * such as dropdowns or Steps
+	 */
+	show_choices: function ( event, force_activation ) {
 		if ( this.model.get( 'active' ) == true ) {
 			wp.hooks.doAction( 'PC.fe.layer.hide', this );
 			if ( wp.hooks.applyFilters( 'PC.fe.layer.self_hide', true, this ) ) {
-				this.model.set('active', false);
+				this.model.set( 'active', false );
 			}
 		} else {
 			if ( ! this.model.get( 'parent' ) || ( this.model.get( 'parent' ) && this.model.collection.get( this.model.get( 'parent' ) ) && 'group' !== this.model.collection.get( this.model.get( 'parent' ) ).get( 'type' ) ) ) {
@@ -1138,7 +1151,6 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 				_.each( this.model.collection.where( { 'display_mode': 'dropdown' } ), function( model ) {
 					model.set( 'active' , false );
 				} );
-
 			}
 
 			if ( event && 'dropdown' === this.model.get( 'display_mode' ) ) {
@@ -1816,17 +1828,17 @@ PC.fe.views.summary = Backbone.View.extend( {
 	layers: [],
 	initialize: function() {
 		this.render();
-		console.log( this.tagName );
-		console.log( this.className );
 		
 		if ( PC.conditionalLogic ) {
 			wp.hooks.addAction( 'mkl_checked_conditions', 'mkl/pc/summary', this.render.bind( this ), 1000 );
 		} 
 		wp.hooks.addAction( 'PC.fe.choice.set_choice', 'mkl/pc/summary', this.render.bind( this ), 1000 );
 		wp.hooks.addAction( 'PC.fe.form.item.change', 'mkl/pc/summary', this.render.bind( this ), 1000 );
-		return this; 
+		wp.hooks.addAction( 'PC.fe.text_overlay.item.change', 'mkl/pc/summary', this.render.bind( this ), 1000 );
+		return this;
 	},
-	render: function() {
+	render: function () {
+		
 		this.clear();
 		var choices = PC.fe.save_data.get_choices();
 		_.each( choices, function( item ) {
