@@ -20,7 +20,8 @@ var PC = PC || {};
 		comparator: wp.hooks.applyFilters( 'PC.choices.comparator', function( choice ) {
 			return choice.get( 'order' );
 		} ),
-		deactivateAll: function() {
+		deactivateAll: function () {
+			if ( !this.layer.should_reset ) return;
 			this.each(function( choice ) {
 				choice.set('active', false);
 			});
@@ -55,6 +56,7 @@ var PC = PC || {};
 		},
 		selectChoice: function ( choice_id, activate ) {
 			var choice = this.get( choice_id );
+			if ( !choice ) return false;
 			var is_active = choice.get('active');
 			// Simple layers
 			if ( 'simple' === this.layer_type || ! this.layer_type ) {

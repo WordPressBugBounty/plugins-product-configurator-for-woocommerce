@@ -167,6 +167,11 @@ class DB {
 
 		if ( ! is_string( $that ) ) return false;
 
+		$cache_key = "mkl_pc_data_{$that}_{$product_id}";
+		$cached = wp_cache_get( $cache_key, 'mkl_pc' );
+		if ( false !== $cached ) {
+			return $cached;
+		}
 		if ( ! $this->is_product( $product_id ) ) return false;
 
 		$product = wc_get_product( $product_id );
@@ -191,8 +196,36 @@ class DB {
 			 * @param $that       - The slug of the meta data fetched - e.g 'content', 'angles', 'layers'...
 			 * @param $product_id - The product ID
 			 */
-			return apply_filters( 'mkl_pc/db/get', $data, $that, $product_id ); 
+			$data = apply_filters( 'mkl_pc/db/get', $data, $that, $product_id );
+			wp_cache_set( $cache_key, $data, 'mkl_pc', 3600 );
+			return $data; 
 		}
+	}
+
+	public function get_indexed( $type, $key, $product_id ) {
+		static $cache = [];
+
+		$cache_key = "{$type}_{$key}_{$product_id}";
+
+		if ( isset( $cache[ $cache_key ] ) ) {
+			return $cache[ $cache_key ];
+		}
+
+		$data = $this->get( $type, $product_id );
+
+		$indexed = [];
+
+		if ( is_array( $data ) ) {
+			foreach ( $data as $item ) {
+				if ( isset( $item[ $key ] ) ) {
+					$indexed[ $item[ $key ] ] = $item;
+				}
+			}
+		}
+
+		$cache[ $cache_key ] = $indexed;
+
+		return $indexed;
 	}
 
 	/**
@@ -245,6 +278,9 @@ class DB {
 		
 		do_action( 'mkl_pc_saved_product_configuration_'.$component, $id, $data );
 		do_action( 'mkl_pc_saved_product_configuration', $id );
+
+		// On product save or meta update:
+		wp_cache_delete( "mkl_pc_data_{$component}_{$id}", 'mkl_pc' );
 
 		return $data;
 	}
@@ -360,6 +396,21 @@ class DB {
 			),
 			'product_info' => array()
 		);
+		
+		if ( 'variable' === $product->get_type()) {
+			$init_data['product_info']['mode'] = $product->get_meta( MKL_PC_PREFIX . '_variable_configuration_mode', true );
+			$init_data['product_info']['variations'] = array(); 
+			$variations = $product->get_available_variations();
+			foreach( $variations as $variation ) {
+				$init_data['product_info']['variations'][ $variation['variation_id'] ] = array (
+					'is_configurable' => $variation['is_configurable'],
+					'price' => $variation['display_price'],
+					// 'price_excl_tax' =>
+					'regular_price' => $variation['display_regular_price'],
+					'is_on_sale' => $variation['display_price'] < $variation['display_regular_price'],
+				);
+			}
+		}
 
 		return apply_filters( 'mkl_product_configurator_init_data', $init_data, $product );
 	}
@@ -406,6 +457,8 @@ class DB {
 		if( 'simple' == $product_type ) {
 			// the configurator content
 			$init_data['content'] = $this->get( 'content', $id );
+			$init_data['product_info']['price'] = (float) $product->get_price();
+			$init_data['product_info']['price_excl_tax'] = (float) wc_get_price_excluding_tax( $product ); 
 		}
 
 		return apply_filters( 'mkl_product_configurator_get_front_end_data', $init_data, $product );
@@ -495,6 +548,14 @@ class DB {
 					'escape' => 'intval',
 				],
 				'extra_price' => [ 
+					'sanitize' => 'floatval',
+					'escape' => 'floatval',
+				],
+				'price' => [ 
+					'sanitize' => 'floatval',
+					'escape' => 'floatval',
+				],
+				'price_excl_tax' => [ 
 					'sanitize' => 'floatval',
 					'escape' => 'floatval',
 				],

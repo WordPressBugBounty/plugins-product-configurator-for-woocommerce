@@ -79,9 +79,12 @@
 		render: function() {
 			this.$el.html( button_label );
 		},
-		on_click: function( e ) {
+		on_click: function ( e ) {
+			e.preventDefault();
 			elementorProFrontend.modules.popup.showPopup( { id: modalId } )
 		}
 	} );
 
+	window.mkl_pc_elementor = window.mkl_pc_elementor || {};
+	window.mkl_pc_elementor.open_modal_button = button_view;
 } )( jQuery );

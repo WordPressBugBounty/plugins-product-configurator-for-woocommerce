@@ -34,6 +34,8 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 
 		this.$el.append( this.template( wp.hooks.applyFilters( 'PC.fe.configurator.layer_data', data ) ) ); 
 
+		this.$el.attr( 'aria-describedby', 'config-layer-' + this.model.id );
+
 		if ( PC.fe.config.show_active_choice_in_layer && ! this.model.get( 'is_step' ) ) {
 			var selection = new PC.fe.views.layers_list_item_selection( { model: this.options.model } );
 			this.$( '.layer-item .layer-name' ).after( selection.$el );
@@ -135,7 +137,7 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 				});
 			} else {
 				var parent = this.model.collection.get( this.model.get( 'parent' ) );
-				if ( PC_config.config.auto_close_siblings_in_groups || parent.get( 'is_step' ) ) {
+				if ( PC_config.config.auto_close_siblings_in_groups || ( parent && parent.get( 'is_step' ) ) ) {
 					// Toggle any siblings
 					_.each( this.model.collection.where( { 'parent': this.model.get( 'parent' ) } ), function( model ) {
 						model.set( 'active' , false );
@@ -152,7 +154,8 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 				$( document ).on( 'click.mkl-pc', this.dropdown_click_outside.bind( this ) );
 			}
 
-			this.model.set( 'active', true ); 
+			this.model.set( 'active', true );
+
 			PC.fe.current_layer = this.model;
 			wp.hooks.doAction( 'PC.fe.layer.show', this );
 		}
@@ -162,15 +165,21 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 			this.show_choices();
 		}
 	},
-	activate: function() {
+	activate: function () {
+		
 		if ( this.model.get( 'active' ) ) {
 			this.$el.addClass( 'active' ); 
-			if ( this.choices ) this.choices.$el.addClass( 'active' );
+			if ( this.choices ) {
+				this.choices.$el.addClass( 'active' );
+				this.choices.$( 'button:visible' ).first().focus();
+			}
+			this.$( '> button.layer-item' ).attr( 'aria-pressed', 'true' );
 			wp.hooks.doAction( 'PC.fe.layer.activate', this );
 		} else {
 			this.$el.removeClass( 'active' );
 			if ( this.choices ) this.choices.$el.removeClass( 'active' );
 			$( document ).off( 'click.mkl-pc' );
+			this.$( '> button.layer-item' ).attr( 'aria-pressed', 'false' );
 			wp.hooks.doAction( 'PC.fe.layer.deactivate', this );
 		}
 	},

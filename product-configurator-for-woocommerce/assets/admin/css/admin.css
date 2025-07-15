@@ -56,7 +56,7 @@ html .media-modal.pc-modal .hidden {
 html .media-modal.pc-modal .delete:not(.button-primary) {
   color: #a00;
 }
-html .media-modal.pc-modal .form-details button.duplicate {
+html .media-modal.pc-modal .form-details .actions-container button + button {
   margin-left: 6px;
 }
 html .media-modal.pc-modal .button-primary.delete {
@@ -76,6 +76,37 @@ html .media-modal.pc-modal .button-primary.delete:active {
   box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);
   transform: translateY(1px);
   outline: none;
+}
+html .media-modal.pc-modal .notice-container {
+  z-index: 100000;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  /* background: red; */
+}
+html .media-modal.pc-modal .pc-notice {
+  padding: 15px;
+  min-width: 200px;
+  max-width: 300px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.8901960784);
+  color: #FFF;
+}
+html .media-modal.pc-modal .pc-notice a {
+  color: #FFF;
+}
+html .media-modal.pc-modal .pc-notice + .pc-notice {
+  margin-top: 8px;
+}
+html .media-modal.pc-modal .pc-notice .dashicons {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+html .media-modal.pc-modal .pc-notice.notice-success .dashicons {
+  color: #00a32a;
 }
 
 /*
@@ -108,7 +139,7 @@ html .media-modal.pc-modal .media-frame-title .description {
   }
 }
 html .media-modal.pc-modal .media-frame-content .mkl-list {
-  padding-bottom: 40px;
+  padding-bottom: 80px;
 }
 html .media-modal.pc-modal .media-frame-content.structure .pc-sidebar {
   position: absolute;
@@ -463,7 +494,8 @@ html .pc-modal-container .setting > .wp-picker-container .wp-color-result.button
   position: absolute;
 }
 
-.pc-modal-opened .mkl_pc span.select2-container {
+.pc-modal-opened .pc-modal-container span.select2-container,
+.pc-modal-opened .pc-modal-container ~ span.select2-container {
   z-index: 1500000;
 }
 

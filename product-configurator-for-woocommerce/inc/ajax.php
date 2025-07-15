@@ -109,6 +109,7 @@ class Ajax {
 						}
 					}
 
+
 					if ( ! $data ) {
 						$data = $this->db->get_front_end_data( $id );
 						$data = $this->db->escape( $data );
@@ -117,6 +118,7 @@ class Ajax {
 							set_transient( 'mkl_pc_data_init_version_' . $id, $data_version, 600 );
 						}
 					}
+
 				} else {
 					$data = $this->db->get_init_data( $id );
 					$data = $this->db->escape( $data );
@@ -141,6 +143,7 @@ class Ajax {
 		}
 
 		$data = apply_filters( 'mkl_pc_get_configurator_data', $data, $id );
+
 
 		if ( isset($_REQUEST['view']) && $_REQUEST['view'] === 'dump' && defined('WP_DEBUG') && WP_DEBUG === true ) {
 			echo 'get_configurator_data was executed in ' . (microtime(true) - $start) *1000 . 'ms and we are about to dump';
@@ -261,7 +264,7 @@ class Ajax {
 	 * Purge the configurations cache
 	 */
 	public function purge_config_cache() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) wp_send_json_error( '', 403 );
+		if ( ! wp_verify_nonce( $_REQUEST[ 'security' ], 'mlk_pc_settings-options' ) || ! current_user_can( 'manage_woocommerce' ) ) wp_send_json_error( '', 403 );
 		Plugin::instance()->cache->purge();
 		wp_send_json_success();
 	}

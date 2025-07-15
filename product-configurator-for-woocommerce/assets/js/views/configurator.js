@@ -81,6 +81,8 @@ PC.fe.views.angles = Backbone.View.extend({
 	render: function() { 
 		this.$el.append( this.template() );
 		this.$list = this.$el.find( 'ul' );
+		// a11y - angles are not relevant for voice over 
+		this.$el.attr( 'aria-hidden', 'true' );
 		this.add_all(); 
 		return this.$el; 
 	},
@@ -128,10 +130,13 @@ PC.fe.views.angle = Backbone.View.extend({
 		this.model.set('active', true); 
 	},
 	activate: function() {
-		if( this.model.get('active') )
-			this.$el.addClass('active');
-		else
+		if ( this.model.get( 'active' ) ) {			
+			this.$el.addClass( 'active' );
+			this.$( 'a' ).attr( 'aria-pressed', 'true' );
+		} else {
+			this.$( 'a' ).attr( 'aria-pressed', 'false' );
 			this.$el.removeClass('active');
+		}
 
 		if ( this.model.get( 'class_name' ) ) {
 			PC.fe.modal.$el.toggleClass( this.model.get( 'class_name' ), this.model.get( 'active' ) );
@@ -272,8 +277,7 @@ PC.fe.views.choice = Backbone.View.extend({
 		this.model.collection.selectChoice( this.model.id );
 		var layer = PC.fe.layers.get( this.model.get( 'layerId' ) );
 		var close_choices = 
-			PC.fe.config.close_choices_when_selecting_choice 
-			&& ( $( 'body' ).is('.is-mobile' ) || PC.utils._isMobile() ) 
+			( PC.fe.config.close_choices_when_selecting_choice && ( $( 'body' ).is('.is-mobile' ) || PC.utils._isMobile() ) )
 			|| PC.fe.config.close_choices_when_selecting_choice_desktop
 			|| 'dropdown' == layer.get( 'display_mode' )
 			|| ( 'full-screen' == layer.get( 'display_mode' ) && 'simple' == layer.get( 'type' ) );
@@ -306,10 +310,12 @@ PC.fe.views.choice = Backbone.View.extend({
 	},
 	activate: function() {
 		if( this.model.get('active') === true ) {
-			this.$el.addClass('active');
+			this.$el.addClass( 'active' );
+			this.$( '> button.choice-item' ).attr( 'aria-pressed', 'true' );
 			wp.hooks.doAction( 'PC.fe.choice.activate', this );
 		} else {
-			this.$el.removeClass('active');
+			this.$el.removeClass( 'active' );
+			this.$( '> button.choice-item' ).attr( 'aria-pressed', 'false' );
 			wp.hooks.doAction( 'PC.fe.choice.deactivate', this );
 		}
 	},
@@ -428,7 +434,11 @@ PC.fe.views.configurator = Backbone.View.extend({
 		}
 
 		this.$el.append( this.template( { bg_image: wp.hooks.applyFilters( 'PC.fe.config.bg_image', PC.fe.config.bg_image, this ) } ) ); 
-		this.$main_window = this.$el.find( '.mkl_pc_container' ); 
+		this.$main_window = this.$el.find( '.mkl_pc_container' );
+
+		if ( !PC.fe.inline ) {
+			this.$main_window.attr( 'aria-modal', 'true' );
+		}
 
 		return this.$el; 
 	},
@@ -443,7 +453,8 @@ PC.fe.views.configurator = Backbone.View.extend({
 				this.$el.find('.layers .layer-item').first().trigger( 'focus' );
 			}.bind(this), 300);
 		}
-		
+		// A11y: set focus to the modal when opening it
+		if ( !PC.fe.inline ) this.$main_window.trigger( 'focus' );
 		wp.hooks.doAction( 'PC.fe.open', this ); 
 	},
 	close: function() {
@@ -737,9 +748,9 @@ PC.fe.views.form = Backbone.View.extend({
 			$( e.currentTarget ).addClass( 'adding-to-cart' );
 
 			var btn;
-			if ( this.$cart.find( 'button[name=add-to-cart]' ).length ) {
+			if ( this.$cart?.find( 'button[name=add-to-cart]' ).length ) {
 				btn = this.$cart.find( 'button[name=add-to-cart]' );
-			} else if ( this.$cart.find( '.single_add_to_cart_button' ).length ) {
+			} else if ( this.$cart?.find( '.single_add_to_cart_button' ).length ) {
 				btn = this.$cart.find( '.single_add_to_cart_button' );
 			}
 
@@ -813,7 +824,7 @@ PC.fe.views.form = Backbone.View.extend({
 						return;
 					}
 					
-					$( document.body ).trigger( 'added_to_cart', [ data.fragments, data.cart_hash, false, data] );
+					$( document.body ).trigger( 'added_to_cart', [ data.fragments, data.cart_hash, btn, data] );
 				} )
 				.catch( error => {
 					console.error( 'Configurator: Error in form submission' );
@@ -1039,6 +1050,8 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 
 		this.$el.append( this.template( wp.hooks.applyFilters( 'PC.fe.configurator.layer_data', data ) ) ); 
 
+		this.$el.attr( 'aria-describedby', 'config-layer-' + this.model.id );
+
 		if ( PC.fe.config.show_active_choice_in_layer && ! this.model.get( 'is_step' ) ) {
 			var selection = new PC.fe.views.layers_list_item_selection( { model: this.options.model } );
 			this.$( '.layer-item .layer-name' ).after( selection.$el );
@@ -1140,7 +1153,7 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 				});
 			} else {
 				var parent = this.model.collection.get( this.model.get( 'parent' ) );
-				if ( PC_config.config.auto_close_siblings_in_groups || parent.get( 'is_step' ) ) {
+				if ( PC_config.config.auto_close_siblings_in_groups || ( parent && parent.get( 'is_step' ) ) ) {
 					// Toggle any siblings
 					_.each( this.model.collection.where( { 'parent': this.model.get( 'parent' ) } ), function( model ) {
 						model.set( 'active' , false );
@@ -1157,7 +1170,8 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 				$( document ).on( 'click.mkl-pc', this.dropdown_click_outside.bind( this ) );
 			}
 
-			this.model.set( 'active', true ); 
+			this.model.set( 'active', true );
+
 			PC.fe.current_layer = this.model;
 			wp.hooks.doAction( 'PC.fe.layer.show', this );
 		}
@@ -1167,15 +1181,21 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 			this.show_choices();
 		}
 	},
-	activate: function() {
+	activate: function () {
+		
 		if ( this.model.get( 'active' ) ) {
 			this.$el.addClass( 'active' ); 
-			if ( this.choices ) this.choices.$el.addClass( 'active' );
+			if ( this.choices ) {
+				this.choices.$el.addClass( 'active' );
+				this.choices.$( 'button:visible' ).first().focus();
+			}
+			this.$( '> button.layer-item' ).attr( 'aria-pressed', 'true' );
 			wp.hooks.doAction( 'PC.fe.layer.activate', this );
 		} else {
 			this.$el.removeClass( 'active' );
 			if ( this.choices ) this.choices.$el.removeClass( 'active' );
 			$( document ).off( 'click.mkl-pc' );
+			this.$( '> button.layer-item' ).attr( 'aria-pressed', 'false' );
 			wp.hooks.doAction( 'PC.fe.layer.deactivate', this );
 		}
 	},
@@ -1948,7 +1968,7 @@ PC.fe.views.toolbar = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.append( this.template( { name:this.parent.options.title } ) );
+		this.$el.append( this.template( { name: this.parent.options.title } ) );
 		this.$selection = this.$el.find('.choices'); 
 		// this.get_cart(); 
 		this.layers = new PC.fe.views.layers_list( { parent: this } );
@@ -2002,6 +2022,9 @@ PC.fe.views.viewer_static_layer = Backbone.View.extend({
 		if ( layer_class ) classes.push( layer_class );
 		if ( this.model.get( 'class_name' ) ) classes.push( this.model.get( 'class_name' ) );
 		
+		// a11y - hide images from being read
+		this.$el.attr( 'aria-hidden', 'true' );
+
 		/**
 		 * Filter the classes applied to the image
 		 */
@@ -2030,6 +2053,7 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 		var that = this;
 		this.empty_img = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 		this.parent = options.parent || PC.fe;
+		this.layer = PC.fe.layers.get( this.model.get( 'layerId' ) );
 		this.is_loaded = false;
 		this.listenTo( this.model, 'change:active', this.change_layer );
 		this.listenTo( this.model, 'preload-image', this.preload_image );
@@ -2050,7 +2074,7 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 		
 		classes.push( this.model.collection.getType() );
 		
-		var layer_class = PC.fe.layers.get( this.model.get( 'layerId' ) ).get( 'class_name' );
+		var layer_class = this.layer.get( 'class_name' );
 		if ( layer_class ) classes.push( layer_class );
 		if ( this.model.get( 'class_name' ) ) classes.push( this.model.get( 'class_name' ) );
 		/**
@@ -2083,9 +2107,15 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 			}
 			this.$el.removeClass( 'active' );
 		}
-
+		// a11y - hide images from being read
+		this.$el.attr( 'aria-hidden', 'true' );
+		
 		this.$el.data( 'dimensions', this.model.get_image( 'image', 'dimensions' ) );
 
+		this.$el.attr( 'data-layer', this.layer.get( 'admin_label' ) || this.layer.get( 'name' ) );
+		this.$el.attr( 'data-choice', this.model.get( 'admin_label' ) || this.model.get( 'name' ) );
+		this.$el.attr( 'data-layer_id', this.layer.id );
+		this.$el.attr( 'data-choice_id', this.model.id );
 		return this.$el; 
 	},
 	// get_image_url: function( choice_id, image ) {
