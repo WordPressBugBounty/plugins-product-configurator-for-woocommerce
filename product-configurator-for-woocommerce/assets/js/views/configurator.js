@@ -366,9 +366,9 @@ PC.fe.views.choices = Backbone.View.extend({
 	},
 	add_one: function( model ) {
 		if ( model.get( 'is_group' ) )  {
-			var new_choice = new PC.fe.views.choiceGroup( { model: model, multiple: false } ); 
+			var new_choice = new PC.fe.views.choiceGroup( { model: model, multiple: false, parent: this } ); 
 		} else {
-			var new_choice = new PC.fe.views.choice( { model: model, multiple: false } ); 
+			var new_choice = new PC.fe.views.choice( { model: model, multiple: false, parent: this } ); 
 		}
 
 		if ( model.get( 'parent' ) && this.$( 'ul[data-item-id=' + model.get( 'parent' ) + ']' ).length ) {
@@ -1036,6 +1036,9 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 
 	render: function() {
 
+		this.$el.attr( 'data-layer', this.model.id );
+		this.$el.data( 'view', this );
+
 		if ( this.model.get( 'not_a_choice' ) && this.model.get( 'custom_html' ) ) {
 			this.$el.addClass( 'not-a-choice custom' );
 			this.$el.append( $( this.model.get( 'custom_html' ) ) );
@@ -1463,7 +1466,7 @@ PC.fe.save_data = {
 						wp.hooks.applyFilters(
 							'PC.fe.save_data.parse_choices.added_choice',
 							{
-								is_choice: false,
+								is_choice: true,
 								layer_id: model.id, 
 								choice_id: choice.id, 
 								angle_id: angle_id,

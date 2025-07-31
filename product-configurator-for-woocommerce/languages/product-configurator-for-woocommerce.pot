@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2025-07-15 06:59+0000\n"
+"POT-Creation-Date: 2025-07-31 11:07+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -17,19 +17,19 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/woocommerce-mkl-product-configurator.php:64
+#: src/woocommerce-mkl-product-configurator.php:65
 msgid "The plugin Product Configurator for WooCommerce requires a PHP version of 5.4+."
 msgstr ""
 
-#: src/woocommerce-mkl-product-configurator.php:72
+#: src/woocommerce-mkl-product-configurator.php:73
 msgid "WooCommerce has to be active for WooCommerce Product configurator to work."
 msgstr ""
 
-#: src/woocommerce-mkl-product-configurator.php:80
+#: src/woocommerce-mkl-product-configurator.php:81
 msgid "Your WooCommerce version is too old for WooCommerce Product Configurator to work."
 msgstr ""
 
-#: src/woocommerce-mkl-product-configurator.php:80
+#: src/woocommerce-mkl-product-configurator.php:81
 msgid "WooCommerce Version 3+ required."
 msgstr ""
 
