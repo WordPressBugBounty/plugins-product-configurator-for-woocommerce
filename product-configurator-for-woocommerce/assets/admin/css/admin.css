@@ -882,9 +882,6 @@ CONTENT
   height: auto;
   max-width: 80px;
 }
-.choice-details .options .view ~ .view .pictures .picture.thumbnail-picture {
-  display: none;
-}
 
 .mkl-pc-setting--container {
   width: 100%;

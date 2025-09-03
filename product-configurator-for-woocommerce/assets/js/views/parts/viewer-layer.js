@@ -54,7 +54,7 @@ PC.fe.views.viewer_static_layer = Backbone.View.extend({
 			this.parent.$el.addClass('is-loading-image');
 		}
 		this.$el.data( 'dimensions', this.model.get_image( 'image', 'dimensions' ) );
-
+		wp.hooks.doAction( 'PC.fe.viewer.layer.render.after', this );
 		return this.$el; 
 	}		
 });
@@ -68,7 +68,6 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 		'stalled': 'img_loaded',
 	},
 	initialize: function( options ) { 
-		var that = this;
 		this.empty_img = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 		this.parent = options.parent || PC.fe;
 		this.layer = PC.fe.layers.get( this.model.get( 'layerId' ) );
@@ -78,7 +77,6 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 		this.listenTo( PC.fe.layers, 'change:active', this.toggle_current_layer_class );
 		this.listenTo( PC.fe.angles, 'change:active', this.change_angle );
 		wp.hooks.doAction( 'PC.fe.choice-img.init', this );
-		var is_active = this.model.get( 'active' );
 
 		this.render(); 
 
@@ -125,15 +123,19 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 			}
 			this.$el.removeClass( 'active' );
 		}
-		// a11y - hide images from being read
-		this.$el.attr( 'aria-hidden', 'true' );
 		
 		this.$el.data( 'dimensions', this.model.get_image( 'image', 'dimensions' ) );
+		
+		// a11y - hide images from being read
+		if ( ! this.$el.attr( 'data-layer' ) ) {
+			this.$el.attr( 'aria-hidden', 'true' );
+			this.$el.attr( 'data-layer', this.layer.get( 'admin_label' ) || this.layer.get( 'name' ) );
+			this.$el.attr( 'data-choice', this.model.get( 'admin_label' ) || this.model.get( 'name' ) );
+			this.$el.attr( 'data-layer_id', this.layer.id );
+			this.$el.attr( 'data-choice_id', this.model.id );
+		}
 
-		this.$el.attr( 'data-layer', this.layer.get( 'admin_label' ) || this.layer.get( 'name' ) );
-		this.$el.attr( 'data-choice', this.model.get( 'admin_label' ) || this.model.get( 'name' ) );
-		this.$el.attr( 'data-layer_id', this.layer.id );
-		this.$el.attr( 'data-choice_id', this.model.id );
+		wp.hooks.doAction( 'PC.fe.viewer.layer.render.after', this );
 		return this.$el; 
 	},
 	// get_image_url: function( choice_id, image ) {

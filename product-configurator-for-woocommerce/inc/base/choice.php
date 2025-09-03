@@ -22,12 +22,12 @@ class Choice {
 	public $layer_data; 
 	public $choice;
 	public $images;
+	public $thumbnail;
 	public $option_label;
 	public $field_value;
 
 	public function __wakeup() {
 		do_action( 'mkl_pc/choice/wakeup', $this );
-		do_action( 'mkl_pc/choice/init', $this, $this->layer_data );
 		// $this->set_selected_choice();
 	}
 
@@ -53,8 +53,16 @@ class Choice {
 	}
 
 	public function maybe_set_things_up() {
-		if ( null === $this->layer ) $this->set_layer(); 
-		if ( null === $this->choice ) $this->set_selected_choice();
+		$setup = false;
+		if ( null === $this->layer ) {
+			$this->set_layer(); 
+			$setup = true;
+		}
+		if ( null === $this->choice ) {
+			$this->set_selected_choice();
+			$setup = true;
+		}
+		if ( $setup ) do_action( 'mkl_pc/choice/init', $this, $this->layer_data );
 	}
 
 	public function __construct( $product_id, $variation_id, $layer_id, $choice_id, $angle_id, $layer_data = false ) { 
@@ -135,6 +143,32 @@ class Choice {
 		$this->maybe_set_things_up();
 		if ( ! $this->images || ! is_array(  $this->images ) || ! isset( $this->images[ $type ] ) ) return '';
 		return $this->images[ $type ];
+	}
+
+	public function get_choice_thumbnail() {
+		$this->maybe_set_things_up();
+
+		if ( $this->thumbnail ) return $this->thumbnail;
+
+		$angles = $this->get_db()->get( 'angles', $this->product_id );
+		$images = isset( $this->choice['images'] ) ? $this->choice['images'] : null;
+
+		if ( is_array( $angles ) && is_array( $images ) ) {
+			// Default to first item
+			$selected_angle = $angles[0];
+			foreach( $angles as $angle ) {
+				if ( isset( $angle['has_thumbnails'] ) && $angle['has_thumbnails'] ) {
+					$selected_angle = $angle;
+				}
+			}
+			$res = wp_list_filter( $images, [ 'angleId' => $selected_angle['_id'] ] );
+			$image = reset( $res ) ?: [];
+			$this->thumbnail = isset( $image['thumbnail'] ) ? $image['thumbnail'] : [];
+		} else {
+			$this->thumbnail = [];
+		}
+		
+		return $this->thumbnail;
 	}
 
 	public function get_image_url( $type = 'image' ){

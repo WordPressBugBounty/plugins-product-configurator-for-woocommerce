@@ -237,7 +237,7 @@ PC.fe.views.choice = Backbone.View.extend({
 		}
 	},
 	get_description: function() {
-		if ( 'colors' == this.model.collection.layer.get( 'display_mode' ) && ! this.model.get( 'is_group' ) ) {
+		if ( wp.hooks.applyFilters( 'PC.fe.tooltip.add_all_text', 'colors' == this.model.collection.layer.get( 'display_mode' ) && ! this.model.get( 'is_group' ) ) ) {
 			this.update_tippy_on_price_update = true;
 			var description = this.$( '.choice-text' ).length ? this.$( '.choice-text' ).html() : this.$( '.choice-name' ).html();
 			if ( this.$( '.choice-price' ).length ) {
@@ -1190,7 +1190,7 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 			this.$el.addClass( 'active' ); 
 			if ( this.choices ) {
 				this.choices.$el.addClass( 'active' );
-				this.choices.$( 'button:visible' ).first().focus();
+				this.choices.$( 'button:visible' ).first().trigger( 'focus' );
 			}
 			this.$( '> button.layer-item' ).attr( 'aria-pressed', 'true' );
 			wp.hooks.doAction( 'PC.fe.layer.activate', this );
@@ -1538,8 +1538,10 @@ PC.fe.views.stepsProgress = Backbone.View.extend( {
 	render: function() {
 		this.$ol = $( '<ol class="steps-progress" />' );
 		PC.fe.steps.steps.each( this.add_step.bind( this ) );
-		this.$marker = $( '<li class="steps-progress--item steps-progress--active-marker" />' );
-		this.$ol.append( this.$marker );
+		if ( wp.hooks.applyFilters( 'PC.fe.steps.display_marker', true ) ) {
+			this.$marker = $( '<li class="steps-progress--item steps-progress--active-marker" />' );
+			this.$ol.append( this.$marker );
+		}
 		this.$ol.appendTo( this.$el );
 	},
 	add_step: function( step ) {
@@ -2039,7 +2041,7 @@ PC.fe.views.viewer_static_layer = Backbone.View.extend({
 			this.parent.$el.addClass('is-loading-image');
 		}
 		this.$el.data( 'dimensions', this.model.get_image( 'image', 'dimensions' ) );
-
+		wp.hooks.doAction( 'PC.fe.viewer.layer.render.after', this );
 		return this.$el; 
 	}		
 });
@@ -2053,7 +2055,6 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 		'stalled': 'img_loaded',
 	},
 	initialize: function( options ) { 
-		var that = this;
 		this.empty_img = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 		this.parent = options.parent || PC.fe;
 		this.layer = PC.fe.layers.get( this.model.get( 'layerId' ) );
@@ -2063,7 +2064,6 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 		this.listenTo( PC.fe.layers, 'change:active', this.toggle_current_layer_class );
 		this.listenTo( PC.fe.angles, 'change:active', this.change_angle );
 		wp.hooks.doAction( 'PC.fe.choice-img.init', this );
-		var is_active = this.model.get( 'active' );
 
 		this.render(); 
 
@@ -2110,15 +2110,19 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 			}
 			this.$el.removeClass( 'active' );
 		}
-		// a11y - hide images from being read
-		this.$el.attr( 'aria-hidden', 'true' );
 		
 		this.$el.data( 'dimensions', this.model.get_image( 'image', 'dimensions' ) );
+		
+		// a11y - hide images from being read
+		if ( ! this.$el.attr( 'data-layer' ) ) {
+			this.$el.attr( 'aria-hidden', 'true' );
+			this.$el.attr( 'data-layer', this.layer.get( 'admin_label' ) || this.layer.get( 'name' ) );
+			this.$el.attr( 'data-choice', this.model.get( 'admin_label' ) || this.model.get( 'name' ) );
+			this.$el.attr( 'data-layer_id', this.layer.id );
+			this.$el.attr( 'data-choice_id', this.model.id );
+		}
 
-		this.$el.attr( 'data-layer', this.layer.get( 'admin_label' ) || this.layer.get( 'name' ) );
-		this.$el.attr( 'data-choice', this.model.get( 'admin_label' ) || this.model.get( 'name' ) );
-		this.$el.attr( 'data-layer_id', this.layer.id );
-		this.$el.attr( 'data-choice_id', this.model.id );
+		wp.hooks.doAction( 'PC.fe.viewer.layer.render.after', this );
 		return this.$el; 
 	},
 	// get_image_url: function( choice_id, image ) {
@@ -2251,7 +2255,10 @@ PC.fe.views.viewer = Backbone.View.extend({
 	},
 
 	render: function( ) { 
+		wp.hooks.doAction( 'PC.fe.viewer.render.before', this );
+
 		this.$el.append( this.template() ); 
+
 		if ( PC.fe.contents ) {
 			if ( PC.fe.angles.length > 1 ) {
 				this.angles_selector = new PC.fe.views.angles({ parent: this }); 

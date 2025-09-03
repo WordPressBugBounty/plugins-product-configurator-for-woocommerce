@@ -528,16 +528,12 @@ PC.views = PC.views || {};
 			if( !this.model.get('images') ) this.model.set('images', new PC.choice_pictures() );
 				
 			var images = this.model.get( 'images' );
-			if( !images.get(angle.id) ){
-				images.add({
-					angleId: angle.id,
-				});
-			} 
+			
+			var imageModel = images.get(angle.id) || null;
 
-			data.model = images.get(angle.id);
+			data.model = imageModel; // can be null
 			var angle_view = new PC.views.choice_picture(data);
-
-			this.$pictures.append( angle_view.render().el );
+			this.$pictures.append(angle_view.render().el);
 
 			/**
 			 * PC.admin.choiceDetails.add_angle action, triggered when adding the angle images to the choice details
@@ -632,7 +628,7 @@ PC.views = PC.views || {};
 		collectionName: 'content',
 		initialize: function( options ) {
 			this.options = options || {};
-			this.listenTo(this.model, 'change', this.has_changed);
+			if ( this.model ) this.listenTo(this.model, 'change', this.has_changed);
 		},
 		events: {
 			'click .edit-attachment': 'edit_attachment',
@@ -648,15 +644,24 @@ PC.views = PC.views || {};
 			this.editing = $(e.currentTarget).closest( '.picture' ).data( 'edit' ); 
 			var media_options = {};
 			media_options.el = this.$el;
-			if( this.model.get( this.editing ).id )
+			if( this.model && this.model.get( this.editing ).id )
 				media_options.selection = this.model.get( this.editing ).id;
 
 			PC.media.open( media_options ); 
 		},
 
 		select_attachment: function(e, attachment) {
-			if( !this.editing )
-				return false;
+			if( !this.editing ) return false;
+			// If no model exists yet, create it now and add to collection
+			if ( !this.model ) {
+				this.model = new PC.choice_picture({
+					angleId: this.options.angle.id,
+				});
+				this.options.choice.get('images').add(this.model);
+
+				// Listen for changes now that it's created
+				this.listenTo( this.model, 'change', this.has_changed );
+			}
 			this.model.set(this.editing, {
 				url: attachment.get('url'),
 				id: attachment.id,
@@ -665,6 +670,12 @@ PC.views = PC.views || {};
 					width: attachment.get( 'width' ),
 				}
 			});
+
+			if ( 'thumbnail' == this.editing && !this.options.angle.get( 'has_thumbnails' ) ) {
+				this.options.angle.collection.invoke( 'set', { has_thumbnails: false } );
+				this.options.angle.set( 'has_thumbnails', true );
+			}
+			
 			this.render();
 		},	
 		remove_attachment: function( e ) {
@@ -682,9 +693,10 @@ PC.views = PC.views || {};
 		render: function() {
 			this.$el.empty();
 
-			var data = _.defaults( {}, this.model.attributes);
+			var data = _.defaults({}, this.model ? this.model.attributes : { image: { url: '' }, thumbnail: { url: '' }});
 			data.is_group = this.options.choice.get( 'is_group' );
 			data.angle_name = this.options.angle.get('name');
+			data.angle = this.options.angle.toJSON();
 			this.$el.append( this.template( data ) );
 			return this;
 		},

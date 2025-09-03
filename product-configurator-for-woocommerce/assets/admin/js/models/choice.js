@@ -17,7 +17,7 @@ PC.choice = Backbone.Model.extend({
 		if ( ! attributes.layerId ) this.set( 'layerId', options.layer.id );
 
 		if ( ! ( attributes.images instanceof Backbone.Collection ) ) {
-			var images = new PC.choice_pictures( attributes.images );
+			var images = new PC.choice_pictures( attributes.images, { parse: true } );
 			this.set('images', images); 
 		}
 
@@ -39,17 +39,20 @@ PC.choice = Backbone.Model.extend({
 		}
 		wp.hooks.doAction( 'PC.fe.models.choice.init', this );
 	},
-	get_image: function( image, what ) { 
+	get_image: function( image, what, angle_id ) { 
 		image = image || 'image'; 
 		what = what || 'url'; 
 		if ( 'thumbnail' == image ) {
-			var active_angle = PC.fe.angles.first(); 
+			angle_id = PC.fe.angles.findWhere( { has_thumbnails: true } );
+			if ( !angle_id ) angle_id = PC.fe.angles.first().id;
 		} else {
-			var active_angle = PC.fe.angles.findWhere( { active: true } ) || PC.fe.angles.first(); 
-		}
-		var angle_id = active_angle.id; 
+			if ( !angle_id || ! PC.fe.angles.get( angle_id ) ) {
+				var active_angle = PC.fe.angles.findWhere( { active: true } ) || PC.fe.angles.first();
+				angle_id = active_angle.id;
+			}
+		}	
 		var m = this.attributes.images.get( angle_id );
-		return m ? m.attributes[image][what] : ''; 
+		return m ? m.attributes[image][what] : '';
 	},
 	has_image: function() {
 		var count = 0;

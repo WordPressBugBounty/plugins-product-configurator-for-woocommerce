@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2025-07-31 11:07+0000\n"
+"POT-Creation-Date: 2025-09-03 10:45+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -69,11 +69,11 @@ msgstr ""
 msgid "Layers of the product "
 msgstr ""
 
-#: src/inc/db.php:60, src/inc/db.php:79, src/inc/db.php:98, src/inc/db.php:125, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:16, src/inc/admin/views/html-product-configurator-templates.php:334, src/inc/admin/views/html-product-configurator-templates.php:431
+#: src/inc/db.php:60, src/inc/db.php:79, src/inc/db.php:98, src/inc/db.php:125, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:16, src/inc/admin/views/html-product-configurator-templates.php:334, src/inc/admin/views/html-product-configurator-templates.php:433
 msgid "Cancel"
 msgstr ""
 
-#: src/inc/db.php:64, src/inc/db.php:83, src/inc/db.php:102, src/inc/admin/views/html-product-configurator-templates.php:82, src/inc/admin/views/html-product-configurator-templates.php:546
+#: src/inc/db.php:64, src/inc/db.php:83, src/inc/db.php:102, src/inc/admin/views/html-product-configurator-templates.php:82, src/inc/admin/views/html-product-configurator-templates.php:548
 msgid "Save"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr ""
 msgid "Import / Export the product's data "
 msgstr ""
 
-#: src/inc/db.php:365, src/inc/admin/views/html-product-configurator-templates.php:452
+#: src/inc/db.php:365, src/inc/admin/views/html-product-configurator-templates.php:454
 msgid "Export"
 msgstr ""
 
@@ -133,7 +133,7 @@ msgstr ""
 msgid ""
 msgstr ""
 
-#: src/inc/languages.php:48, src/inc/admin/settings-page.php:651, src/inc/frontend/cart.php:185, src/inc/frontend/order.php:93, src/inc/admin/settings/choice.php:68
+#: src/inc/languages.php:48, src/inc/admin/settings-page.php:651, src/inc/frontend/cart.php:196, src/inc/frontend/order.php:93, src/inc/admin/settings/choice.php:68
 msgid "SKU"
 msgstr ""
 
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Reset configuration"
 msgstr ""
 
-#: src/inc/languages.php:53, src/inc/admin/settings-page.php:842, src/inc/admin/settings-page.php:848, src/inc/frontend/cart.php:441, src/inc/frontend/cart.php:595
+#: src/inc/languages.php:53, src/inc/admin/settings-page.php:842, src/inc/admin/settings-page.php:848, src/inc/frontend/cart.php:453, src/inc/frontend/cart.php:607
 msgid "Edit configuration"
 msgstr ""
 
@@ -321,7 +321,7 @@ msgstr ""
 msgid "Select a picture"
 msgstr ""
 
-#: src/inc/admin/product.php:250, src/inc/admin/views/html-product-configurator-templates.php:430
+#: src/inc/admin/product.php:250, src/inc/admin/views/html-product-configurator-templates.php:432
 msgid "Choose"
 msgstr ""
 
@@ -737,7 +737,7 @@ msgstr ""
 msgid "Configuration (meta label in the cart)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:896, src/inc/compatibility/yith-quote-request.php:248, src/inc/frontend/cart.php:201, src/inc/frontend/order.php:87, src/inc/frontend/order.php:229, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
+#: src/inc/admin/settings-page.php:896, src/inc/compatibility/yith-quote-request.php:248, src/inc/frontend/cart.php:212, src/inc/frontend/order.php:87, src/inc/frontend/order.php:229, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
 msgid "Configuration"
 msgstr ""
 
@@ -1256,7 +1256,7 @@ msgstr ""
 msgid "Add / Change picture"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:184, src/inc/admin/views/html-product-configurator-templates.php:211, src/inc/admin/views/html-product-configurator-templates.php:387, src/inc/admin/views/html-product-configurator-templates.php:408
+#: src/inc/admin/views/html-product-configurator-templates.php:184, src/inc/admin/views/html-product-configurator-templates.php:211, src/inc/admin/views/html-product-configurator-templates.php:387, src/inc/admin/views/html-product-configurator-templates.php:409
 msgid "Remove picture"
 msgstr ""
 
@@ -1320,107 +1320,107 @@ msgstr ""
 msgid "Main Image"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:378, src/inc/admin/views/html-product-configurator-templates.php:400
+#: src/inc/admin/views/html-product-configurator-templates.php:378, src/inc/admin/views/html-product-configurator-templates.php:401
 msgid "Add / Edit image"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:392
+#: src/inc/admin/views/html-product-configurator-templates.php:393
 msgid "Thumbnail"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:427
+#: src/inc/admin/views/html-product-configurator-templates.php:429
 msgid "Select a product:"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:446
+#: src/inc/admin/views/html-product-configurator-templates.php:448
 msgid "Import"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:447
+#: src/inc/admin/views/html-product-configurator-templates.php:449
 msgid "Import configuration"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:449
+#: src/inc/admin/views/html-product-configurator-templates.php:451
 msgid "Import an other product"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:453
+#: src/inc/admin/views/html-product-configurator-templates.php:455
 msgid "Export configuration data"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:474
+#: src/inc/admin/views/html-product-configurator-templates.php:476
 msgid "Choose a product"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:481
+#: src/inc/admin/views/html-product-configurator-templates.php:483
 msgid "Select a file"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:482
+#: src/inc/admin/views/html-product-configurator-templates.php:484
 msgid "Select the JSON file you exported previously."
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:488
+#: src/inc/admin/views/html-product-configurator-templates.php:490
 msgid "Preview"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:489
+#: src/inc/admin/views/html-product-configurator-templates.php:491
 msgid "Review the data and press Import data to import it to this product."
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:490
+#: src/inc/admin/views/html-product-configurator-templates.php:492
 msgid "Note that any existing configuration will be overriden."
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:491
+#: src/inc/admin/views/html-product-configurator-templates.php:493
 msgid "Import data"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:496
+#: src/inc/admin/views/html-product-configurator-templates.php:498
 msgid "Layers and content:"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:518
+#: src/inc/admin/views/html-product-configurator-templates.php:520
 msgid "Angles:"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:529
+#: src/inc/admin/views/html-product-configurator-templates.php:531
 msgid "Conditions"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:543
+#: src/inc/admin/views/html-product-configurator-templates.php:545
 msgid "The import process is complete."
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:544
+#: src/inc/admin/views/html-product-configurator-templates.php:546
 msgid "Please check the different elements (Layers, views, content...), and save if you are happy with it."
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:545
+#: src/inc/admin/views/html-product-configurator-templates.php:547
 msgid "Alternatively you can save here."
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:547
+#: src/inc/admin/views/html-product-configurator-templates.php:549
 msgid "Importing from a different site?"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:548
+#: src/inc/admin/views/html-product-configurator-templates.php:550
 msgid "When importing from a different site, the images need to be added to the library separately."
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:549
+#: src/inc/admin/views/html-product-configurator-templates.php:551
 msgid "If you already imported the matching images to the library, you can use the following tool to try to match the images."
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:550
+#: src/inc/admin/views/html-product-configurator-templates.php:552
 msgid "Save and fix images"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:624
+#: src/inc/admin/views/html-product-configurator-templates.php:626
 msgid "Add option"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:667
+#: src/inc/admin/views/html-product-configurator-templates.php:669
 msgid "Remove option"
 msgstr ""
 
