@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2025-09-03 10:45+0000\n"
+"POT-Creation-Date: 2025-09-16 07:57+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -157,7 +157,7 @@ msgstr ""
 msgid "Edit configuration"
 msgstr ""
 
-#: src/inc/languages.php:54, src/inc/admin/settings-page.php:854, src/inc/admin/settings-page.php:860, src/inc/frontend/product.php:258
+#: src/inc/languages.php:54, src/inc/admin/settings-page.php:854, src/inc/admin/settings-page.php:860, src/inc/frontend/product.php:261
 msgid "Edit item in cart"
 msgstr ""
 
@@ -197,11 +197,11 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: src/inc/utils.php:178
+#: src/inc/utils.php:176
 msgid "Error:"
 msgstr ""
 
-#: src/inc/utils.php:178
+#: src/inc/utils.php:176
 msgid "template not found"
 msgstr ""
 
@@ -817,15 +817,15 @@ msgstr ""
 msgid "The configuration type does not match the requested item"
 msgstr ""
 
-#: src/inc/base/configuration.php:171
+#: src/inc/base/configuration.php:174
 msgid "You have already saved this configuration!"
 msgstr ""
 
-#: src/inc/base/configuration.php:199
+#: src/inc/base/configuration.php:202
 msgid "The configuration was saved successfully!"
 msgstr ""
 
-#: src/inc/base/configuration.php:227
+#: src/inc/base/configuration.php:230
 msgid "Invalid configuration_id ID"
 msgstr ""
 
@@ -873,7 +873,7 @@ msgstr ""
 msgid "SKU:"
 msgstr ""
 
-#: src/inc/frontend/product.php:301
+#: src/inc/frontend/product.php:306
 msgid "Please select a variation to configure"
 msgstr ""
 
