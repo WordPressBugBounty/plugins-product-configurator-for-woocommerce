@@ -3,8 +3,8 @@ Contributors: mklacroix, marcusig
 Tags: woocommerce,customize,product addons,custom product, product builder
 Donate link: https://paypal.me/marclacro1x
 Requires at least: 5.9
-Tested up to: 6.8
-Stable tag: 1.5.3
+Tested up to: 6.9
+Stable tag: 1.5.11
 Requires PHP: 7.4
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -145,6 +145,51 @@ We recommend using a plugin such as WP-Optimize for all-round performance improv
 
 
 == Changelog ==
+
+= 1.5.11 - 28/Jan/2026 =
+
+* DEV: Added JS Filter `PC.fe.choices.add_one`, allowing to prevent adding a choice view
+* TWEAK: Fix ajax add to cart modal position on La Pomme
+* TWEAK: Hide Stripe express checkout on configurable products, to prevent adding to the cart without configuring
+* TWEAK: Throw error when adding product to the cart without configuration
+* FIX: Variable products not adding to the cart when using the Ajax ATC feature
+* FIX: issue on some variable products
+
+= 1.5.10 - 15/Dec/2025 =
+
+* TWEAK: Moved error message CSS to common CSS
+* DEV: Filter 'PC.fe.cart_redirect_url'
+* DEV: Added filter Filter 'PC.fe.cart_redirect_after_add'
+* TWEAK: Added a setting to show "View configuration" link in the order
+* TWEAK: Added a setting to show "Edit configuration" link in the cart and checkout
+
+= 1.5.9 - 1/Dec/2025 =
+
+* Compatibility with Tiered price plugin
+* Compatibility with Wholesale price - tiered prices
+* PERFORMANCE: Possibility to load configurator data asynchronously
+* Tested up to 6.9
+
+= 1.5.8 - 3/Nov/2025 =
+
+* FIX: Choice class to initiate when calling the get method, or some data can be missing in some instances
+
+= 1.5.6 - 22/Oct/2025 =
+
+* FIX: Check for missing dependency (accounting.js)
+* TWEAK: Include both color and image in choice thumbnails
+
+= 1.5.5 - 13/Oct/2025 =
+
+* COMPATIBILITY: WooCommerce Currency Switcher (Curcy) - cache compat
+* FEATURE: added setting to control per layer whether to close a layer when the user makes a selection
+* TWEAK: Automatically wrap custom html when necessary (Layer > Custom HTML)
+* TWEAK: Purge configurator cache when litespeed_purged_all is triggered
+* TWEAK: Added JS action 'PC.fe.configurator.summary.render'
+* TWEAK: Summary to use template function, allowing to add content using PHP hooks
+* TWEAK: Add setting Image size used when merging images
+* FIX: Save your design modal positioning in WSB theme on mobile
+* FIX: dropdown position in La Pomme and Le Bolide
 
 = 1.5.3 - 16/Sep/2025 = 
 
@@ -325,4 +370,4 @@ We recommend using a plugin such as WP-Optimize for all-round performance improv
 
 == Upgrade Notice ==
 
-* 1.5.3 Minor tweaks and fixes
+* 1.5.11 Minor tweaks and fixes

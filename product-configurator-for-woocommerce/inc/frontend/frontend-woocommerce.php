@@ -140,7 +140,7 @@ class Frontend_Woocommerce {
 
 		$date_modified = $product->get_date_modified();
 		
-		wp_enqueue_script( 'mkl_pc/js/fe_data_'.$product_id, Plugin::instance()->cache->get_config_file($product_id), array(), ( $date_modified ? $date_modified->getTimestamp() : MKL_PC_VERSION ), true );
+		if ( !mkl_pc( 'settings')->get( 'async_data' ) ) wp_enqueue_script( 'mkl_pc/js/fe_data_'.$product_id, Plugin::instance()->cache->get_config_file($product_id), array(), ( $date_modified ? $date_modified->getTimestamp() : MKL_PC_VERSION ), true );
 
 		if ( ! trim( $content ) ) $content = mkl_pc( 'settings' )->get_label( 'mkl_pc__button_label', __( 'Configure', 'product-configurator-for-woocommerce' ) );
 
@@ -211,7 +211,7 @@ class Frontend_Woocommerce {
 	}
 
 	/**
-	 * Configure Button shortcode
+	 * Embedded configurator shortcode
 	 *
 	 * @param array  $atts
 	 * @param string $content
@@ -245,7 +245,7 @@ class Frontend_Woocommerce {
 
 		$date_modified = $product->get_date_modified();
 		
-		wp_enqueue_script( 'mkl_pc/js/fe_data_'.$product_id, Plugin::instance()->cache->get_config_file($product_id), array(), ( $date_modified ? $date_modified->getTimestamp() : MKL_PC_VERSION ), true );
+		if ( !mkl_pc( 'settings')->get( 'async_data' ) ) wp_enqueue_script( 'mkl_pc/js/fe_data_'.$product_id, Plugin::instance()->cache->get_config_file($product_id), array(), ( $date_modified ? $date_modified->getTimestamp() : MKL_PC_VERSION ), true );
 
 		if ( ! trim( $content ) ) $content = __( 'Configure', 'product-configurator-for-woocommerce' );
 
@@ -340,6 +340,11 @@ class Frontend_Woocommerce {
 			array('backbone/collections/choices', 'collections/choices.js'),
 
 		);
+
+		if ( !wp_script_is( 'accounting', 'registered' ) ) {
+			wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting.min.js', array( 'jquery' ), '0.4.2' );
+		}
+
 		foreach( $scripts as $script ) {
 			list( $key, $file ) = $script;
 			if ( ! defined( 'SCRIPT_DEBUG' ) || !SCRIPT_DEBUG ) {
@@ -409,6 +414,7 @@ class Frontend_Woocommerce {
 			'config' => apply_filters( 'mkl_pc_js_config', array(
 				'inline' => false,
 				'where' => 'out',
+				'data_mode' => mkl_pc( 'settings')->get( 'async_data' ) ? 'async' : 'default',
 				'bg_image' => $bg_image ? $bg_image : apply_filters( 'mkl_pc_bg_image', MKL_PC_ASSETS_URL.'images/default-bg.jpg'),
 				'close_configurator_on_add_to_cart' => ( bool ) mkl_pc( 'settings')->get( 'close_configurator_on_add_to_cart' ),
 				'close_choices_when_selecting_choice' => ( bool ) mkl_pc( 'settings')->get( 'close_choices_when_selecting_choice' ),
@@ -431,6 +437,8 @@ class Frontend_Woocommerce {
 				'steps_use_layer_name' => ( bool ) mkl_pc( 'settings')->get( 'steps_use_layer_name', false ),
 				'steps_progress_enable_click_all' => ( bool ) mkl_pc( 'settings')->get( 'steps_progress_enable_click_all', false ),
 				'enable_configurator_ajax_add_to_cart' => ( bool ) mkl_pc( 'settings')->get( 'enable_configurator_ajax_add_to_cart', false ),
+				'mobile_image_breakpoint' => 660,
+				'large_image_breakpoint' => 2200,
 				'angles' => [
 					'show_image' => mkl_pc( 'settings')->get( 'show_angle_image' ),
 					'show_name' => mkl_pc( 'settings')->get( 'show_angle_name' ),
@@ -457,7 +465,7 @@ class Frontend_Woocommerce {
 
 		wp_localize_script( 'mkl_pc/js/product_configurator', 'PC_config', apply_filters( 'mkl_pc_frontend_js_config', $args ) );
 
-		if ( $prod ) {
+		if ( $prod && ! mkl_pc( 'settings')->get( 'async_data' ) ) {
 			wp_enqueue_script( 'mkl_pc/js/fe_data_'.$post->ID, Plugin::instance()->cache->get_config_file($post->ID), array(), ( $date_modified ? $date_modified->getTimestamp() : MKL_PC_VERSION ), true );
 			// Add JSON for Weglot compatibility
 			// if ( current_user_can( 'edit_posts' ) && defined( 'WEGLOT_DIRURL' ) ) {
@@ -583,6 +591,8 @@ class Frontend_Woocommerce {
 		 */
 		if ( apply_filters( 'mkl_pc_do_not_override_images', false ) ) return $data;
 		$img_size =  mkl_pc( 'settings' )->get( 'preview_image_size', 'full' );
+		$img_size_mobile =  mkl_pc( 'settings' )->get( 'preview_image_size_mobile', 'inherit' );
+		$img_size_large =  mkl_pc( 'settings' )->get( 'preview_image_size_large', 'inherit' );
 		$thumbnail_size = mkl_pc( 'settings' )->get( 'thumbnail_size', 'medium' );
 		foreach( $data['content'] as $lin => $layer ) {
 			foreach( $layer['choices'] as $cin => $choice ) {
@@ -590,6 +600,12 @@ class Frontend_Woocommerce {
 					if ( $image['image']['id'] ) {
 						if ( $new_image_url = wp_get_attachment_image_url( $image['image']['id'], $img_size ) ) {
 							$data['content'][$lin]['choices'][$cin]['images'][$imin]['image']['url'] = $new_image_url;
+						}
+						if ( $img_size_mobile && 'inherit' != $img_size_mobile && $mobile_image_url = wp_get_attachment_image_url( $image['image']['id'], $img_size_mobile ) ) {
+							$data['content'][$lin]['choices'][$cin]['images'][$imin]['image']['url_mobile'] = $mobile_image_url;
+						}
+						if ( $img_size_large && 'inherit' != $img_size_large && $large_image_url = wp_get_attachment_image_url( $image['image']['id'], $img_size_large ) ) {
+							$data['content'][$lin]['choices'][$cin]['images'][$imin]['image']['url_large'] = $large_image_url;
 						}
 					}
 					if ( $image['thumbnail']['id'] ) {

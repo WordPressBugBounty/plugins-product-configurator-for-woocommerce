@@ -43,12 +43,14 @@ PC.actionParameter = 'pc_get_data';
 			if ( $( this ).hasClass( 'keyboard-navigation' ) ) return;
 			if ( 'Tab' == e.key && ! e.ctrlKey ) {
 				$( this ).addClass( 'keyboard-navigation' );
+				PC.fe.keyboard_navigation = true;
 			}
 		} );
 
 		$( 'body' ).on( 'click', function( e ) {
 			if ( ! $( this ).hasClass( 'keyboard-navigation' ) ) return;
 			$( this ).removeClass( 'keyboard-navigation' );
+			PC.fe.keyboard_navigation = false;
 		} );
 
 		PC.fe.product_type = PC.fe.product_type || 'simple';
@@ -271,6 +273,28 @@ PC.actionParameter = 'pc_get_data';
 		if ( PC.fe.config.open_configurator && true == PC.fe.config.open_configurator && ! $( '.mkl-configurator-inline' ).length ) {
 			$( '.configure-product-simple' ).first().trigger( 'click' );
 		}
+
+		// WooCommerce Currency Switcher (Curcy) - cache compat
+		jQuery(document.body).on('wmc_cache_compatible_finish', function( event, data ) {
+			if ( data.format ) {
+				// Override loaded format
+				_.each( data.format, ( item, key ) => {
+					PC_config.lang[key] = item;
+				} )
+			}
+
+			// Override currency rate
+			if ( data.rate ) {
+				PC.fe.config.wcpbc_rate = PC_config.config.wcpbc_rate = data.rate;
+			}
+
+			// Trigger events to re-render price elements
+			wp.hooks.doAction( 'PC.fe.extra_price.after.get_tax_rates' );
+			if ( PC.fe && PC.fe.modal ) {
+				PC.fe.modal.trigger( 'PC.fe.extra_price.update_taxes' );
+			}
+		} );
+
 	} );
 
 	PC.fe.init = function( product_id, parent_id, $element ) {
@@ -280,7 +304,7 @@ PC.actionParameter = 'pc_get_data';
 
 		PC.fe.trigger_el = $element;
 
-		if ( parent_id ) {
+		if ( parent_id && 'async' !== PC.fe.config.data_mode ) {
 			this.currentProductData = PC.productData['prod_' + parent_id];
 			this.layers = new PC.layers( PC.productData['prod_' + parent_id].layers );
 			this.angles = new PC.angles( PC.productData['prod_' + parent_id].angles, { parse: true } );
@@ -293,13 +317,17 @@ PC.actionParameter = 'pc_get_data';
 		if ( $( $element ).data( 'force_form' ) ) PC.fe.currentProductData.product_info.force_form = true;
 
 		PC.fe.product_type = this.currentProductData.product_info.product_type;
-		if ( $element && $element.data( 'price' ) ) {
-			this.currentProductData.product_info.price = $element.data( 'price' );
+		if ( $element ) {
+			this.currentProductData.product_info.price = $element.data( 'price' ) || 0;
+			this.currentProductData.product_info.price_tiers = $element.data( 'price_tiers' );
 			this.currentProductData.product_info.regular_price = $element.data( 'regular_price' );
 			this.currentProductData.product_info.is_on_sale = ( 1 == $element.data( 'is_on_sale' ) );
 		} else {
 			this.currentProductData.product_info.price = 0;
 		}
+
+		// Set quantity variable
+		this.currentProductData.product_info.qty = this?.modal?.form?.$( 'input.qty' ).val() || 1;
 
 		if ( ( 'simple' === PC.fe.product_type && PC.productData['prod_' + product_id] ) || ( 'variation' === PC.fe.product_type && PC.productData['prod_' + product_id] ) ) {
 			this.contents = PC.fe.setContent.parse( PC.productData['prod_' + product_id] ); 
@@ -339,17 +367,36 @@ PC.actionParameter = 'pc_get_data';
 		if ( PC.productData && PC.productData['prod_'+parent_id] ) {
 			this.modal = this.modal || new PC.fe.views.configurator( { product_id: product_id, parent_id: parent_id } ); 
 			PC.fe.init( product_id, parent_id, $element );
-		} else if ( PC.productDataMode && "json" == PC.productDataMode ) {
+		} else {
+			// No data found - force Async mode
+			PC.fe.config.data_mode = 'async';
 			wp.hooks.addAction( 'mkl_pc.product_data.loaded', 'mkl_pc', function( id ) {
 				if ( id == product_id ) {
 					this.modal = this.modal || new PC.fe.views.configurator( { product_id: product_id, parent_id: parent_id } ); 
 					PC.fe.init( product_id, parent_id, $element );
 				}
 			}.bind( this ) );
-		} else {
-			$element.after( $( '<div>Error loading the configurator data</div>' ) );
-		}
+			// const now = 
+		} 
+		
+		if ( 'async' === PC.fe.config.data_mode ) {
+			if ( $element ) {
+				$element.addClass( 'loading-data' );
+			}
+			wp.hooks.doAction( 'mkl_pc.product_data.loading', product_id );
+			fetch( PC_config.ajaxurl + `?action=pc_get_data&data=init&fe=1&id=${product_id}&ver=` ).then(r => r.json()).then(data => {
+				PC.productData = window.PC.productData || {};
+				PC.productData['prod_'+product_id] = data;
+				
+				if ( !data?.layers?.length || !data?.content?.length ) {
+					console.log( data );
+					$element.after( $( '<div>Error - the configurator data is incomplete. See browser console for data details</div>' ) );
+				}
 
+				$element.removeClass( 'loading-data' );
+				wp.hooks.doAction( 'mkl_pc.product_data.loaded', product_id );
+			});
+		} 
 		// if( !this.layers && !variation ) {
 		// 	return;
 		// }
@@ -500,6 +547,27 @@ PC.actionParameter = 'pc_get_data';
 		PC.fe.is_setting_config = false;
 	};
 
+	PC.fe.get_product_price = function() {
+		if ( !PC.fe?.currentProductData ) return 0;
+		const { product_info } = PC.fe.currentProductData;
+		const qty = product_info.qty;
+		let price = parseFloat( product_info?.price );
+		
+		if ( product_info?.price_tiers && Array.isArray( product_info.price_tiers ) ) {
+			const tier = product_info.price_tiers.find( ( item ) => qty >= parseInt( item.start ) );
+
+			if ( tier ) {
+				// Percentage or fixed price
+				if ( tier.type.includes( 'percent' ) ) {
+					price = price - ( parseFloat( tier.price ) * parseFloat( price ) / 100 );
+				} else {
+					price = parseFloat( tier.price || 0 );
+				}
+			}
+		}
+		return price || 0;
+	};
+
 	/*
 	// product is configurable == true
 		// PRODUCT IS SIMPLE 
@@ -552,7 +620,7 @@ PC.actionParameter = 'pc_get_data';
 		if ( PC && PC.fe && PC.fe.modal ) {
 			PC.fe.modal.$el.removeClass( 'adding-to-cart' );
 		}
-	} );
+	} );	
 
 })( jQuery, PC._us || window._ );
 

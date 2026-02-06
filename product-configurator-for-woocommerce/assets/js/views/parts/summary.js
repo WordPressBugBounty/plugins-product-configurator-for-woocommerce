@@ -17,20 +17,26 @@ PC.fe.views.summary = Backbone.View.extend( {
 	render: function () {
 		
 		this.clear();
-		var choices = PC.fe.save_data.get_choices();
+		this.$el.append( this.template( this?.model?.attributes || {} ) );
+
+		const $target = this.$( '.mkl-pc-summary--content' );
+		
+		if ( !$target.length ) $target = this.$el;
+
+		var choices = PC.fe.save_data.get_choices( false );
 		_.each( choices, function( item ) {
 			var layer = PC.fe.layers.get( item.layer_id );
 			var choice = PC.fe.get_choice_model( item.layer_id, item.choice_id );
 			if ( ! layer ) return;
 			if ( 'simple' == layer.get( 'type' ) && layer.get( 'not_a_choice' ) ) return;
-			if ( layer.get( 'hide_in_configurator') ) return;
+			// if ( wp.hooks.applyFilters( 'hide_in_configurator-also-hides-in-summary', true, item ) && layer.get( 'hide_in_configurator') ) return;
 			if ( layer.get( 'hide_in_summary') ) return;
 			if ( ! this.layers[ item.layer_id ] ) {
 				this.layers[ item.layer_id ] = new PC.fe.views.summary_item_group( { model: layer } );
 				if ( layer.get( 'parent' ) && this.$( '[data-layer_id="' + layer.get( 'parent' ) + '"]' ).length ) {
 					this.layers[ item.layer_id ].$el.appendTo( this.$( '[data-layer_id="' + layer.get( 'parent' ) + '"]' ) );
 				} else {
-					this.layers[ item.layer_id ].$el.appendTo( this.$el );
+					this.layers[ item.layer_id ].$el.appendTo( $target );
 				}
 			}
 
@@ -51,6 +57,11 @@ PC.fe.views.summary = Backbone.View.extend( {
 			}
 		} );
 
+		/**
+		 * Triggered whenthe summary has been rendered. 
+		 * It is rendered every time a change to the data is done
+		 */
+		wp.hooks.doAction( 'PC.fe.configurator.summary.render', this );
 		return this.$el;
 	},
 	clear: function() {

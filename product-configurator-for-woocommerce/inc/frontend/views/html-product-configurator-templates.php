@@ -29,7 +29,7 @@ add_action( 'mkl_pc_frontend_configurator__main_view', 'mkl_pc_frontend_configur
 
 function mkl_pc_frontend_configurator__main_view__loader() {
 	?>
-	<div class="loader">
+	<div class="mkl-loader">
 		<div class="header"><?php _e( 'Loading Data', 'product-configurator-for-woocommerce' ); ?> </div>
 		<div class="spinner"></div>
 	</div>
@@ -169,10 +169,8 @@ add_action( 'tmpl-pc-configurator-choice-item', 'mkl_pc_frontend_configurator_ch
 
 function mkl_pc_frontend_configurator_choice_thumbnail() {
 	?>
-		<# if ( data.thumbnail ) { #>
-			<i class="mkl-pc-thumbnail"><span><img src="{{data.thumbnail}}" alt="" /></span></i>
-		<# } else if ( data.color ) { #>
-			<i class="mkl-pc-thumbnail"><span style="background-color: {{data.color}};"></span></i>
+		<# if ( data.thumbnail || data.color ) { #>
+			<i class="mkl-pc-thumbnail"><span<# if ( data.color ) { #> style="background-color: {{data.color}};"<# } #>><# if ( data.thumbnail ) { #><img src="{{data.thumbnail}}" alt="" /><# } #></span></i>
 		<# } #>
 	<?php
 }
@@ -210,6 +208,15 @@ function mkl_pc_frontend_configurator_display_mode_fullscreen() { ?>
 		</li>
 	<# } #>
 <?php
+}
+
+add_action( 'tmpl-mkl-pc-atc-redirection-content', 'mkl_pc_frontend_added_to_cart_redirection_message' );
+function mkl_pc_frontend_added_to_cart_redirection_message() {
+	?>
+		<div class="header"><?php _ex( 'Done!', 'Part of message displayed when the product is successfully added to the cart', 'product-configurator-for-woocommerce' ); ?> </div>
+		<p>{{{data.messages}}}</p>
+		<div class="spinner"></div>
+	<?php
 }
 
 $root = plugin_dir_path( __FILE__ ) . 'parts/' ;

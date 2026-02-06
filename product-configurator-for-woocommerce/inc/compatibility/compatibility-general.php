@@ -12,6 +12,8 @@ class Compatibility_General {
 		$this->compats_plugins[] = include_once 'yith-catalogue-mode.php';
 		$this->compats_plugins[] = include_once 'elementor-pro-form.php';
 		$this->compats_plugins[] = include_once 'wholesale-prices.php';
+		$this->compats_plugins[] = include_once 'tiered-prices.php';
+		$this->compats_plugins[] = include_once 'curcy-woocommerce-multi-currency.php';
 
 		add_action( 'after_setup_theme', [ $this, 'check_themes' ] );
 		if ( did_action( 'plugins_loaded' ) ) {

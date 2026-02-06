@@ -266,13 +266,39 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			$sizes = array_merge( [ 'full' ], get_intermediate_image_sizes() );
 			add_settings_field(
 				'preview_image_size',
-				__( 'Preview Image size', 'product-configurator-for-woocommerce' ),
+				__( 'Preview Image size - default', 'product-configurator-for-woocommerce' ),
 				[ $this, 'callback_select' ],
 				'mlk_pc_settings', 
 				'general_settings',
 				[ 
 					'options' => $sizes,
 					'setting_name' => 'preview_image_size',
+					'no_value' => true,
+				]
+			);
+
+			add_settings_field(
+				'preview_image_size_mobile',
+				__( 'Preview Image size - mobile', 'product-configurator-for-woocommerce' ),
+				[ $this, 'callback_select' ],
+				'mlk_pc_settings', 
+				'general_settings',
+				[ 
+					'options' => array_merge( [ 'inherit' ], $sizes ),
+					'setting_name' => 'preview_image_size_mobile',
+					'no_value' => true,
+				]
+			);
+
+			add_settings_field(
+				'preview_image_size_large',
+				__( 'Preview Image size - large screens', 'product-configurator-for-woocommerce' ),
+				[ $this, 'callback_select' ],
+				'mlk_pc_settings', 
+				'general_settings',
+				[ 
+					'options' => array_merge( [ 'inherit' ], $sizes ),
+					'setting_name' => 'preview_image_size_large',
 					'no_value' => true,
 				]
 			);
@@ -288,6 +314,20 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 					'setting_name' => 'thumbnail_size',
 					'no_value' => true,
 					'description' => __( 'Size of the thumbnails in the sidebar', 'product-configurator-for-woocommerce' ),
+				]
+			);
+
+			add_settings_field(
+				'merge_size',
+				__( 'Image size used when merging images', 'product-configurator-for-woocommerce' ),
+				[ $this, 'callback_select' ],
+				'mlk_pc_settings', 
+				'general_settings',
+				[ 
+					'options' => $sizes,
+					'setting_name' => 'merge_size',
+					'no_value' => true,
+					'description' => __( 'Size of the images used when merging the images to create the cart/order image', 'product-configurator-for-woocommerce' ),
 				]
 			);
 
@@ -490,6 +530,29 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				'general_settings',
 				[ 
 					'setting_name' => 'choice_groups_toggle',
+				]
+			);
+
+			add_settings_field(
+				'show_edit_configuration_link',
+				__( 'Show Edit configuration link in the cart and checkout', 'product-configurator-for-woocommerce' ),
+				[ $this, 'callback_checkbox' ],
+				'mlk_pc_settings', 
+				'general_settings',
+				[ 
+					'setting_name' => 'show_edit_configuration_link',
+					'description' => __( 'NB: currently only works in classic cart and checkout', 'product-configurator-for-woocommerce' ),
+				]
+			);
+
+			add_settings_field(
+				'show_view_configuration_link',
+				__( 'Show view configuration link in the order details', 'product-configurator-for-woocommerce' ),
+				[ $this, 'callback_checkbox' ],
+				'mlk_pc_settings', 
+				'general_settings',
+				[ 
+					'setting_name' => 'show_view_configuration_link',
 				]
 			);
 
@@ -752,6 +815,18 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				[ 
 					'setting_name' => 'disable_caching',
 					'description'  => __( 'Can be usefull when using CDNs such as CloudFlare', 'product-configurator-for-woocommerce' ),
+				]
+			);
+
+			add_settings_field(
+				'async_data',
+				__( 'Load configurator data asynchronously', 'product-configurator-for-woocommerce' ),
+				[ $this, 'callback_checkbox' ],
+				'mlk_pc_settings', 
+				'general_settings',
+				[ 
+					'setting_name' => 'async_data',
+					'description'  => __( 'Will load the data after page load', 'product-configurator-for-woocommerce' ),
 				]
 			);
 

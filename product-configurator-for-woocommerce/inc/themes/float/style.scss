@@ -154,43 +154,6 @@ $inner_space: 1em;
 	bottom: 0;
 	width: 100%; 
 	z-index: 10000;
-	.loader {
-		display: none;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		text-align: center;
-		transform: translate(-50%, -50%);
-
-		.header {
-			font-size: 1.5em;
-			font-weight: bold;
-			color: #FFF;
-			text-shadow: 0 2px 14px rgba(0, 0, 0, 0.62);
-		}
-		.spinner {
-			width: 40px;
-			height: 40px;
-			margin: 30px auto;
-			background-color: #FFF;
-
-			border-radius: 100%;  
-			-webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
-			animation: sk-scaleout 1.0s infinite ease-in-out;
-		}
-
-	}
-
-	&.loading {
-		.loader {
-			display: block;
-		}
-		.mkl_pc_container {
-			transform: translateY(-30px);
-			opacity: 0;
-		}
-	}
-
 
 	.mkl_pc_container {
 		position: absolute;
@@ -921,6 +884,11 @@ body.configurator_is_inline > ul.layer_choices.display-mode-full-screen {
 		left: 14px;
 		bottom: 14px;
 		right: 14px;
+		padding: 10px;
+		li.choices-list {
+			padding-left: 0;
+			padding-right: 0;
+		}
 	}
 	&.active {
 		display: flex;
@@ -1028,6 +996,14 @@ body.configurator_is_inline > ul.layer_choices.display-mode-full-screen {
 	} 
 
 }
+
+/* Fix mobile layout for full screen layer display mode */
+@media (max-width: $small_screen_width) {	
+	body:not(.configurator_is_inline).pc-full-screenlayer--opened .mkl_pc .mkl_pc_container .mkl_pc_toolbar {
+		top: 0;
+	}
+}
+
 
 body.configurator_is_inline.pc-full-screenlayer--opened {
     overflow: hidden;

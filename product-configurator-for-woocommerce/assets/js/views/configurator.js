@@ -51,8 +51,8 @@ PC.fe.views.add_to_cart_modal = Backbone.View.extend({
 	on_added: function( event, fragments, cart_hash, button, response ) {
 		this.show_message( 'added', response.messages );
 	},
-	on_added_with_redirection: function() {
-		this.show_message( 'added-redirect' );
+	on_added_with_redirection: function( e, response ) {
+		this.show_message( 'added-redirect', response.messages );
 	},
 	on_not_added_to_cart: function( e, response ) {
 		this.show_message( 'not-added', response.messages );
@@ -178,6 +178,7 @@ PC.fe.views.choice = Backbone.View.extend({
 			disable_selection: ! this.model.get( 'available' ) && ! PC.fe.config.enable_selection_when_outofstock
 		}, wp.hooks.applyFilters( 'PC.fe.configurator.choice_data', this.model.attributes ) );
 		
+		// Render the template
 		this.$el.html( this.template( wp.hooks.applyFilters( 'PC.fe.configurator.template_choice_data', data ) ) );
 
 		wp.hooks.doAction( 'PC.fe.configurator.choice-item.render.after-template', this );
@@ -276,11 +277,16 @@ PC.fe.views.choice = Backbone.View.extend({
 		// Activate the clicked item
 		this.model.collection.selectChoice( this.model.id );
 		var layer = PC.fe.layers.get( this.model.get( 'layerId' ) );
+		var auto_close = layer.get( 'auto_close' );
 		var close_choices = 
 			( PC.fe.config.close_choices_when_selecting_choice && ( $( 'body' ).is('.is-mobile' ) || PC.utils._isMobile() ) )
 			|| PC.fe.config.close_choices_when_selecting_choice_desktop
 			|| 'dropdown' == layer.get( 'display_mode' )
-			|| ( 'full-screen' == layer.get( 'display_mode' ) && 'simple' == layer.get( 'type' ) );
+			|| ( 'full-screen' == layer.get( 'display_mode' ) && 'simple' == layer.get( 'type' ) )
+			|| 'yes' === auto_close;
+
+		// If the layer contains the class no-auto-close, do not toggle
+		if ( 'no' === auto_close ) close_choices = false;
 
 		if ( layer ) {
 			// Maybe close the choice list
@@ -365,6 +371,9 @@ PC.fe.views.choices = Backbone.View.extend({
 		collection.each( this.add_one, this );
 	},
 	add_one: function( model ) {
+		// Possibility to avoid adding choice
+		if ( !wp.hooks.applyFilters( 'PC.fe.choices.add_one', true, model ) ) return;
+
 		if ( model.get( 'is_group' ) )  {
 			var new_choice = new PC.fe.views.choiceGroup( { model: model, multiple: false, parent: this } ); 
 		} else {
@@ -401,7 +410,7 @@ PC.fe.views.configurator = Backbone.View.extend({
 		var product_id = options.product_id;
 		var parent_id = options.parent_id;
 		wp.hooks.doAction( 'PC.fe.init.modal', this ); 
-		if ( parent_id ) {
+		if ( parent_id && 'async' !== PC.fe.config.data_mode ) {
 			this.options = PC.productData['prod_' + parent_id].product_info; 
 		} else {
 			this.options = PC.productData['prod_' + product_id].product_info; 
@@ -617,9 +626,9 @@ PC.fe.views.form = Backbone.View.extend({
 	},
 	events: {
 		'click .configurator-add-to-cart': 'add_to_cart',
-		'click .add-to-quote': 'add_to_quote'
+		'click .add-to-quote': 'add_to_quote',
+		'change input.qty': 'qty_change'
 	},
-
 	render: function() {
 		if ( ! PC.fe.config.cart_item_key ) {
 			this.$( '.edit-cart-item' ).hide();
@@ -627,7 +636,7 @@ PC.fe.views.form = Backbone.View.extend({
 			this.$el.addClass( 'edit-cart-item-is-displayed');
 		}
 
-		if ( 'variable' === PC.fe.product_type ) {
+		if ( 'variable' === PC.fe.product_type || 'variation' === PC.fe.product_type ) {
 			var atc = $( '[name=variation_id][value=' + PC.fe.active_product + ']' );
 			if ( ! atc.length ) atc = $( '[name=add-to-cart][value=' + PC.fe.active_product + ']' );
 		} else {
@@ -761,10 +770,10 @@ PC.fe.views.form = Backbone.View.extend({
 				/*
 					Prepare data 
 				*/
-				if ( this.$cart.find( '[name="add-to-cart"]' ).length ) {
+				// if ( this.$cart.find( '[name="add-to-cart"]' ).length ) {
 					// var request_body = new FormData( this.$cart[0], this.$cart.find( '[name="add-to-cart"]' )[0] );
-				} else {
-				}
+				// } else {
+				// }
 				var request_body = new FormData( this.$cart[0] );
 
 				// Remove 'add-to-cart' to prevent triggering default WC's actions
@@ -818,13 +827,14 @@ PC.fe.views.form = Backbone.View.extend({
 					}
 
 					// Redirect to cart option
-					if ( 'yes' === wc_add_to_cart_params.cart_redirect_after_add ) {
-						$( document.body ).trigger( 'added_to_cart_with_redirection' );
-						window.location = wc_add_to_cart_params.cart_url;
+					if ( 'yes' === wp.hooks.applyFilters( 'PC.fe.cart_redirect_after_add', wc_add_to_cart_params.cart_redirect_after_add ) ) {
+						$( document.body ).trigger( 'added_to_cart_with_redirection', [ data ] );
+						window.location = wp.hooks.applyFilters( 'PC.fe.cart_redirect_url', wc_add_to_cart_params.cart_url );
 						return;
 					}
 					
 					$( document.body ).trigger( 'added_to_cart', [ data.fragments, data.cart_hash, btn, data] );
+					if ( PC.fe.config.close_configurator_on_add_to_cart && ! PC.fe.inline ) PC.fe.modal.close();
 				} )
 				.catch( error => {
 					console.error( 'Configurator: Error in form submission' );
@@ -912,6 +922,20 @@ PC.fe.views.form = Backbone.View.extend({
 			}
 		}
 	},
+	qty_change: function( e ) {
+		
+		PC.fe.currentProductData.product_info.qty = $( e.target ).val();
+		console.log( 'qty_change', PC.fe.currentProductData.product_info.qty, typeof pc_get_extra_price );
+		// If Extra price is not installed, check if price needs an update
+		if ( 'undefined' === typeof pc_get_extra_price && PC.fe.currentProductData.product_info?.price_tiers ) {
+			$( '.pc-total-price' ).html( PC.utils.formatMoney( PC.fe.get_product_price() ) );
+			// Display regular price
+			if ( PC.fe.currentProductData.product_info.regular_price && PC.fe.currentProductData.product_info.is_on_sale && $( '.pc-total--regular-price' ).length ) {
+				$( '.pc-total--regular-price' ).html( PC.utils.formatMoney( ( parseFloat( PC.fe.currentProductData.product_info.regular_price ) ) ) );
+			}
+		}
+		wp.hooks.doAction( 'PC.fe.qty_changed', PC.fe.currentProductData.product_info.qty );
+	}
 } );
 
 PC.fe.views.layers_list_item_selection = Backbone.View.extend({
@@ -1040,8 +1064,20 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 		this.$el.data( 'view', this );
 
 		if ( this.model.get( 'not_a_choice' ) && this.model.get( 'custom_html' ) ) {
+			const custom_html = this.model.get( 'custom_html' );
 			this.$el.addClass( 'not-a-choice custom' );
-			this.$el.append( $( this.model.get( 'custom_html' ) ) );
+			let html;
+			try {	
+				html = $( custom_html );
+			} catch ( error ) {
+				console.log( 'custom_html not formatted correctly, attempting to wrap it' );
+				try {
+					html = $( '<div>' + custom_html + '</div>' );
+				} catch ( error ) {
+					console.log( 'custom_html not formatted correctly, wrapping did not work' );
+				}
+			}
+			if ( html.length ) this.$el.append( html );
 			if ( this.model.get( 'class_name' ) ) this.$el.addClass( this.model.get( 'class_name' ) );
 			wp.hooks.doAction( 'PC.fe.layer.render', this );
 			wp.hooks.doAction( 'PC.fe.html_layer.render', this );
@@ -1284,15 +1320,15 @@ PC.fe.errors = [];
 
 PC.fe.save_data = {
 	choices: [],
-	save: function() {
-		this.reset_errors();
+	save: function( reset_errors ) {
+		if ( false !== reset_errors ) this.reset_errors();
 		this.choices = [];
 		PC.fe.layers.each( this.parse_choices, this ); 
 		this.choices = wp.hooks.applyFilters( 'PC.fe.save_data.choices', this.choices );
 		return JSON.stringify( this.choices );
 	},
-	get_choices: function() {
-		this.save();
+	get_choices: function( reset_errors ) {
+		this.save( reset_errors );
 		return this.choices;
 	},
 	reset_errors: function() {
@@ -1461,17 +1497,20 @@ PC.fe.save_data = {
 				if ( is_active || ( 'simple' != model.get( 'type' ) && 'multiple' != model.get( 'type' ) && 'form' != model.get( 'type' ) ) ) {
 					if ( false === choice.get( 'cshow' ) ) return;
 					var img_id = choice.get_image('image', 'id'); 
-
+					const choice_data = {
+						is_choice: true,
+						layer_id: model.id, 
+						choice_id: choice.id, 
+						angle_id: angle_id,
+						image: img_id,
+						layer_name: model_data.name,
+						name: choice.get_name(),
+					};	
+				
 					if ( wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.add_choice', true, choice ) ) this.choices.push(
 						wp.hooks.applyFilters(
 							'PC.fe.save_data.parse_choices.added_choice',
-							{
-								is_choice: true,
-								layer_id: model.id, 
-								choice_id: choice.id, 
-								angle_id: angle_id,
-								image: img_id,
-							},
+							choice_data,
 							choice
 						)
 					);
@@ -1865,20 +1904,26 @@ PC.fe.views.summary = Backbone.View.extend( {
 	render: function () {
 		
 		this.clear();
-		var choices = PC.fe.save_data.get_choices();
+		this.$el.append( this.template( this?.model?.attributes || {} ) );
+
+		const $target = this.$( '.mkl-pc-summary--content' );
+		
+		if ( !$target.length ) $target = this.$el;
+
+		var choices = PC.fe.save_data.get_choices( false );
 		_.each( choices, function( item ) {
 			var layer = PC.fe.layers.get( item.layer_id );
 			var choice = PC.fe.get_choice_model( item.layer_id, item.choice_id );
 			if ( ! layer ) return;
 			if ( 'simple' == layer.get( 'type' ) && layer.get( 'not_a_choice' ) ) return;
-			if ( layer.get( 'hide_in_configurator') ) return;
+			// if ( wp.hooks.applyFilters( 'hide_in_configurator-also-hides-in-summary', true, item ) && layer.get( 'hide_in_configurator') ) return;
 			if ( layer.get( 'hide_in_summary') ) return;
 			if ( ! this.layers[ item.layer_id ] ) {
 				this.layers[ item.layer_id ] = new PC.fe.views.summary_item_group( { model: layer } );
 				if ( layer.get( 'parent' ) && this.$( '[data-layer_id="' + layer.get( 'parent' ) + '"]' ).length ) {
 					this.layers[ item.layer_id ].$el.appendTo( this.$( '[data-layer_id="' + layer.get( 'parent' ) + '"]' ) );
 				} else {
-					this.layers[ item.layer_id ].$el.appendTo( this.$el );
+					this.layers[ item.layer_id ].$el.appendTo( $target );
 				}
 			}
 
@@ -1899,6 +1944,11 @@ PC.fe.views.summary = Backbone.View.extend( {
 			}
 		} );
 
+		/**
+		 * Triggered whenthe summary has been rendered. 
+		 * It is rendered every time a change to the data is done
+		 */
+		wp.hooks.doAction( 'PC.fe.configurator.summary.render', this );
 		return this.$el;
 	},
 	clear: function() {
@@ -2073,6 +2123,13 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 			
 		var is_active = this.model.get( 'active' );
 		var img = this.model.get_image();
+		const width = PC.fe.modal.$el.outerWidth();
+		if ( width && PC.fe.config.mobile_image_breakpoint && width < PC.fe.config.mobile_image_breakpoint && this.model.get_image( 'image', 'url_mobile' ) ) {
+			img = this.model.get_image( 'image', 'url_mobile' );
+		}
+		if ( width && PC.fe.config.large_image_breakpoint && width >= PC.fe.config.large_image_breakpoint && this.model.get_image( 'image', 'url_large' ) ) {
+			img = this.model.get_image( 'image', 'url_large' );
+		}
 		var classes = [];
 		
 		classes.push( this.model.collection.getType() );

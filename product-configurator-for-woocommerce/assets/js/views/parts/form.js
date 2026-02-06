@@ -10,9 +10,9 @@ PC.fe.views.form = Backbone.View.extend({
 	},
 	events: {
 		'click .configurator-add-to-cart': 'add_to_cart',
-		'click .add-to-quote': 'add_to_quote'
+		'click .add-to-quote': 'add_to_quote',
+		'change input.qty': 'qty_change'
 	},
-
 	render: function() {
 		if ( ! PC.fe.config.cart_item_key ) {
 			this.$( '.edit-cart-item' ).hide();
@@ -20,7 +20,7 @@ PC.fe.views.form = Backbone.View.extend({
 			this.$el.addClass( 'edit-cart-item-is-displayed');
 		}
 
-		if ( 'variable' === PC.fe.product_type ) {
+		if ( 'variable' === PC.fe.product_type || 'variation' === PC.fe.product_type ) {
 			var atc = $( '[name=variation_id][value=' + PC.fe.active_product + ']' );
 			if ( ! atc.length ) atc = $( '[name=add-to-cart][value=' + PC.fe.active_product + ']' );
 		} else {
@@ -154,10 +154,10 @@ PC.fe.views.form = Backbone.View.extend({
 				/*
 					Prepare data 
 				*/
-				if ( this.$cart.find( '[name="add-to-cart"]' ).length ) {
+				// if ( this.$cart.find( '[name="add-to-cart"]' ).length ) {
 					// var request_body = new FormData( this.$cart[0], this.$cart.find( '[name="add-to-cart"]' )[0] );
-				} else {
-				}
+				// } else {
+				// }
 				var request_body = new FormData( this.$cart[0] );
 
 				// Remove 'add-to-cart' to prevent triggering default WC's actions
@@ -211,13 +211,14 @@ PC.fe.views.form = Backbone.View.extend({
 					}
 
 					// Redirect to cart option
-					if ( 'yes' === wc_add_to_cart_params.cart_redirect_after_add ) {
-						$( document.body ).trigger( 'added_to_cart_with_redirection' );
-						window.location = wc_add_to_cart_params.cart_url;
+					if ( 'yes' === wp.hooks.applyFilters( 'PC.fe.cart_redirect_after_add', wc_add_to_cart_params.cart_redirect_after_add ) ) {
+						$( document.body ).trigger( 'added_to_cart_with_redirection', [ data ] );
+						window.location = wp.hooks.applyFilters( 'PC.fe.cart_redirect_url', wc_add_to_cart_params.cart_url );
 						return;
 					}
 					
 					$( document.body ).trigger( 'added_to_cart', [ data.fragments, data.cart_hash, btn, data] );
+					if ( PC.fe.config.close_configurator_on_add_to_cart && ! PC.fe.inline ) PC.fe.modal.close();
 				} )
 				.catch( error => {
 					console.error( 'Configurator: Error in form submission' );
@@ -305,4 +306,18 @@ PC.fe.views.form = Backbone.View.extend({
 			}
 		}
 	},
+	qty_change: function( e ) {
+		
+		PC.fe.currentProductData.product_info.qty = $( e.target ).val();
+		console.log( 'qty_change', PC.fe.currentProductData.product_info.qty, typeof pc_get_extra_price );
+		// If Extra price is not installed, check if price needs an update
+		if ( 'undefined' === typeof pc_get_extra_price && PC.fe.currentProductData.product_info?.price_tiers ) {
+			$( '.pc-total-price' ).html( PC.utils.formatMoney( PC.fe.get_product_price() ) );
+			// Display regular price
+			if ( PC.fe.currentProductData.product_info.regular_price && PC.fe.currentProductData.product_info.is_on_sale && $( '.pc-total--regular-price' ).length ) {
+				$( '.pc-total--regular-price' ).html( PC.utils.formatMoney( ( parseFloat( PC.fe.currentProductData.product_info.regular_price ) ) ) );
+			}
+		}
+		wp.hooks.doAction( 'PC.fe.qty_changed', PC.fe.currentProductData.product_info.qty );
+	}
 } );

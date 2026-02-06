@@ -1,4 +1,4 @@
-# Copyright (C) 2025 product-configurator-for-woocommerce
+# Copyright (C) 2026 product-configurator-for-woocommerce
 # This file is distributed under the same license as the product-configurator-for-woocommerce package.
 msgid ""
 msgstr ""
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2025-09-16 07:57+0000\n"
+"POT-Creation-Date: 2026-01-28 12:17+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -33,95 +33,95 @@ msgstr ""
 msgid "WooCommerce Version 3+ required."
 msgstr ""
 
-#: src/inc/ajax.php:212
+#: src/inc/ajax.php:209
 msgid "Error saving the data:"
 msgstr ""
 
-#: src/inc/ajax.php:212, src/inc/ajax.php:318
+#: src/inc/ajax.php:209, src/inc/ajax.php:315
 msgid "The session seems to have expired."
 msgstr ""
 
-#: src/inc/ajax.php:297
+#: src/inc/ajax.php:294
 msgid "%d rows were affected"
 msgstr ""
 
-#: src/inc/ajax.php:318
+#: src/inc/ajax.php:315
 msgid "Error processing the request:"
 msgstr ""
 
-#: src/inc/ajax.php:474, src/inc/admin/settings-page.php:956
+#: src/inc/ajax.php:471, src/inc/languages.php:63, src/inc/admin/settings-page.php:1031
 msgid "Successfully added to cart, now redirecting..."
 msgstr ""
 
-#: src/inc/db.php:36
+#: src/inc/db.php:247
 msgid "Home"
 msgstr ""
 
-#: src/inc/db.php:37
+#: src/inc/db.php:248
 msgid "Welcome to the Product Configurator "
 msgstr ""
 
-#: src/inc/db.php:55
+#: src/inc/db.php:266
 msgid "Layers"
 msgstr ""
 
-#: src/inc/db.php:56
+#: src/inc/db.php:267
 msgid "Layers of the product "
 msgstr ""
 
-#: src/inc/db.php:60, src/inc/db.php:79, src/inc/db.php:98, src/inc/db.php:125, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:16, src/inc/admin/views/html-product-configurator-templates.php:334, src/inc/admin/views/html-product-configurator-templates.php:433
+#: src/inc/db.php:271, src/inc/db.php:290, src/inc/db.php:309, src/inc/db.php:336, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:16, src/inc/admin/views/html-product-configurator-templates.php:334, src/inc/admin/views/html-product-configurator-templates.php:433
 msgid "Cancel"
 msgstr ""
 
-#: src/inc/db.php:64, src/inc/db.php:83, src/inc/db.php:102, src/inc/admin/views/html-product-configurator-templates.php:82, src/inc/admin/views/html-product-configurator-templates.php:548
+#: src/inc/db.php:275, src/inc/db.php:294, src/inc/db.php:313, src/inc/admin/views/html-product-configurator-templates.php:82, src/inc/admin/views/html-product-configurator-templates.php:548
 msgid "Save"
 msgstr ""
 
-#: src/inc/db.php:68
+#: src/inc/db.php:279
 msgid "Define the layers the product is composed of. "
 msgstr ""
 
-#: src/inc/db.php:74
+#: src/inc/db.php:285
 msgid "Views"
 msgstr ""
 
-#: src/inc/db.php:75
+#: src/inc/db.php:286
 msgid "Angles of the product "
 msgstr ""
 
-#: src/inc/db.php:87
+#: src/inc/db.php:298
 msgid "Define the view angles, if you want the client to be able to switch between them. "
 msgstr ""
 
-#: src/inc/db.php:93
+#: src/inc/db.php:304
 msgid "Content"
 msgstr ""
 
-#: src/inc/db.php:94
+#: src/inc/db.php:305
 msgid "Contents "
 msgstr ""
 
-#: src/inc/db.php:106
+#: src/inc/db.php:317
 msgid "Define choices for each layer and assign them pictures"
 msgstr ""
 
-#: src/inc/db.php:120
+#: src/inc/db.php:331
 msgid "Conditional settings"
 msgstr ""
 
-#: src/inc/db.php:121
+#: src/inc/db.php:332
 msgid "Conditional settings "
 msgstr ""
 
-#: src/inc/db.php:363
+#: src/inc/db.php:361
 msgid "Import / Export"
 msgstr ""
 
-#: src/inc/db.php:364
+#: src/inc/db.php:362
 msgid "Import / Export the product's data "
 msgstr ""
 
-#: src/inc/db.php:365, src/inc/admin/views/html-product-configurator-templates.php:454
+#: src/inc/db.php:363, src/inc/admin/views/html-product-configurator-templates.php:454
 msgid "Export"
 msgstr ""
 
@@ -133,7 +133,7 @@ msgstr ""
 msgid ""
 msgstr ""
 
-#: src/inc/languages.php:48, src/inc/admin/settings-page.php:651, src/inc/frontend/cart.php:196, src/inc/frontend/order.php:93, src/inc/admin/settings/choice.php:68
+#: src/inc/languages.php:48, src/inc/admin/settings-page.php:714, src/inc/frontend/cart.php:227, src/inc/frontend/order.php:94, src/inc/admin/settings/choice.php:68
 msgid "SKU"
 msgstr ""
 
@@ -149,15 +149,15 @@ msgstr ""
 msgid "Select at least %i items in %s"
 msgstr ""
 
-#: src/inc/languages.php:52, src/inc/admin/settings-page.php:830, src/inc/admin/settings-page.php:836, src/inc/frontend/views/html-product-configurator-templates.php:82
+#: src/inc/languages.php:52, src/inc/admin/settings-page.php:905, src/inc/admin/settings-page.php:911, src/inc/frontend/views/html-product-configurator-templates.php:82
 msgid "Reset configuration"
 msgstr ""
 
-#: src/inc/languages.php:53, src/inc/admin/settings-page.php:842, src/inc/admin/settings-page.php:848, src/inc/frontend/cart.php:453, src/inc/frontend/cart.php:607
+#: src/inc/languages.php:53, src/inc/admin/settings-page.php:917, src/inc/admin/settings-page.php:923, src/inc/frontend/cart.php:484, src/inc/frontend/cart.php:640
 msgid "Edit configuration"
 msgstr ""
 
-#: src/inc/languages.php:54, src/inc/admin/settings-page.php:854, src/inc/admin/settings-page.php:860, src/inc/frontend/product.php:261
+#: src/inc/languages.php:54, src/inc/admin/settings-page.php:929, src/inc/admin/settings-page.php:935, src/inc/frontend/product.php:261
 msgid "Edit item in cart"
 msgstr ""
 
@@ -166,11 +166,11 @@ msgctxt "Label displayed in the cart / order"
 msgid "Configuration"
 msgstr ""
 
-#: src/inc/languages.php:56, src/inc/admin/settings-page.php:908, src/inc/frontend/frontend-woocommerce.php:254
+#: src/inc/languages.php:56, src/inc/admin/settings-page.php:983, src/inc/frontend/frontend-woocommerce.php:254
 msgid "Loading the configurator..."
 msgstr ""
 
-#: src/inc/languages.php:57, src/inc/admin/settings-page.php:866, src/inc/admin/settings-page.php:872, src/inc/frontend/order.php:76
+#: src/inc/languages.php:57, src/inc/admin/settings-page.php:941, src/inc/admin/settings-page.php:947, src/inc/frontend/order.php:77
 msgid "Download configuration image"
 msgstr ""
 
@@ -179,21 +179,21 @@ msgctxt "Label of the link to view a configuration, in the cart or an order"
 msgid "View configuration"
 msgstr ""
 
-#: src/inc/languages.php:61, src/inc/admin/settings-page.php:932, src/inc/frontend/views/parts/toolbar.php:27
+#: src/inc/languages.php:61, src/inc/admin/settings-page.php:1007, src/inc/frontend/views/parts/toolbar.php:27
 msgctxt "Previous step button label"
 msgid "Previous"
 msgstr ""
 
-#: src/inc/languages.php:62, src/inc/admin/settings-page.php:944, src/inc/frontend/views/parts/toolbar.php:40
+#: src/inc/languages.php:62, src/inc/admin/settings-page.php:1019, src/inc/frontend/views/parts/toolbar.php:40
 msgctxt "Next step button label"
 msgid "Next"
 msgstr ""
 
-#: src/inc/languages.php:307, src/inc/languages.php:307
+#: src/inc/languages.php:308, src/inc/languages.php:308
 msgid "Name"
 msgstr ""
 
-#: src/inc/languages.php:313, src/inc/languages.php:313, src/inc/admin/settings/angle.php:39, src/inc/admin/settings/choice.php:86, src/inc/admin/settings/layer.php:142
+#: src/inc/languages.php:314, src/inc/languages.php:314, src/inc/admin/settings/angle.php:39, src/inc/admin/settings/choice.php:86, src/inc/admin/settings/layer.php:142
 msgid "Description"
 msgstr ""
 
@@ -245,7 +245,7 @@ msgstr ""
 msgid "Custom background image"
 msgstr ""
 
-#: src/inc/admin/order.php:65, src/inc/admin/settings-page.php:878, src/inc/admin/settings-page.php:884, src/inc/frontend/order.php:57
+#: src/inc/admin/order.php:65, src/inc/admin/settings-page.php:953, src/inc/admin/settings-page.php:959, src/inc/frontend/order.php:58
 msgid "View configuration"
 msgstr ""
 
@@ -465,7 +465,7 @@ msgstr ""
 msgid "Configure button label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:218, src/inc/admin/settings-page.php:836, src/inc/admin/settings-page.php:848, src/inc/admin/settings-page.php:860, src/inc/admin/settings-page.php:872, src/inc/admin/settings-page.php:884, src/inc/admin/settings-page.php:896, src/inc/admin/settings-page.php:908, src/inc/admin/settings-page.php:920, src/inc/admin/settings-page.php:932, src/inc/admin/settings-page.php:944, src/inc/admin/settings-page.php:956
+#: src/inc/admin/settings-page.php:218, src/inc/admin/settings-page.php:911, src/inc/admin/settings-page.php:923, src/inc/admin/settings-page.php:935, src/inc/admin/settings-page.php:947, src/inc/admin/settings-page.php:959, src/inc/admin/settings-page.php:971, src/inc/admin/settings-page.php:983, src/inc/admin/settings-page.php:995, src/inc/admin/settings-page.php:1007, src/inc/admin/settings-page.php:1019, src/inc/admin/settings-page.php:1031
 msgid "Default:"
 msgstr ""
 
@@ -486,322 +486,358 @@ msgid "Configurator images"
 msgstr ""
 
 #: src/inc/admin/settings-page.php:269
-msgid "Preview Image size"
+msgid "Preview Image size - default"
 msgstr ""
 
 #: src/inc/admin/settings-page.php:282
+msgid "Preview Image size - mobile"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:295
+msgid "Preview Image size - large screens"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:308
 msgid "Thumbnail size"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:290
+#: src/inc/admin/settings-page.php:316
 msgid "Size of the thumbnails in the sidebar"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:296
+#: src/inc/admin/settings-page.php:322
+msgid "Image size used when merging images"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:330
+msgid "Size of the images used when merging the images to create the cart/order image"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:336
 msgid "Lazy load images"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:302
+#: src/inc/admin/settings-page.php:342
 msgid "Yes (default) - use an empty placeholder until the user selects a choice."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:303
+#: src/inc/admin/settings-page.php:343
 msgid "No - load everything from the beginning."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:312
+#: src/inc/admin/settings-page.php:352
 msgid "Display options"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:324
+#: src/inc/admin/settings-page.php:364
 msgid "Show the product's price in the configurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:335
+#: src/inc/admin/settings-page.php:375
 msgid "Show choices' description"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:346
+#: src/inc/admin/settings-page.php:386
 msgid "Always show the description (no tooltip)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:357
+#: src/inc/admin/settings-page.php:397
 msgid "Show layers' description"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:368
+#: src/inc/admin/settings-page.php:408
 msgid "Close the configurator when pressing \"add to cart\""
 msgstr ""
 
-#: src/inc/admin/settings-page.php:374
+#: src/inc/admin/settings-page.php:414
 msgid "Helpful if submiting the form via ajax"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:380
+#: src/inc/admin/settings-page.php:420
 msgid "On mobile, close the choices when making a selection"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:391
+#: src/inc/admin/settings-page.php:431
 msgid "On desktop, close the choices when making a selection"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:402
+#: src/inc/admin/settings-page.php:442
 msgid "In layer groups, close the siblings when opening an other layer"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:413
+#: src/inc/admin/settings-page.php:453
 msgid "Show the selected label in the layer header"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:424
+#: src/inc/admin/settings-page.php:464
 msgid "Show the selected image in the layer header"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:435
+#: src/inc/admin/settings-page.php:475
 msgid "Where should the \"configure\" button be placed"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:441
+#: src/inc/admin/settings-page.php:481
 msgid "Before the product excerpt"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:442
+#: src/inc/admin/settings-page.php:482
 msgid "Before the add to cart form"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:443
+#: src/inc/admin/settings-page.php:483
 msgid "Before the quantity input"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:444
+#: src/inc/admin/settings-page.php:484
 msgid "After the add to cart button"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:445
+#: src/inc/admin/settings-page.php:485
 msgid "After the add to cart form"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:454
+#: src/inc/admin/settings-page.php:494
 msgid "Show a reset button in the configurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:465
+#: src/inc/admin/settings-page.php:505
 msgid "Automatically open the first layer when starting the configurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:476
+#: src/inc/admin/settings-page.php:516
 msgid "Automatically scroll to the top of the opened layer (Supported themes only) "
 msgstr ""
 
-#: src/inc/admin/settings-page.php:487
+#: src/inc/admin/settings-page.php:527
 msgid "Enable toggling of the choice groups"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:498
+#: src/inc/admin/settings-page.php:538
+msgid "Show Edit configuration link in the cart and checkout"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:544
+msgid "NB: currently only works in classic cart and checkout"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:550
+msgid "Show view configuration link in the order details"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:561
 msgid "Angle display options"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:510
+#: src/inc/admin/settings-page.php:573
 msgid "Show angle/view image"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:521
+#: src/inc/admin/settings-page.php:584
 msgid "Show angle/view name"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:532
+#: src/inc/admin/settings-page.php:595
 msgid "Use the active angle to generate the image in the cart"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:543
+#: src/inc/admin/settings-page.php:606
 msgid "The user can swipe right or left to change view"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:554
+#: src/inc/admin/settings-page.php:617
 msgid "Image generation options"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:567
+#: src/inc/admin/settings-page.php:630
 msgid "Configuration image generation"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:584
+#: src/inc/admin/settings-page.php:647
 msgid "Show configuration image in cart and checkout"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:595
+#: src/inc/admin/settings-page.php:658
 msgid "Image size in the cart / checkout / order"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:609
+#: src/inc/admin/settings-page.php:672
 msgid "Image mode"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:616
+#: src/inc/admin/settings-page.php:679
 msgid "Add images to the library"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:617
+#: src/inc/admin/settings-page.php:680
 msgid "Generate images on the fly"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:620
+#: src/inc/admin/settings-page.php:683
 msgid "(can take a lot of space on the disk if you have many possible configurations)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:621
+#: src/inc/admin/settings-page.php:684
 msgid "(save disk space, but uses more server resource)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:628
+#: src/inc/admin/settings-page.php:691
 msgid "Add product image to the checkout"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:639
+#: src/inc/admin/settings-page.php:702
 msgid "Add product image to the email"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:663
+#: src/inc/admin/settings-page.php:726
 msgid "SKU mode"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:669
+#: src/inc/admin/settings-page.php:732
 msgid "Each choice can have its own SKU"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:670
+#: src/inc/admin/settings-page.php:733
 msgid "Generate a single SKU by compounding the SKU set in each selected choice"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:679
+#: src/inc/admin/settings-page.php:742
 msgid "SKU devider (character used between the parts when compounding the SKU)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:691
+#: src/inc/admin/settings-page.php:754
 msgid "SKU label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:703
+#: src/inc/admin/settings-page.php:766
 msgid "Show SKU in the cart and checkout"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:714
+#: src/inc/admin/settings-page.php:777
 msgid "Miscellaneous"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:726
+#: src/inc/admin/settings-page.php:789
 msgid "Allow adding the product to cart without configuring"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:737
+#: src/inc/admin/settings-page.php:800
 msgid "Enable Ajax Add to cart in the configurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:748
+#: src/inc/admin/settings-page.php:811
 msgid "Disable caching of configurations"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:754
+#: src/inc/admin/settings-page.php:817
 msgid "Can be usefull when using CDNs such as CloudFlare"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:760
+#: src/inc/admin/settings-page.php:823
+msgid "Load configurator data asynchronously"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:829
+msgid "Will load the data after page load"
+msgstr ""
+
+#: src/inc/admin/settings-page.php:835
 msgid "Disable GZIP compression of the configuration data (only affects the ajax request)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:771
+#: src/inc/admin/settings-page.php:846
 msgid "Timeout when saving the configuration in the admin"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:786
+#: src/inc/admin/settings-page.php:861
 msgid "Use steps if possible"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:792
+#: src/inc/admin/settings-page.php:867
 msgid "Check the documentation on how to use the steps feature"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:797
+#: src/inc/admin/settings-page.php:872
 msgid "Use layer names for previous and next button labels"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:807
+#: src/inc/admin/settings-page.php:882
 msgid "Make all steps clickable in the breadcrumb instead of the completed ones"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:823
+#: src/inc/admin/settings-page.php:898
 msgid "Other labels"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:890
+#: src/inc/admin/settings-page.php:965
 msgid "Configuration (meta label in the cart)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:896, src/inc/compatibility/yith-quote-request.php:248, src/inc/frontend/cart.php:212, src/inc/frontend/order.php:87, src/inc/frontend/order.php:229, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
+#: src/inc/admin/settings-page.php:971, src/inc/compatibility/yith-quote-request.php:248, src/inc/frontend/cart.php:243, src/inc/frontend/order.php:88, src/inc/frontend/order.php:230, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
 msgid "Configuration"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:902
+#: src/inc/admin/settings-page.php:977
 msgid "Loading message (displayed when the configurator is loading, in inline mode)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:914
+#: src/inc/admin/settings-page.php:989
 msgid "Angle switch label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:920, src/inc/frontend/views/parts/product-viewer.php:11
+#: src/inc/admin/settings-page.php:995, src/inc/frontend/views/parts/product-viewer.php:11
 msgid "Change angle"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:926
+#: src/inc/admin/settings-page.php:1001
 msgid "Previous step label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:938
+#: src/inc/admin/settings-page.php:1013
 msgid "Next step label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:950
+#: src/inc/admin/settings-page.php:1025
 msgid "Redirection message after Successfully adding to the cart"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:971
+#: src/inc/admin/settings-page.php:1046
 msgid "Disable TranslatePress Dynamic translation for the condigurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:977
+#: src/inc/admin/settings-page.php:1052
 msgid "Activate this setting if you wish to translate the configuration data from within the configurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:997
+#: src/inc/admin/settings-page.php:1072
 msgid "Edit the theme settings in the customizer"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1122
+#: src/inc/admin/settings-page.php:1197
 msgid "Get the official Product Configurator themes"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1123
+#: src/inc/admin/settings-page.php:1198
 msgid "Beautiful design, integrated live configuring interface, widgetized homepage, flexible, lightweight and much more..."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1185, src/inc/admin/settings-page.php:1220
+#: src/inc/admin/settings-page.php:1260, src/inc/admin/settings-page.php:1295
 msgid "Theme preview"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1187, src/inc/admin/settings-page.php:1222
+#: src/inc/admin/settings-page.php:1262, src/inc/admin/settings-page.php:1297
 msgid "No preview"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1196
+#: src/inc/admin/settings-page.php:1271
 msgid "No theme is in use."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1197
+#: src/inc/admin/settings-page.php:1272
 msgid "Select a theme"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1206
+#: src/inc/admin/settings-page.php:1281
 msgid "Select the theme"
 msgstr ""
 
@@ -833,7 +869,11 @@ msgstr ""
 msgid "Request a quote"
 msgstr ""
 
-#: src/inc/compatibility/wholesale-prices.php:91
+#: src/inc/compatibility/tiered-prices.php:63, src/inc/compatibility/wholesale-prices.php:167
+msgid "Price tiers"
+msgstr ""
+
+#: src/inc/compatibility/wholesale-prices.php:162
 msgid "Wholesale Price"
 msgstr ""
 
@@ -853,6 +893,10 @@ msgstr ""
 msgid "Show the configure button and hide the add to cart button"
 msgstr ""
 
+#: src/inc/frontend/cart.php:60
+msgid "Configuration data is missing, the product could not be added to the cart."
+msgstr ""
+
 #: src/inc/frontend/frontend-woocommerce.php:125, src/inc/frontend/frontend-woocommerce.php:224
 msgid "A product id must be set in order for this shortcode to work."
 msgstr ""
@@ -865,11 +909,11 @@ msgstr ""
 msgid "The global product variable is not a WC_Product instance"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:407
+#: src/inc/frontend/frontend-woocommerce.php:412
 msgid "%s is required"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:619
+#: src/inc/frontend/frontend-woocommerce.php:635
 msgid "SKU:"
 msgstr ""
 
@@ -905,7 +949,7 @@ msgstr ""
 msgid "Angle Name"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:45, src/inc/admin/settings/choice.php:160, src/inc/admin/settings/layer.php:250
+#: src/inc/admin/settings/angle.php:45, src/inc/admin/settings/choice.php:160, src/inc/admin/settings/layer.php:271
 msgid "CSS Class"
 msgstr ""
 
@@ -913,11 +957,11 @@ msgstr ""
 msgid "Use this view to generate the image in the cart"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:73, src/inc/admin/settings/choice.php:230, src/inc/admin/settings/layer.php:357
+#: src/inc/admin/settings/angle.php:73, src/inc/admin/settings/choice.php:230, src/inc/admin/settings/layer.php:378
 msgid "General"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:81, src/inc/admin/settings/choice.php:261, src/inc/admin/settings/layer.php:383
+#: src/inc/admin/settings/angle.php:81, src/inc/admin/settings/choice.php:261, src/inc/admin/settings/layer.php:404
 msgid "Advanced settings"
 msgstr ""
 
@@ -1044,11 +1088,11 @@ msgstr ""
 msgid "Together with the Extra price add-on, calculate complex prices."
 msgstr ""
 
-#: src/inc/admin/settings/choice.php:272, src/inc/admin/settings/layer.php:395
+#: src/inc/admin/settings/choice.php:272, src/inc/admin/settings/layer.php:416
 msgid "Translations"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:34, src/inc/admin/settings/layer.php:269
+#: src/inc/admin/settings/layer.php:34, src/inc/admin/settings/layer.php:290
 msgid "Default"
 msgstr ""
 
@@ -1168,63 +1212,67 @@ msgstr ""
 msgid "To add HTML to the viewer, add it to the custom HTML field in the content section."
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:256
-msgid "ID"
-msgstr ""
-
-#: src/inc/admin/settings/layer.php:265
-msgid "Number of columns"
-msgstr ""
-
-#: src/inc/admin/settings/layer.php:273
-msgid "4"
+#: src/inc/admin/settings/layer.php:249
+msgid "Close layer when the user makes a selection"
 msgstr ""
 
 #: src/inc/admin/settings/layer.php:277
+msgid "ID"
+msgstr ""
+
+#: src/inc/admin/settings/layer.php:286
+msgid "Number of columns"
+msgstr ""
+
+#: src/inc/admin/settings/layer.php:294
+msgid "4"
+msgstr ""
+
+#: src/inc/admin/settings/layer.php:298
 msgid "3"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:281
+#: src/inc/admin/settings/layer.php:302
 msgid "2"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:285
+#: src/inc/admin/settings/layer.php:306
 msgid "1"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:297
+#: src/inc/admin/settings/layer.php:318
 msgid "Color swatch size"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:301
+#: src/inc/admin/settings/layer.php:322
 msgid "Small"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:305
+#: src/inc/admin/settings/layer.php:326
 msgid "Medium"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:309
+#: src/inc/admin/settings/layer.php:330
 msgid "Large"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:320, src/inc/frontend/views/parts/summary.php:6
+#: src/inc/admin/settings/layer.php:341, src/inc/frontend/views/parts/summary.php:6
 msgid "Summary"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:327
+#: src/inc/admin/settings/layer.php:348
 msgid "Next step button label"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:349
+#: src/inc/admin/settings/layer.php:370
 msgid "Layer"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:366
+#: src/inc/admin/settings/layer.php:387
 msgid "Display settings"
 msgstr ""
 
-#: src/inc/admin/settings/layer.php:374
+#: src/inc/admin/settings/layer.php:395
 msgid "Selection settings"
 msgstr ""
 
@@ -1450,8 +1498,13 @@ msgctxt "Aria label of the main configurator close button"
 msgid "Close the configurator app"
 msgstr ""
 
-#: src/inc/frontend/views/html-product-configurator-templates.php:209
+#: src/inc/frontend/views/html-product-configurator-templates.php:207
 msgid "Confirm selection and continue configuring the product"
+msgstr ""
+
+#: src/inc/frontend/views/html-product-configurator-templates.php:216
+msgctxt "Part of message displayed when the product is successfully added to the cart"
+msgid "Done!"
 msgstr ""
 
 #: src/inc/themes/clean/theme.php:35
@@ -1578,7 +1631,7 @@ msgstr ""
 msgid "Adding to the cart"
 msgstr ""
 
-#: src/inc/frontend/views/parts/add-to-cart-modal.php:21, src/inc/frontend/views/parts/add-to-cart-modal.php:34
+#: src/inc/frontend/views/parts/add-to-cart-modal.php:21
 msgid "Done!"
 msgstr ""
 
@@ -1590,11 +1643,7 @@ msgstr ""
 msgid "or"
 msgstr ""
 
-#: src/inc/frontend/views/parts/add-to-cart-modal.php:35
-msgid "Redirecting you to the cart..."
-msgstr ""
-
-#: src/inc/frontend/views/parts/add-to-cart-modal.php:44
+#: src/inc/frontend/views/parts/add-to-cart-modal.php:42
 msgid "Close"
 msgstr ""
 

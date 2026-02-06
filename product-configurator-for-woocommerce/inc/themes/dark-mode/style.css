@@ -93,36 +93,6 @@ Supports: steps
   z-index: 100000;
   color: var(--mkl_pc_color-ll2);
 }
-.mkl_pc .loader {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  transform: translate(-50%, -50%);
-}
-.mkl_pc .loader .header {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #FFF;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.62);
-}
-.mkl_pc .loader .spinner {
-  width: 40px;
-  height: 40px;
-  margin: 30px auto;
-  background-color: #FFF;
-  border-radius: 100%;
-  -webkit-animation: sk-scaleout 1s infinite ease-in-out;
-  animation: sk-scaleout 1s infinite ease-in-out;
-}
-.mkl_pc.loading .loader {
-  display: block;
-}
-.mkl_pc.loading .mkl_pc_container {
-  transform: translateY(-30px);
-  opacity: 0;
-}
 .mkl_pc .overlay {
   position: absolute;
   top: 0;
