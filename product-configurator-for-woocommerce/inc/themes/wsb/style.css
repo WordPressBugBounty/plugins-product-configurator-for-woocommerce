@@ -1397,13 +1397,11 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
     flex: auto;
   }
 }
-@media (max-width: 760px) {
-  .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal {
-    left: 0;
-  }
-  .mkl_pc .mkl_pc_container footer .mkl-pc-syd-modal::after {
-    left: 40px;
-  }
+.mkl_pc .mkl_pc_container footer .save-your-design-modal-container .mkl-pc-syd-modal {
+  left: 0;
+}
+.mkl_pc .mkl_pc_container footer .save-your-design-modal-container .mkl-pc-syd-modal::after {
+  left: 40px;
 }
 @media (max-width: 760px) {
   .mkl_pc .mkl_pc_container footer {

@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2026-01-28 12:17+0000\n"
+"POT-Creation-Date: 2026-02-09 10:25+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -249,20 +249,28 @@ msgstr ""
 msgid "View configuration"
 msgstr ""
 
-#: src/inc/admin/product-variable.php:43
+#: src/inc/admin/product-variable.php:44
 msgid "Variations share the same layers, choices are set per variation"
 msgstr ""
 
-#: src/inc/admin/product-variable.php:44
+#: src/inc/admin/product-variable.php:45
 msgid "Variations share the same configuration"
 msgstr ""
 
-#: src/inc/admin/product-variable.php:46
+#: src/inc/admin/product-variable.php:47
 msgid "Configuration mode"
 msgstr ""
 
-#: src/inc/admin/product-variable.php:47
+#: src/inc/admin/product-variable.php:48
 msgid "Warning: changing mode on a product already in use could have undesired effects."
+msgstr ""
+
+#: src/inc/admin/product-variable.php:57
+msgid "All variations are configurable"
+msgstr ""
+
+#: src/inc/admin/product-variable.php:58
+msgid "Select if you want all variations to be configurable – prevents having to enable the setting on each variation"
 msgstr ""
 
 #: src/inc/admin/product.php:110
