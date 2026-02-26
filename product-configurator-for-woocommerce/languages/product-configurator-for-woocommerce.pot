@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2026-02-09 10:25+0000\n"
+"POT-Creation-Date: 2026-02-26 08:14+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -197,11 +197,11 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: src/inc/utils.php:176
+#: src/inc/utils.php:175
 msgid "Error:"
 msgstr ""
 
-#: src/inc/utils.php:176
+#: src/inc/utils.php:175
 msgid "template not found"
 msgstr ""
 
@@ -821,31 +821,31 @@ msgstr ""
 msgid "Edit the theme settings in the customizer"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1197
+#: src/inc/admin/settings-page.php:1208
 msgid "Get the official Product Configurator themes"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1198
+#: src/inc/admin/settings-page.php:1209
 msgid "Beautiful design, integrated live configuring interface, widgetized homepage, flexible, lightweight and much more..."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1260, src/inc/admin/settings-page.php:1295
+#: src/inc/admin/settings-page.php:1271, src/inc/admin/settings-page.php:1306
 msgid "Theme preview"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1262, src/inc/admin/settings-page.php:1297
+#: src/inc/admin/settings-page.php:1273, src/inc/admin/settings-page.php:1308
 msgid "No preview"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1271
+#: src/inc/admin/settings-page.php:1282
 msgid "No theme is in use."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1272
+#: src/inc/admin/settings-page.php:1283
 msgid "Select a theme"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1281
+#: src/inc/admin/settings-page.php:1292
 msgid "Select the theme"
 msgstr ""
 
