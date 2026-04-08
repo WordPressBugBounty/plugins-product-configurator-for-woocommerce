@@ -119,15 +119,6 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   width: auto;
   height: auto;
   padding-bottom: var(--mkl_pc_footer_height);
-  background: #fff;
-  display: flex;
-  overflow: auto;
-  flex-wrap: wrap;
-  visibility: hidden;
-  align-items: flex-start;
-  opacity: 0;
-  transform: translateY(-30px);
-  transition: all 0.5s;
 }
 .mkl_pc .mkl_pc_container:not(body.configurator_is_inline .mkl_pc .mkl_pc_container) {
   top: 0;
@@ -143,6 +134,17 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
     right: 0;
     bottom: 0; /* Fix issue on mobile, where the footer would be hidden */
   }
+}
+.mkl_pc .mkl_pc_container {
+  background: #fff;
+  display: flex;
+  overflow: auto;
+  flex-wrap: wrap;
+  visibility: hidden;
+  align-items: flex-start;
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: all 0.5s;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_bg {
   display: none;
@@ -277,15 +279,17 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   transition: 0.2s all;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
+  opacity: 0;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   max-height: 100%;
   -webkit-user-drag: none;
-}
-.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
-  opacity: 0;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers .custom-html {
   position: absolute;
@@ -429,6 +433,9 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   padding: 20px;
   border-radius: var(--mkl_pc_choice--border-radius);
 }
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.layers-list-item.type-group:not(.type-step) + .type-group {
+  margin-top: 30px;
+}
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.layers-list-item button, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.layers-list-item .layer-item {
   text-align: left;
   padding: 8px;
@@ -481,7 +488,6 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layers .layer-item {
   position: relative;
   display: block;
-  transition: 0.2s all;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layers .layer-item i {
   position: absolute;
@@ -514,6 +520,9 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layers .layer-item i:not(:empty) ~ .layer-text {
   padding-left: 60px;
   display: block;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layers .layer-item {
+  transition: 0.2s all;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layers .layer-item .description {
   display: block;
@@ -679,7 +688,6 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label {
   border: 1px solid var(--mkl_pc_color-border);
-  cursor: pointer;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label::before {
   content: "";
@@ -696,6 +704,9 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label:hover::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label:hover::before, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label:focus::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label:focus::before {
   background: var(--mkl_pc_color-primary);
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label {
+  cursor: pointer;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group + .is-group {
   margin-top: 0.2em;
@@ -736,16 +747,19 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.layer-choices-title {
   display: none;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown {
   padding: 0;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown > button.layer-item {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown > button.layer-item,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown > button.layer-item {
   padding: 15px;
   border: 1px solid var(--mkl_pc_color-border);
   border-radius: var(--mkl_pc_choice--border-radius);
   width: 100%;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown > button.layer-item::after {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown > button.layer-item::after,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown > button.layer-item::after {
   transition: 0.2s all;
   content: " ";
   display: block;
@@ -758,14 +772,21 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   border-right: 1px solid rgba(54, 56, 58, 0.3333333333);
   border-bottom: 1px solid rgba(54, 56, 58, 0.3333333333);
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown.dropdown-move-label-outside > button.layer-item span.selected-choice {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown > button.layer-item:hover, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown > button.layer-item:focus,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown > button.layer-item:hover,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown > button.layer-item:focus {
+  --mkl_pc_color-border: #777;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown.dropdown-move-label-outside > button.layer-item span.selected-choice,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown.dropdown-move-label-outside > button.layer-item span.selected-choice {
   font-size: 1rem;
   text-transform: inherit;
   opacity: 1;
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices {
   display: none;
   position: absolute;
   top: calc(100% - 11px);
@@ -777,66 +798,98 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   border: 1px solid #EEE;
   box-shadow: 0 20px 20px -10px rgba(0, 0, 0, 0.29);
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list {
   padding: 0;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li {
   width: 100%;
   margin: 0;
   border-radius: 0;
   box-shadow: none;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.is-group .choice-group-label {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.is-group .choice-group-label,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li.is-group .choice-group-label {
   font-size: 0.8em;
   opacity: 0.6;
   padding: 10px;
   border-bottom: 1px solid #eee;
   width: 100%;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li button.choice-item,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label {
   border-radius: 0;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text--container, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text--container {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text--container, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text--container,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text--container,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text--container {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
   flex-wrap: wrap;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text--container span.description, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text--container span.description {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text--container span.description, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text--container span.description,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text--container span.description,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text--container span.description {
   order: 2;
   width: 100%;
   margin-top: 10px;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item i.mkl-pc-thumbnail, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label i.mkl-pc-thumbnail {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item i.mkl-pc-thumbnail, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label i.mkl-pc-thumbnail,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li button.choice-item i.mkl-pc-thumbnail,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label i.mkl-pc-thumbnail {
   height: 50px;
   width: 50px;
   margin-top: -0.5em;
   margin-bottom: -0.5em;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li button.choice-item .choice-text,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label .choice-text {
   width: 100%;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item span.text.choice-name, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label span.text.choice-name {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item span.text.choice-name, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label span.text.choice-name,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li button.choice-item span.text.choice-name,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label span.text.choice-name {
   position: relative;
   display: flex;
   text-align: left;
   justify-content: space-between;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item:hover, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item:focus, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label:hover, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label:focus {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item:hover::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li button.choice-item:focus::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label:hover::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label:focus::after,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li button.choice-item:hover::after,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li button.choice-item:focus::after,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label:hover::after,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li > button.choice-group-label:focus::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   background: var(--mkl_pc_color-primary);
-  color: #FFF;
+  z-index: -1;
+  opacity: 0.06;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.has-qty.active > button.choice-item, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.has-text-field.active > button.choice-item {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.has-qty.active > button.choice-item, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.has-text-field.active > button.choice-item,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li.has-qty.active > button.choice-item,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li.has-text-field.active > button.choice-item {
   padding-bottom: 4px;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.active {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.active,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li.active {
   background: var(--mkl_pc_color-primary);
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.active button {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices .choices-list li.active button,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown .layer_choices .choices-list li.active button {
   color: #FFF;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown.active .layer_choices {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown.active .layer_choices,
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list ul li.layers-list-item.display-mode-dropdown.active .layer_choices {
   display: block;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.row-mode .layer_choices.row-mode > .choices-list > ul {
@@ -920,6 +973,9 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
 }
 .mkl_pc .mkl_pc_container .quantity input.qty {
   background: #fff;
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 8px;
 }
 @media (max-width: 660px) {
   .mkl_pc .mkl_pc_container .quantity input.qty {
@@ -977,7 +1033,8 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   display: inline-block;
 }
 .mkl_pc .mkl_pc_container button.configurator-add-to-cart,
-.mkl_pc .mkl_pc_container .mkl-pc--steps button {
+.mkl_pc .mkl_pc_container .mkl-pc--steps button,
+.mkl_pc .mkl_pc_container .pc_configurator_form > button {
   background: var(--mkl_pc_color-primary);
   border: 1px solid var(--mkl_pc_color-primary);
   color: #FFF;
@@ -986,15 +1043,23 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   border-radius: 8px;
   font-weight: 400;
 }
+.mkl_pc .mkl_pc_container button.configurator-add-to-cart:hover,
+.mkl_pc .mkl_pc_container .mkl-pc--steps button:hover,
+.mkl_pc .mkl_pc_container .pc_configurator_form > button:hover {
+  background: var(--mkl_pc_color-primary_hover);
+  border-color: var(--mkl_pc_color-primary_hover);
+}
 .mkl_pc .mkl_pc_container button.configurator-add-to-cart svg,
-.mkl_pc .mkl_pc_container .mkl-pc--steps button svg {
+.mkl_pc .mkl_pc_container .mkl-pc--steps button svg,
+.mkl_pc .mkl_pc_container .pc_configurator_form > button svg {
   display: inline-block;
   width: 20px;
   height: 20px;
   transform: translateX(10px);
 }
 .mkl_pc .mkl_pc_container button.configurator-add-to-cart svg path,
-.mkl_pc .mkl_pc_container .mkl-pc--steps button svg path {
+.mkl_pc .mkl_pc_container .mkl-pc--steps button svg path,
+.mkl_pc .mkl_pc_container .pc_configurator_form > button svg path {
   fill: #FFF;
 }
 .mkl_pc .mkl_pc_container button.configurator-add-to-cart svg {
@@ -1102,8 +1167,8 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
     width: calc(100% - 75px);
   }
 }
-.mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
-.mkl_pc .mkl_pc_container footer a.share-your-design,
+.mkl_pc .mkl_pc_container footer .save-your-design--pdf,
+.mkl_pc .mkl_pc_container footer .share-your-design,
 .mkl_pc .mkl_pc_container footer button.reset-configuration {
   margin: 0;
   padding: 4px 9px;
@@ -1118,8 +1183,8 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   border: none;
   color: var(--mkl_pc_color-primary);
 }
-.mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg,
-.mkl_pc .mkl_pc_container footer a.share-your-design svg,
+.mkl_pc .mkl_pc_container footer .save-your-design--pdf svg,
+.mkl_pc .mkl_pc_container footer .share-your-design svg,
 .mkl_pc .mkl_pc_container footer button.reset-configuration svg {
   height: 24px;
   fill: currentColor;
@@ -1127,32 +1192,32 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   margin-right: 6px;
   vertical-align: middle;
 }
-.mkl_pc .mkl_pc_container footer a.save-your-design--pdf.icon-only span,
-.mkl_pc .mkl_pc_container footer a.share-your-design.icon-only span,
+.mkl_pc .mkl_pc_container footer .save-your-design--pdf.icon-only span,
+.mkl_pc .mkl_pc_container footer .share-your-design.icon-only span,
 .mkl_pc .mkl_pc_container footer button.reset-configuration.icon-only span {
   display: none;
 }
-.mkl_pc .mkl_pc_container footer a.save-your-design--pdf.icon-only svg,
-.mkl_pc .mkl_pc_container footer a.share-your-design.icon-only svg,
+.mkl_pc .mkl_pc_container footer .save-your-design--pdf.icon-only svg,
+.mkl_pc .mkl_pc_container footer .share-your-design.icon-only svg,
 .mkl_pc .mkl_pc_container footer button.reset-configuration.icon-only svg {
   margin-right: 0;
 }
-.mkl_pc .mkl_pc_container footer a.save-your-design--pdf:hover, .mkl_pc .mkl_pc_container footer a.save-your-design--pdf:focus,
-.mkl_pc .mkl_pc_container footer a.share-your-design:hover,
-.mkl_pc .mkl_pc_container footer a.share-your-design:focus,
+.mkl_pc .mkl_pc_container footer .save-your-design--pdf:hover, .mkl_pc .mkl_pc_container footer .save-your-design--pdf:focus,
+.mkl_pc .mkl_pc_container footer .share-your-design:hover,
+.mkl_pc .mkl_pc_container footer .share-your-design:focus,
 .mkl_pc .mkl_pc_container footer button.reset-configuration:hover,
 .mkl_pc .mkl_pc_container footer button.reset-configuration:focus {
   opacity: 0.5;
 }
 @media (max-width: 660px) {
-  .mkl_pc .mkl_pc_container footer a.save-your-design--pdf,
-  .mkl_pc .mkl_pc_container footer a.share-your-design,
+  .mkl_pc .mkl_pc_container footer .save-your-design--pdf,
+  .mkl_pc .mkl_pc_container footer .share-your-design,
   .mkl_pc .mkl_pc_container footer button.reset-configuration {
     font-size: 12px;
     width: auto;
   }
-  .mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg,
-  .mkl_pc .mkl_pc_container footer a.share-your-design svg,
+  .mkl_pc .mkl_pc_container footer .save-your-design--pdf svg,
+  .mkl_pc .mkl_pc_container footer .share-your-design svg,
   .mkl_pc .mkl_pc_container footer button.reset-configuration svg {
     transform: none;
   }
@@ -1188,26 +1253,27 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
     bottom: -5px;
   }
 }
-.mkl_pc .mkl_pc_container footer span.save-your-design-modal-container a.save-your-design span {
+.mkl_pc .mkl_pc_container footer span.save-your-design-modal-container .save-your-design span {
   display: none;
 }
-.mkl_pc .mkl_pc_container footer span.save-your-design-modal-container a.save-your-design svg {
+.mkl_pc .mkl_pc_container footer span.save-your-design-modal-container .save-your-design svg {
   fill: var(--mkl_pc_color-primary);
   margin-right: 0;
 }
 @media (max-width: 660px) {
-  .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container a.save-your-design svg {
+  .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container .save-your-design svg {
     transform: none;
   }
 }
 @media (max-width: 660px) {
-  .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container a.save-your-design {
+  .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container .save-your-design {
     width: auto;
   }
 }
-.mkl_pc .mkl_pc_container footer a.save-your-design svg path,
+.mkl_pc .mkl_pc_container footer .save-your-design svg path,
 .mkl_pc .mkl_pc_container footer .mkl_pc .mkl_pc_container .mkl-pc-show-form svg path,
-.mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg path {
+.mkl_pc .mkl_pc_container footer .save-your-design--pdf svg path,
+.mkl_pc .mkl_pc_container footer .mkl-footer--action-button svg path {
   fill: var(--mkl_pc_color-primary);
 }
 .mkl_pc.opened {
@@ -1258,9 +1324,6 @@ body.admin-bar:not(.configurator_is_inline) .mkl_pc {
   }
 }
 
-body:not(.configurator_is_inline) .mkl_pc .mkl_pc_toolbar {
-  padding-bottom: 30px;
-}
 @media (max-width: 660px) {
   body:not(.configurator_is_inline) .mkl_pc .mkl_pc_toolbar > header {
     position: fixed;
@@ -1268,6 +1331,9 @@ body:not(.configurator_is_inline) .mkl_pc .mkl_pc_toolbar {
     top: 0;
     z-index: 2;
   }
+}
+body:not(.configurator_is_inline) .mkl_pc .mkl_pc_toolbar {
+  padding-bottom: 30px;
 }
 @media (max-width: 660px) {
   body:not(.configurator_is_inline) .mkl_pc .mkl_pc_viewer {
@@ -1285,7 +1351,11 @@ body:not(.configurator_is_inline) .mkl_pc .mkl_pc_toolbar {
 }
 
 .keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices button.choice-item:focus,
-.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices button.choice-group-label:focus {
+.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices button.choice-group-label:focus,
+.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices button.layer-item:focus,
+.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.layers-list-item button.choice-item:focus,
+.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.layers-list-item button.choice-group-label:focus,
+.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.layers-list-item button.layer-item:focus {
   outline: 4px solid rgba(var(--mkl_pc_color-primary_rgb), 0.2);
   outline-offset: 1px;
 }
@@ -1400,10 +1470,10 @@ body.configurator_is_inline .mkl-pc-preset-container .mkl_pc .mkl_pc_admin {
 body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors .choices-list li.active button:focus i.mkl-pc-thumbnail span::before {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2901960784), 0 0 0 2px #FFF, 0 0 0 4px #9E9E9E;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors .layer_choices.swatches-size--medium {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors.swatches-size--medium {
   --mkl_pc_color_thumnail_size: 43px;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors .layer_choices.swatches-size--large {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors.swatches-size--large {
   --mkl_pc_color_thumnail_size: 69px;
 }
 
@@ -1433,15 +1503,6 @@ body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choic
 .tippy-box {
   border-radius: 12px;
   padding: 10px;
-}
-
-.tippy-content span.text, .tippy-content span.description, .tippy-content span.choice-price {
-  display: block;
-}
-
-.tippy-content span.choice-price {
-  font-size: 0.8em;
-  opacity: 0.6;
 }
 
 /* Elementor fix */
@@ -1475,8 +1536,8 @@ body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choic
 */
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item,
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li:not(.is-group).form-item {
-  padding-right: 0;
-  padding-left: 0;
+  padding-right: 8px;
+  padding-left: 8px;
 }
 
 /* hide_in_configurator */

@@ -389,9 +389,6 @@ html .media-modal.pc-modal .no-data {
   padding: 5px 20px;
 }
 
-html .pc-modal-container {
-  /* Color picker settings */
-}
 html .pc-modal-container.loading .loading-screen {
   display: block;
 }
@@ -470,6 +467,9 @@ html .pc-modal-container .mkl-pc-image-settings {
   padding: 16px;
   box-sizing: border-box;
 }
+html .pc-modal-container {
+  /* Color picker settings */
+}
 html .pc-modal-container .setting > .wp-picker-container {
   position: relative;
   display: block;
@@ -520,7 +520,7 @@ html .pc-modal-container .setting > .wp-picker-container .wp-color-result.button
   cursor: pointer;
 }
 .mkl-list-item button:hover h3 {
-  color: #0073aa;
+  color: var(--wp-admin-theme-color, #0073aa);
 }
 .mkl-list-item .layer-img {
   position: absolute;
@@ -547,7 +547,7 @@ html .pc-modal-container .setting > .wp-picker-container .wp-color-result.button
   opacity: 0;
 }
 .mkl-list-item .sort:hover svg {
-  fill: #0073aa;
+  fill: var(--wp-admin-theme-color, #0073aa);
 }
 .mkl-list-item .group-list {
   margin: 0.7em;
@@ -578,11 +578,11 @@ html .pc-modal-container .setting > .wp-picker-container .wp-color-result.button
   position: relative;
 }
 .mkl-list-item.active.is-group {
-  outline: 2px solid #0073aa;
+  outline: 2px solid var(--wp-admin-theme-color, #0073aa);
   border-radius: 8px;
 }
 .mkl-list-item.active > button {
-  background-color: #0073aa;
+  background-color: var(--wp-admin-theme-color, #0073aa);
   color: #fff;
 }
 .mkl-list-item.active > button h3 {
@@ -715,14 +715,14 @@ CONTENT
   padding: 16px;
   border-bottom: 1px solid #dddddd;
 }
-.content-layers-list .layers li.active,
-.content-choices-list .layers li.active {
-  background: #f3f3f3;
-}
 .content-layers-list .layers li.active > a,
 .content-choices-list .layers li.active > a {
   background: #fff;
   color: #23282d;
+}
+.content-layers-list .layers li.active,
+.content-choices-list .layers li.active {
+  background: #f3f3f3;
 }
 .content-layers-list .layers li .layer-details,
 .content-choices-list .layers li .layer-details {
@@ -954,6 +954,9 @@ CONTENT
   border-bottom: 1px solid #dddddd;
   display: flex;
 }
+.media-frame-content.import-export .importer-header button .dashicons {
+  line-height: 1;
+}
 .media-frame-content.import-export .importer-header ol {
   display: flex;
   width: 100%;
@@ -970,7 +973,7 @@ CONTENT
   margin: 0;
 }
 .media-frame-content.import-export .importer-header ol li.active {
-  border-bottom: 4px solid #2171b1;
+  border-bottom: 4px solid var(--wp-admin-theme-color, #2171b1);
   background: #EFEFEF;
 }
 .media-frame-content.import-export .importer .form label {
@@ -1100,6 +1103,7 @@ a.mkl-pc-link--external::before {
 .floating-add button.mkl-floating-add-item i {
   vertical-align: middle;
   border-radius: 3px;
+  line-height: 1;
 }
 .floating-add.showing::before {
   visibility: visible;
@@ -1112,9 +1116,6 @@ a.mkl-pc-link--external::before {
 
 .pc-sidebar .setting .field-repeater {
   border: 1px solid #CCC;
-}
-.pc-sidebar .setting .field-repeater button .dashicons {
-  vertical-align: middle;
 }
 .pc-sidebar .setting .field-repeater button.remove-option span {
   display: none;
@@ -1141,6 +1142,7 @@ a.mkl-pc-link--external::before {
   border: none;
 }
 .pc-sidebar .setting .field-repeater .field-repeater--option .remove-option i.dashicons {
+  line-height: 1;
   transform: translateY(-3px);
 }
 .pc-sidebar .setting .field-repeater .field-repeater--option .remove-option i.dashicons + span {

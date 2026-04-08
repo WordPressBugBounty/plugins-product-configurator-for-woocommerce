@@ -388,15 +388,17 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   transition: 0.2s all;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
+  opacity: 0;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   max-height: 100%;
   -webkit-user-drag: none;
-}
-.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
-  opacity: 0;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers svg {
   transition: 0.2s all;
@@ -749,7 +751,6 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   border: none;
   -webkit-animation: slide-in-top 0.2s ease-out;
   animation: slide-in-top 0.2s ease-out;
-  /* STEPS */
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li > span.layer-item {
   margin-left: var(--mkl_pc-wsb-spacing);
@@ -781,6 +782,9 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li ul li.active button {
   background: var(--mkl_pc_color-active_bg);
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li {
+  /* STEPS */
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.type-step > span.layer-item {
   display: block;
@@ -933,6 +937,9 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   display: none;
   position: relative;
   transition: all 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01);
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.no-toggle {
+  display: block;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list {
   padding: 1.5em;
@@ -1353,13 +1360,15 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   z-index: 2;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
 }
 @media (min-width: 660px) {
   .mkl_pc .mkl_pc_container footer {
     justify-content: left;
   }
+}
+.mkl_pc .mkl_pc_container footer {
+  align-items: center;
+  box-sizing: border-box;
 }
 @media (max-width: 660px) {
   .mkl_pc .mkl_pc_container footer .mkl-footer--action-button {
@@ -1650,15 +1659,6 @@ body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choic
   stroke-width: 4px;
 }
 
-.tippy-content span.text, .tippy-content span.description, .tippy-content span.choice-price {
-  display: block;
-}
-
-.tippy-content span.choice-price {
-  font-size: 0.8em;
-  opacity: 0.6;
-}
-
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.choices-fullwidth .choices-list li {
   width: 100%;
 }
@@ -1730,28 +1730,28 @@ body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choic
   animation: configurator-load 1s infinite ease-in-out;
 }
 
-a.save-your-design svg, a.save-your-design--pdf svg {
+.save-your-design svg, .save-your-design--pdf svg, .mkl-footer--action-button svg {
   transform: translateY(0);
   fill: var(--mkl_pc_color-primary);
 }
 @media (max-width: 760px) {
-  a.save-your-design, a.save-your-design--pdf {
+  .save-your-design, .save-your-design--pdf, .mkl-footer--action-button {
     width: 40px;
   }
-  a.save-your-design span, a.save-your-design--pdf span {
+  .save-your-design span, .save-your-design--pdf span, .mkl-footer--action-button span {
     display: none;
   }
 }
 @media (max-height: 500px) and (orientation: landscape) {
-  a.save-your-design, a.save-your-design--pdf {
+  .save-your-design, .save-your-design--pdf, .mkl-footer--action-button {
     width: 40px;
   }
-  a.save-your-design span, a.save-your-design--pdf span {
+  .save-your-design span, .save-your-design--pdf span, .mkl-footer--action-button span {
     display: none;
   }
 }
 
-a.save-your-design svg path,
+.save-your-design svg path,
 .mkl_pc .mkl_pc_container .mkl-pc-show-form svg path,
 .save-your-design--pdf svg path,
 .mkl-footer--action-button svg path {
@@ -1763,6 +1763,27 @@ a.save-your-design svg path,
   z-index: 100000;
 }
 
+/* twentytwentyfive theme fix */
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .form button {
+  padding: 1rem;
+}
+
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .form input.qty {
+  font-size: 1rem;
+  padding: 1rem;
+  line-height: inherit;
+}
+
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar .mkl-pc-validation-summary {
+  margin: 0;
+  border-radius: 0;
+  border-width: 0 0 0 4px;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar .mkl-pc-validation-summary:focus {
+  outline: 2px solid rgba(122, 19, 19, 0.231372549);
+  outline-offset: -2px;
+}
+
 @media (max-width: 660px) {
   .mkl_pc {
     --mkl_pc-footer-height: 35px;
@@ -1770,13 +1791,13 @@ a.save-your-design svg path,
   .mkl_pc.no-sticky-footer .mkl_pc_container .form.form-cart {
     box-shadow: none;
   }
-  .mkl_pc.no-sticky-footer .mkl_pc_container .mkl_pc_toolbar {
-    overflow: auto;
-    overflow-x: hidden;
-  }
   .mkl_pc.no-sticky-footer .mkl_pc_container .mkl_pc_toolbar section.choices {
     height: auto;
     overflow: unset;
+  }
+  .mkl_pc.no-sticky-footer .mkl_pc_container .mkl_pc_toolbar {
+    overflow: auto;
+    overflow-x: hidden;
   }
 }
 /*# sourceMappingURL=../../../maps/inc/themes/wsb/style.css.map */

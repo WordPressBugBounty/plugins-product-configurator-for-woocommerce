@@ -166,6 +166,7 @@ PC.fe.views.choice = Backbone.View.extend({
 		'mouseenter > .choice-item': 'preload_image',
 		'focus > .choice-item': 'preload_image',
 		'click > button.choice-group-label': 'toggle_group',
+		'keydown > button.choice-group-label': 'toggle_group_with_keyboard',
 	},
 	render: function() {
 		/**
@@ -180,6 +181,7 @@ PC.fe.views.choice = Backbone.View.extend({
 		
 		// Render the template
 		this.$el.html( this.template( wp.hooks.applyFilters( 'PC.fe.configurator.template_choice_data', data ) ) );
+		this.$( '> .choice-item' ).attr( 'aria-disabled', data.disable_selection ? 'true' : 'false' );
 
 		wp.hooks.doAction( 'PC.fe.configurator.choice-item.render.after-template', this );
 
@@ -193,26 +195,36 @@ PC.fe.views.choice = Backbone.View.extend({
 			}
 		}
 
+		var $choiceItem = this.$( '> .choice-item' );
+		var description = this.get_description();
+		var description_screen_reader = this.get_description( false );
+		this.set_choice_sr_text( description_screen_reader );
+
 		if ( window.tippy ) {
-			
-			var description = this.get_description();
 
 			/**
 			 * Customization of the tooltip can be done by using TippyJS options: atomiks.github.io/tippyjs/v6/
 			 */
 			var tooltip_options = wp.hooks.applyFilters( 'PC.fe.tooltip.options', {
+				interactive: false,
 				content: description,
 				allowHTML: true,
 				placement: 'top',
 				zIndex: 100001,
 				appendTo: 'parent',
+				trigger: 'mouseenter focus',
+				onCreate: function( instance ) {
+					if ( instance && instance.popper ) {
+						instance.popper.setAttribute( 'aria-hidden', 'true' );
+					}
+				},
 			},
 			this );
 
 			tooltip_options = wp.hooks.applyFilters( 'PC.fe.choice.tooltip.options', tooltip_options, this );
 
-			if ( tooltip_options.content && tooltip_options.content.length && this.$( '.choice-item' ).length ) {
-				tippy( this.el, tooltip_options );
+			if ( tooltip_options.content && tooltip_options.content.length && $choiceItem.length ) {
+				tippy( $choiceItem[0], tooltip_options );
 			}
 		}
 
@@ -237,32 +249,58 @@ PC.fe.views.choice = Backbone.View.extend({
 			$ci[0]._tippy.setContent( this.get_description() );
 		}
 	},
-	get_description: function() {
+	get_description: function( html = true) {
+		var description = [];
 		if ( wp.hooks.applyFilters( 'PC.fe.tooltip.add_all_text', 'colors' == this.model.collection.layer.get( 'display_mode' ) && ! this.model.get( 'is_group' ) ) ) {
 			this.update_tippy_on_price_update = true;
-			var description = this.$( '.choice-text' ).length ? this.$( '.choice-text' ).html() : this.$( '.choice-name' ).html();
+			if ( this.$( '.choice-text' ).length ) {
+				description.push( html ? this.$( '.choice-text' ).html() : this.$( '.choice-text' ).text() );
+			} else if ( this.$( '.choice-name' ).length ) {
+				description.push( html ? this.$( '.choice-name' ).html() : this.$( '.choice-name' ).text() );
+			}
 			if ( this.$( '.choice-price' ).length ) {
-				description += this.$( '.choice-price' ).html();
+				description.push( html ? this.$( '.choice-price' ).html() : this.$( '.choice-price' ).text() );
 				this.$( '.choice-price' ).hide();
 			}
 			if ( this.$( '.description' ).length ) {
-				description += this.$( '.description' ).html();
+				description.push( html ? this.$( '.description' ).html() : this.$( '.description' ).text() );
 				this.$( '.description' ).hide();
 			}
 			if ( this.$( '.out-of-stock' ).length ) {
-				description += this.$( '.out-of-stock' )[0].outerHTML;
+				description.push( html ? this.$( '.out-of-stock' )[0].outerHTML : this.$( '.out-of-stock' )[0].outerText );
 				// console.log('get desc', this.model.collection.layer.get( 'name' ), this.model.get( 'name' ), this.$( '.out-of-stock' ).length, this.$( '.out-of-stock' )[0].outerHTML );
 			}
 		} else if ( ! PC.fe.config.choice_description_no_tooltip ) {
-			var description = this.$( '.description' ).html();
+			description.push( html ? this.$( '.description' ).html() : this.$( '.description' ).text() );
 		}
 		// console.log( description );
-		return description;
+		if ( html ) {
+			return description.join( ' ' );
+		} else {
+			return description.join( ', ' );
+		}
+	},
+	set_choice_sr_text: function( description ) {
+		var $choice_item = this.$( '> .choice-item' );
+		if ( ! $choice_item.length ) return;
+		var details = '';
+		if ( description ) {
+			details = description.replace( /\s+/g, ' ' ).replace( /\s*,\s*/g, ', ' ).trim();
+		}
+		// var text = details ? ( name ? name + '. ' + details : details ) : name;
+		if ( details ) {
+			$choice_item.attr( 'aria-label', details );
+		}
 	},
 	set_choice: function( event ) {
 		if ( this.model.get( 'is_group' ) ) return;
 
 		if ( event.type == 'keydown' ) {
+			if ( event.keyCode >= 37 && event.keyCode <= 40 ) {
+				event.preventDefault();
+				this.navigate_choices( event.keyCode );
+				return;
+			}
 			if ( ! ( event.keyCode == 13 || event.keyCode == 32 ) ) {
 				return;
 			}
@@ -315,18 +353,62 @@ PC.fe.views.choice = Backbone.View.extend({
 		// img.src = src;
 	},
 	activate: function() {
+		this.set_choice_a11y_attrs();
 		if( this.model.get('active') === true ) {
 			this.$el.addClass( 'active' );
-			this.$( '> button.choice-item' ).attr( 'aria-pressed', 'true' );
+			this.$( '> button.choice-item' ).attr( 'aria-checked', 'true' );
 			wp.hooks.doAction( 'PC.fe.choice.activate', this );
 		} else {
 			this.$el.removeClass( 'active' );
-			this.$( '> button.choice-item' ).attr( 'aria-pressed', 'false' );
+			this.$( '> button.choice-item' ).attr( 'aria-checked', 'false' );
 			wp.hooks.doAction( 'PC.fe.choice.deactivate', this );
+		}
+		if ( this.options.parent && this.options.parent.update_roving_tabindex ) {
+			this.options.parent.update_roving_tabindex();
 		}
 	},
 	toggle_group: function() {
 		this.$el.toggleClass( 'show-group-content' );
+		this.$( '> .choice-group-label' ).attr( 'aria-expanded', this.$el.is( '.show-group-content' ) ? 'true' : 'false' );
+	},
+	toggle_group_with_keyboard: function( event ) {
+		if ( ! ( event.keyCode === 13 || event.keyCode === 32 ) ) return;
+		event.preventDefault();
+		this.toggle_group();
+	},
+	get_layer_type: function() {
+		if ( this.model.collection && this.model.collection.layer ) {
+			return this.model.collection.layer.get( 'type' ) || 'simple';
+		}
+		return 'simple';
+	},
+	/**
+	 * Native <button> + radiogroup roving tabindex (choices.js); no duplicate native inputs in default templates.
+	 */
+	set_choice_a11y_attrs: function() {
+		var $choice_item = this.$( '> button.choice-item' );
+		if ( ! $choice_item.length ) return;
+		var role = 'multiple' === this.get_layer_type() ? 'checkbox' : 'radio';
+		$choice_item.attr( 'role', role );
+	},
+	navigate_choices: function( key_code ) {
+		if ( ! this.options.parent || ! this.options.parent.$list ) return;
+		var $items = PC.fe.a11y.filter_focusable( this.options.parent.$list.find( '.choice-item' ) );
+		if ( ! $items.length ) return;
+		var current_index = $items.index( this.$( '> .choice-item' ) );
+		if ( -1 === current_index ) return;
+		var direction = ( key_code === 37 || key_code === 38 ) ? -1 : 1;
+		var next_index = ( current_index + direction + $items.length ) % $items.length;
+		var $next = $items.eq( next_index );
+		if ( ! $next.length ) return;
+		PC.fe.a11y.focus_without_scroll( $next );
+
+		if ( 'multiple' !== this.get_layer_type() ) {
+			var next_view = $next.closest( 'li.choice' ).data( 'view' );
+			if ( next_view && next_view.model ) {
+				next_view.model.collection.selectChoice( next_view.model.id, true );
+			}
+		}
 	}
 });
 
@@ -357,13 +439,54 @@ PC.fe.views.choices = Backbone.View.extend({
 		if ( this.model.get( 'color_swatch_size' ) ) this.$el.addClass( 'swatches-size--' + this.model.get( 'color_swatch_size' ) );
 
 		this.$list = this.$el.find('.choices-list ul'); 
+		this.set_a11y_attributes();
 		this.add_all( this.options.content ); 
 		
 		if ( this.options.content && ( ! this.model.get( 'default_selection' ) || 'select_first' == this.model.get( 'default_selection' ) ) && !this.options.content.findWhere( { 'active': true } ) && this.options.content.findWhere( { available: true } ) ) {
 			var av = this.options.content.findWhere( { available: true } );
 			if ( av ) av.set( 'active', true );
 		}
+
+		this.update_roving_tabindex();
 		return this.$el;
+	},
+	/**
+	 * Roving tabindex for simple layers (radiogroup pattern).
+	 * Ensures Tab enters the group once; arrow keys move between choices.
+	 */
+	update_roving_tabindex: function() {
+		if ( ! this.$list || ! this.$list.length ) return;
+		if ( 'simple' !== ( this.model.get( 'type' ) || 'simple' ) ) return;
+
+		var $items = PC.fe.a11y.filter_focusable( this.$list.find( '.choice-item' ) );
+		if ( ! $items.length ) return;
+
+		// Make all items untabbable by default.
+		$items.attr( 'tabindex', '-1' );
+
+		// Prefer the checked one, otherwise the first available.
+		var $checked = $items.filter( '[aria-checked="true"]' ).first();
+		var $target = $checked.length ? $checked : $items.first();
+		$target.attr( 'tabindex', '0' );
+	},
+	set_a11y_attributes: function() {
+		if ( ! this.$list || ! this.$list.length ) return;
+		var layer_name = this.model.get( 'name' ) || '';
+		var layer_type = this.model.get( 'type' ) || 'simple';
+		var list_id = 'mkl-pc-choice-list-' + this.model.id;
+		this.$list.attr( 'id', list_id );
+
+		if ( 'simple' === layer_type ) {
+			this.$list.attr( {
+				role: 'radiogroup',
+				'aria-label': layer_name
+			} );
+		} else if ( 'multiple' === layer_type ) {
+			this.$list.attr( {
+				role: 'group',
+				'aria-label': layer_name
+			} );
+		}
 	},
 	add_all: function( collection ) { 
 		// this.$el.empty();
@@ -387,13 +510,19 @@ PC.fe.views.choices = Backbone.View.extend({
 		}
 
 		/**
-		 * 
+		 * Action hook: PC.fe.choices.add_one.after
+		 * @param {PC.fe.views.choices} target_view
+		 * @param {PC.fe.views.choice} new_choice
 		 */
 		wp.hooks.doAction( 'PC.fe.choices.add_one.after', this, new_choice );
 	},
 	close_choices: function( event ) {
 		event.preventDefault(); 
 		this.model.set('active', false);
+		var $layerBtn = $( '#config-layer-' + this.model.id );
+		if ( $layerBtn.length ) {
+			PC.fe.a11y.focus_without_scroll( $layerBtn );
+		}
 	}
 });
 
@@ -407,13 +536,14 @@ PC.fe.views.configurator = Backbone.View.extend({
 	template: wp.template( 'mkl-pc-configurator' ), 
 	initialize: function( options ) {
 		this.options = options;
-		var product_id = options.product_id;
-		var parent_id = options.parent_id;
+		this.product_id = options.product_id;
+		this.parent_id = options.parent_id;
 		wp.hooks.doAction( 'PC.fe.init.modal', this ); 
-		if ( parent_id && 'async' !== PC.fe.config.data_mode ) {
-			this.options = PC.productData['prod_' + parent_id].product_info; 
+		
+		if ( this.parent_id && 'async' !== PC.fe.config.data_mode ) {
+			this.options = PC.productData['prod_' + this.parent_id].product_info; 
 		} else {
-			this.options = PC.productData['prod_' + product_id].product_info; 
+			this.options = PC.productData['prod_' + this.product_id].product_info; 
 		}
 
 		try {
@@ -427,7 +557,11 @@ PC.fe.views.configurator = Backbone.View.extend({
 		'content-is-loaded': 'start',
 		'click .close-mkl-pc': 'close',
 	},
+	focusable_selector: 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])',
 	render: function() {
+		if ( PC.fe.a11y.modal_focusable_selector ) {
+			this.focusable_selector = PC.fe.a11y.modal_focusable_selector;
+		}
 		if( PC.fe.inline == true && $(PC.fe.inlineTarget).length > 0 ) {
 			$(PC.fe.inlineTarget).empty().append(this.$el);
 		} else if ( PC.fe.config.inline == true && $(PC.fe.config.inlineTarget).length > 0 ) {
@@ -445,10 +579,23 @@ PC.fe.views.configurator = Backbone.View.extend({
 		this.$el.append( this.template( { bg_image: wp.hooks.applyFilters( 'PC.fe.config.bg_image', PC.fe.config.bg_image, this ) } ) ); 
 		this.$main_window = this.$el.find( '.mkl_pc_container' );
 
-		if ( !PC.fe.inline ) {
-			this.$main_window.attr( 'aria-modal', 'true' );
+		if ( ! PC.fe.inline ) {
+			this.$main_window.attr( {
+				role: 'dialog',
+				'aria-modal': 'true'
+			} );
+			this.$main_window.removeAttr( 'aria-label' );
+		} else {
+			var inlineRegionLabel = ( typeof PC_config !== 'undefined' && PC_config.lang && PC_config.lang.inline_region_aria_label ) ? PC_config.lang.inline_region_aria_label : 'Product configurator';
+			this.$main_window.attr( {
+				role: 'region',
+				'aria-label': inlineRegionLabel
+			} );
+			this.$main_window.removeAttr( 'aria-modal aria-labelledby' );
 		}
-
+		if ( ! this.$main_window.find( '.mkl-pc-live-region' ).length ) {
+			this.$main_window.append( '<div class="mkl-pc-live-region screen-reader-text" aria-live="polite" aria-atomic="true"></div>' );
+		}
 		return this.$el; 
 	},
 	open: function() {
@@ -456,14 +603,17 @@ PC.fe.views.configurator = Backbone.View.extend({
 
 		setTimeout( _.bind( this.$el.addClass, this.$el, 'opened' ), 10 );
 
+		this.previously_focused_el = document.activeElement;
+		this.trigger_el = PC.fe.trigger_el;
+
 		// Set focus on the first layer
-		if ( ! PC.fe.inline ) {
-			setTimeout( function() {
-				this.$el.find('.layers .layer-item').first().trigger( 'focus' );
-			}.bind(this), 300);
+		if ( wp.hooks.applyFilters( 'PC.fe.setup_keyboard_navigation', true ) ) {
+			$( document ).on( 'keydown.mkl-pc-modal', this.handle_configurator_keydown.bind( this ) );
+			if ( !PC.fe.inline ) {
+				this.apply_initial_focus();
+				setTimeout( this.apply_initial_focus.bind( this ), 500 );
+			}
 		}
-		// A11y: set focus to the modal when opening it
-		if ( !PC.fe.inline ) this.$main_window.trigger( 'focus' );
 		wp.hooks.doAction( 'PC.fe.open', this ); 
 	},
 	close: function() {
@@ -474,10 +624,12 @@ PC.fe.views.configurator = Backbone.View.extend({
 
 		// Empty the form fields to prevent adding the configuration to the cart by mistake (only if the configurator doesn't automatically close, as that would empty the field)
 		if ( ! PC.fe.config.close_configurator_on_add_to_cart ) $( 'input[name=pc_configurator_data]' ).val( '' );
+		$( document ).off( 'keydown.mkl-pc-modal' );
 
 		wp.hooks.doAction( 'PC.fe.close', this ); 
 
 		setTimeout( _.bind( this.$el.hide, this.$el ), 500 );
+		if ( ! PC.fe.inline ) this.restore_focus();
 	},
 
 	start: function( e, arg ) {
@@ -489,7 +641,6 @@ PC.fe.views.configurator = Backbone.View.extend({
 		this.$main_window.append( this.viewer.render() );
 		
 		if ( ! PC.fe.angles.length || ! PC.fe.layers.length || ! PC.fe.contents.content.length ) {
-			console.log( e );
 			var message = $( '<div class="error configurator-error" />' ).text( 'The product configuration seems incomplete. Please make sure Layers, angles and content are set.' );
 			if ( ! PC.fe.config.inline ) {
 				$( PC.fe.trigger_el ).after( message );
@@ -511,6 +662,8 @@ PC.fe.views.configurator = Backbone.View.extend({
 			this.$main_window.append( this.toolbar.render() ); 
 			this.$main_window.append( this.footer.render() );
 		}
+
+		this.refresh_main_window_accessibility();
 
 		// this.summary = new PC.fe.views.summary();
 		// this.$main_window.append( this.summary.$el );
@@ -557,6 +710,187 @@ PC.fe.views.configurator = Backbone.View.extend({
 
 		// Trigger an action after reseting
 		wp.hooks.doAction( 'PC.fe.reset_configurator' );
+	},
+	refresh_main_window_accessibility: function() {
+		if ( ! this.$main_window || ! this.$main_window.length ) return;
+		var $label = this.$el.find( '.mkl_pc_toolbar header .product-name, .product-name' ).first();
+		if ( ! $label.length ) return;
+		if ( ! $label.attr( 'id' ) ) {
+			$label.attr( 'id', 'mkl-pc-dialog-title-' + this.product_id );
+		}
+		this.$main_window.attr( 'aria-labelledby', $label.attr( 'id' ) );
+		var $description = this.$el.find( '.mkl_pc_toolbar #mkl-pc-dialog-instructions-' + this.product_id ).first();
+		if ( $description.length ) {
+			this.$main_window.attr( 'aria-describedby', $description.attr( 'id' ) );
+		} else {
+			this.$main_window.removeAttr( 'aria-describedby' );
+		}
+		if ( ! PC.fe.inline ) this.$main_window.removeAttr( 'aria-label' );
+	},
+	restore_focus: function() {
+		if ( this.trigger_el && $( this.trigger_el ).length ) {
+			PC.fe.a11y.focus_without_scroll( $( this.trigger_el ) );
+			return;
+		}
+		if ( this.previously_focused_el && document.contains( this.previously_focused_el ) ) {
+			PC.fe.a11y.focus_without_scroll( $( this.previously_focused_el ) );
+		}
+	},
+	get_initial_focus_target: function() {
+		var $scope = this.$main_window && this.$main_window.length ? this.$main_window : this.$el;
+		if ( ! $scope || ! $scope.length ) return $();
+
+		// 1) Toolbar header (tabindex -1 — valid programmatic focus target).
+		var $header = $scope.find( '.mkl_pc_toolbar > header' ).first();
+		if ( $header.length && $header.is( ':visible' ) ) {
+			return $header;
+		}
+
+		// 2) First visible layer row: primary layer button, then choices in that layer, then nested layer buttons.
+		var $first_visible_layer = $scope.find( '.layers .layers-list-item:visible:not(.hide_in_configurator)' ).first();
+		if ( $first_visible_layer.length ) {
+			var $first_layer_button = $first_visible_layer.find( '> button.layer-item:visible:not(:disabled)' ).first();
+			if ( $first_layer_button.length && PC.fe.a11y.is_focusable_enabled( $first_layer_button ) ) {
+				return $first_layer_button;
+			}
+
+			var first_layer_id = $first_visible_layer.attr( 'data-layer' );
+			if ( first_layer_id ) {
+				var $layerChoices = $scope.find( '#mkl-pc-layer-choices-' + first_layer_id );
+				var $first_input = PC.fe.a11y.filter_focusable( $layerChoices.find( '.choice-item-input' ) ).first();
+				if ( $first_input.length ) return $first_input;
+				var $first_choice = PC.fe.a11y.filter_focusable( $layerChoices.find( '.choice-item' ) ).first();
+				if ( $first_choice.length ) return $first_choice;
+			}
+
+			var $nested_layer_button = $first_visible_layer.find( 'button.layer-item:visible:not(:disabled)' ).first();
+			if ( $nested_layer_button.length && PC.fe.a11y.is_focusable_enabled( $nested_layer_button ) ) {
+				return $nested_layer_button;
+			}
+		}
+
+		var $layer_button = $scope.find( '.layers .layers-list-item:visible:not(.hide_in_configurator) > button.layer-item:visible:not(:disabled)' ).first();
+		if ( $layer_button.length && PC.fe.a11y.is_focusable_enabled( $layer_button ) ) return $layer_button;
+
+		// 3) First choice in any open choices panel (inputs preferred for form-like layers).
+		var $choice_input = PC.fe.a11y.filter_focusable( $scope.find( '.layer_choices:visible .choice-item-input' ) ).first();
+		if ( $choice_input.length ) return $choice_input;
+		var $choice_button = PC.fe.a11y.filter_focusable( $scope.find( '.layer_choices:visible .choice-item' ) ).first();
+		if ( $choice_button.length ) return $choice_button;
+
+		// 4) First generic focusable in the modal.
+		var $focusable = PC.fe.a11y.filter_focusable( $scope.find( this.focusable_selector ) ).first();
+		if ( $focusable.length ) return $focusable;
+
+		return this.$main_window && this.$main_window.length ? this.$main_window : $();
+	},
+	
+	apply_initial_focus: function() {
+		if ( PC.fe.inline ) return;
+		var $target = this.get_initial_focus_target();
+		if ( $target && $target.length ) {
+			PC.fe.a11y.focus_without_scroll( $target );
+		}
+	},
+
+	/**
+	 * Visible, enabled focusables (delegates to PC.fe.a11y.filter_focusable).
+	 */
+	filter_modal_focusable: function( $collection ) {
+		return PC.fe.a11y.filter_focusable( $collection );
+	},
+	
+	/**
+	 * Tab order for drawer-style choices: all focusables inside .choices-list, then .choices-close.
+	 */
+	get_drawer_choices_tab_cycle: function( $layerChoices ) {
+		var $listFocusable = this.filter_modal_focusable( $layerChoices.find( '.choices-list' ).first().find( this.focusable_selector ) );
+		var $close = $layerChoices.find( '.choices-close' ).filter( ':visible' );
+		var cycle = [];
+		$listFocusable.each( function() {
+			cycle.push( this );
+		} );
+		if ( $close.length ) {
+			cycle.push( $close[0] );
+		}
+		return cycle;
+	},
+	handle_configurator_keydown: function( event ) {
+		if ( ! this.$el.is( ':visible' ) ) return;
+		if ( 'Escape' === event.key ) {
+			// Nested SYD/Share modals handle Escape themselves.
+			if ( $( 'body' ).hasClass( 'syd-modal-opened' ) || $( 'body' ).hasClass( 'syd-share-modal-opened' ) ) {
+				return;
+			}
+			if ( $( 'body' ).hasClass( 'mkl-pc-showing-advanced-description' ) || $( '.mkl-pc-advanced-description--container' ).length ) {
+				return;
+			}
+			var $activeLayer = this.$main_window.find( '.layers .layers-list-item.active:visible:not(.hide_in_configurator)' ).first();
+			if ( $activeLayer.length ) {
+				var activeLayerView = $activeLayer.data( 'view' );
+				if ( activeLayerView && activeLayerView.choices_location && 'in' !== activeLayerView.choices_location ) {
+					var $focusTarget = activeLayerView.$( '> button.layer-item:visible:not(:disabled)' ).first();
+					if ( ! $focusTarget.length ) {
+						$focusTarget = this.$main_window;
+					}
+					activeLayerView.show_choices( null );
+					event.preventDefault();
+					setTimeout( function() {
+						PC.fe.a11y.focus_without_scroll( $focusTarget );
+					}, 0 );
+					return;
+				}
+			}
+			if ( PC.fe.inline ) return;
+			event.preventDefault();
+			this.close();
+			return;
+		}
+		if ( 'Tab' !== event.key ) return;
+
+		var activeEl = document.activeElement;
+		var $layerChoices = $( activeEl ).closest( '.layer_choices.active' );
+		if ( $layerChoices.length ) {
+			var choicesId = $layerChoices.attr( 'id' ) || '';
+			var layerIdMatch = choicesId.match( /^mkl-pc-layer-choices-(.+)$/ );
+			var layerView = null;
+			if ( layerIdMatch ) {
+				var $layerLi = this.$main_window.find( '.layers .layers-list-item[data-layer="' + layerIdMatch[1] + '"]' ).first();
+				layerView = $layerLi.data( 'view' );
+			}
+			if ( layerView && layerView.choices_location && 'in' !== layerView.choices_location ) {
+				var cycle = this.get_drawer_choices_tab_cycle( $layerChoices );
+				if ( cycle.length ) {
+					var idx = cycle.indexOf( activeEl );
+					if ( idx !== -1 ) {
+						event.preventDefault();
+						var next;
+						if ( event.shiftKey ) {
+							next = idx === 0 ? cycle[ cycle.length - 1 ] : cycle[ idx - 1 ];
+						} else {
+							next = idx === cycle.length - 1 ? cycle[0] : cycle[ idx + 1 ];
+						}
+						PC.fe.a11y.focus_without_scroll( $( next ) );
+						return;
+					}
+				}
+			}
+		}
+
+		if ( PC.fe.inline ) return;
+
+		// Focus cycling
+		var $focusable = PC.fe.a11y.filter_focusable( this.$main_window.find( this.focusable_selector ) );
+		if ( ! $focusable.length ) return;
+		var first = $focusable[0];
+		var last = $focusable[ $focusable.length - 1 ];
+		if ( event.shiftKey && document.activeElement === first ) {
+			event.preventDefault();
+			PC.fe.a11y.focus_without_scroll( $( last ) );
+		} else if ( ! event.shiftKey && document.activeElement === last ) {
+			event.preventDefault();
+			PC.fe.a11y.focus_without_scroll( $( first ) );
+		}
 	}
 });
 
@@ -697,20 +1031,13 @@ PC.fe.views.form = Backbone.View.extend({
 		var data = PC.fe.save_data.save();
 		var errors = wp.hooks.applyFilters( 'PC.fe.validate_configuration', PC.fe.errors );
 		if ( errors.length ) {
-			// show errors and prevent adding to cart
-			console.log( errors );
-			var messages = [];
-			_.each( errors, function( error ) {
-				if ( error.choice ) {
-					error.choice.set( 'has_error', error.message );
-				}
-				if ( error.layer ) {
-					error.layer.set( 'has_error', error.message );
-				}
-				messages.push( PC.utils.strip_html( error.message ) );
-			} );
-			alert( messages.join( "\n" ) );
+			if ( PC.fe.show_validation_errors ) {
+				PC.fe.show_validation_errors( errors );
+			}
 			return false;
+		}
+		if ( PC.fe.clear_validation_errors ) {
+			PC.fe.clear_validation_errors();
 		}
 		return data;
 	},
@@ -942,6 +1269,7 @@ PC.fe.views.layers_list_item_selection = Backbone.View.extend({
 	tagName: 'span',
 	className: 'selected-choice',
 	initialize: function() {
+		this._last_announced_summary = null;
 		this.choices = PC.fe.getLayerContent( this.model.id );
 		if ( ! this.choices && 'group' !== this.model.get( 'type' ) ) return;
 		this.listenTo( this.model, 'change:cshow', this.render );
@@ -1003,7 +1331,18 @@ PC.fe.views.layers_list_item_selection = Backbone.View.extend({
 			}.bind( this ) );
 		}
 
-		this.$el.html( choices_names.join( ', ' ) );
+		var visible_value = choices_names.join( ', ' );
+		var selected_prefix = PC_config.lang.selected_prefix || 'Selected: %s';
+		var selected_none = PC_config.lang.selected_none || 'Selected: none';
+		var sr_value = choices_names.length ? selected_prefix.replace( '%s', visible_value ) : selected_none;
+		this.$el
+			.attr( 'role', 'status' )
+			.attr( 'aria-live', 'polite' )
+			.attr( 'aria-atomic', 'true' );
+		this.$el.html(
+			'<span aria-hidden="true">' + visible_value + '</span>' +
+			'<span class="screen-reader-text">' + sr_value + '</span>'
+		);
 		wp.hooks.doAction( 'PC.fe.set.selected_choice', choices_names, this );
 	},
 	should_display: function( model ) {
@@ -1029,7 +1368,7 @@ PC.fe.views.layers_list_item_selection_image = Backbone.View.extend({
 		_.each( active_choices, function( item ) {
 			var image = item.get_image( 'thumbnail' );
 			if ( image ) {
-				html_content += '<img src="' + image + '">';
+				html_content += '<img src="' + image + '" alt="" aria-hidden="true">';
 			}
 		} );
 		if ( ! this.has_thumbnail ) {
@@ -1089,11 +1428,20 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 
 		this.$el.append( this.template( wp.hooks.applyFilters( 'PC.fe.configurator.layer_data', data ) ) ); 
 
+		var layer_name_id = 'config-layer-name-' + this.model.id;
+		this.$( '.layer-item .layer-name' ).first().attr( 'id', layer_name_id );
 		this.$el.attr( 'aria-describedby', 'config-layer-' + this.model.id );
+		this.$( '> button.layer-item' ).attr( {
+			'aria-labelledby': layer_name_id,
+			'aria-expanded': 'false'
+		} );
 
 		if ( PC.fe.config.show_active_choice_in_layer && ! this.model.get( 'is_step' ) ) {
 			var selection = new PC.fe.views.layers_list_item_selection( { model: this.options.model } );
 			this.$( '.layer-item .layer-name' ).after( selection.$el );
+			var selected_choice_id = 'config-layer-selected-' + this.model.id;
+			selection.$el.attr( 'id', selected_choice_id );
+			this.$( '> button.layer-item' ).attr( 'aria-describedby', selected_choice_id );
 		}
 
 		// Add classes
@@ -1117,14 +1465,35 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 			this.$( '.layer-name' ).prependTo( this.$el );
 		}
 
+		this.set_accessibility_context();
+
 		wp.hooks.doAction( 'PC.fe.layer.beforeRenderChoices', this );
 		// Add the choices
-		this.add_choices(); 
+		this.add_choices();
+
+		if ( this.choices_location === 'in' ) {
+			this.$el.attr( 'aria-role', 'group' );
+			this.$el.attr( 'aria-labelledby', 'config-layer-name-' + this.model.id );
+		}
+
 		wp.hooks.doAction( 'PC.fe.layer.render', this );
 		
 		// Add display-mode class to the choices element
 		if ( this.choices && this.choices.$el && this.model.get( 'display_mode' ) ) this.choices.$el.addClass( 'display-mode-' + this.model.get( 'display_mode' ) );
 		return this.$el;
+	},
+	set_accessibility_context: function() {
+		var $layer_button = this.$( '> button.layer-item' );
+		if ( ! $layer_button.length ) return;
+		var layer_name_id = 'config-layer-name-' + this.model.id;
+		var label_ids = [ layer_name_id ];
+		if ( this.model.get( 'parent' ) ) {
+			var parent_id = 'config-layer-' + this.model.get( 'parent' );
+			if ( this.$el.closest( '.mkl_pc' ).find( '#' + parent_id ).length ) {
+				label_ids.unshift( parent_id );
+			}
+		}
+		$layer_button.attr( 'aria-labelledby', label_ids.join( ' ' ) );
 	},
 	add_choices: function() {
 
@@ -1150,6 +1519,8 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 		}
 
 		where = wp.hooks.applyFilters( 'PC.fe.choices.where', where, this );
+		
+
 		if( ! where || 'out' == where ) {
 			this.options.parent.after( this.choices.$el );
 		} else if( 'in' == where ) {
@@ -1157,7 +1528,13 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 		} else if ( $( where ).length ) {
 			this.choices.$el.appendTo( $( where ) )
 		}
+		
+		this.choices_location = where;
+
 		wp.hooks.doAction( 'PC.fe.add.choices', this.choices.$el, this );
+		var layer_id = 'mkl-pc-layer-choices-' + this.model.id;
+		this.choices.$el.attr( 'id', layer_id );
+		this.$( '> button.layer-item' ).attr( 'aria-controls', layer_id );
 	},
 	on_click_layer( event ) {
 		if ( event ) {
@@ -1205,12 +1582,20 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 				} );
 			}
 
-			if ( event && 'dropdown' === this.model.get( 'display_mode' ) ) {
+			if ( event && 'dropdown' === this.model.get( 'display_mode' ) && 'group' !== this.model.get( 'type' ) ) {
 				$( document ).on( 'click.mkl-pc', this.dropdown_click_outside.bind( this ) );
 			}
 
+			
 			this.model.set( 'active', true );
 
+			// // If the choices are not in the layer, focus the first choice
+			// console.log( this.choices_location );
+			
+			// if ( this.choices_location !== 'in' ) {
+			// 	this.choices.$( '.choice-item:visible' ).first().trigger( 'focus' );
+			// }
+			
 			PC.fe.current_layer = this.model;
 			wp.hooks.doAction( 'PC.fe.layer.show', this );
 		}
@@ -1226,15 +1611,40 @@ PC.fe.views.layers_list_item = Backbone.View.extend({
 			this.$el.addClass( 'active' ); 
 			if ( this.choices ) {
 				this.choices.$el.addClass( 'active' );
-				this.choices.$( 'button:visible' ).first().trigger( 'focus' );
+
+				// Autofocus first control after panel transition (steps / mouse: skip).
+				if ( ! this.model.get( 'is_step' ) && PC.fe.keyboard_navigation ) {
+					var $scope = this.choices.$el;
+					if ( $scope && $scope.length ) {
+						var view = this;
+						PC.fe.a11y.focus_after_panel_transition( $scope, function() {
+							if ( ! view.model.get( 'active' ) ) return;
+							PC.fe.a11y.focus_first_in_scope( $scope );
+						}, { namespace: 'mklPcFocus' } );
+					}
+				}
 			}
-			this.$( '> button.layer-item' ).attr( 'aria-pressed', 'true' );
+			this.$( '> button.layer-item' ).attr( 'aria-expanded', 'true' );
 			wp.hooks.doAction( 'PC.fe.layer.activate', this );
 		} else {
+			var active_el = document.activeElement;
+			var focus_was_inside_choices = !! ( this.choices && this.choices.el && active_el && this.choices.el.contains( active_el ) );
 			this.$el.removeClass( 'active' );
 			if ( this.choices ) this.choices.$el.removeClass( 'active' );
 			$( document ).off( 'click.mkl-pc' );
-			this.$( '> button.layer-item' ).attr( 'aria-pressed', 'false' );
+			this.$( '> button.layer-item' ).attr( 'aria-expanded', 'false' );
+			// If the layer collapsed while focus was inside its choices,
+			// restore focus to the layer button to avoid Safari tabbing out of the modal.
+			if ( focus_was_inside_choices ) {
+				setTimeout( () => {
+					var $btn = this.$( '> button.layer-item:visible:not(:disabled)' ).first();
+					if ( $btn.length ) {
+						PC.fe.a11y.focus_without_scroll( $btn );
+					} else if ( PC.fe.modal && PC.fe.modal.$main_window && PC.fe.modal.$main_window.length ) {
+						PC.fe.a11y.focus_without_scroll( PC.fe.modal.$main_window );
+					}
+				}, 0 );
+			}
 			wp.hooks.doAction( 'PC.fe.layer.deactivate', this );
 		}
 	},
@@ -1259,6 +1669,9 @@ PC.fe.views.layers_list = Backbone.View.extend({
 	}, 
 	render: function() {
 		this.options.parent.$selection.append( this.$el );
+		if ( PC_config.lang.layers_aria_label ) {
+			this.$el.attr( 'aria-label', PC_config.lang.layers_aria_label );
+		}
 		this.add_all( PC.fe.layers );
 		return this.$el;
 	},
@@ -1316,7 +1729,9 @@ PC.fe.views.layers_list = Backbone.View.extend({
 	},
 
 });
-PC.fe.errors = [];
+PC.fe.validation = PC.fe.validation || {};
+PC.fe.validation.errors = PC.fe.validation.errors || [];
+PC.fe.errors = PC.fe.validation.errors;
 
 PC.fe.save_data = {
 	choices: [],
@@ -1332,8 +1747,9 @@ PC.fe.save_data = {
 		return this.choices;
 	},
 	reset_errors: function() {
-		if ( PC.fe.errors.length ) {
-			_.each( PC.fe.errors, function( error ) {
+		var errs = PC.fe.validation.errors;
+		if ( errs.length ) {
+			_.each( errs, function( error ) {
 				if ( error.choice && error.choice.get( 'has_error' ) ) {
 					error.choice.set( 'has_error', false );
 				}
@@ -1342,12 +1758,19 @@ PC.fe.save_data = {
 				}
 			} );
 		}
-		PC.fe.errors = [];
+		errs.length = 0;
+		var $summary = $( '.mkl-pc-validation-summary' ).first();
+		if ( $summary.length ) {
+			$summary.empty().attr( 'hidden', 'hidden' );
+		}
+		if ( PC.fe.validation.detach_live_sync ) {
+			PC.fe.validation.detach_live_sync();
+		}
 	},
 	is_layer_valid: function( layer ) {
 		this.reset_errors();
 		this.validate_layer( layer );
-		return ! PC.fe.errors.length;
+		return ! PC.fe.validation.errors.length;
 	},
 	validate_layer: function( layer ) {
 		if ( 'group' == layer.get( 'type' ) ) {
@@ -1356,6 +1779,40 @@ PC.fe.save_data = {
 			return;
 		}
 		this.parse_choices( layer );
+	},
+
+	/**
+	 * Run validate_layer for one layer (and its descendant groups) without mutating the main errors list.
+	 * Uses the same parse_choices / hooks path as full save validation — no duplicated rules.
+	 *
+	 * @param {Backbone.Model} layer Layer model from PC.fe.layers.
+	 * @return {Array} Errors produced for that subtree only.
+	 */
+	collect_errors_for_layer: function( layer ) {
+		if ( ! layer || ! layer.get ) return [];
+		var prev = PC.fe.validation.errors;
+		var capture = [];
+		PC.fe.validation.errors = capture;
+		PC.fe.errors = capture;
+		try {
+			this.validate_layer( layer );
+			return capture.slice();
+		} finally {
+			PC.fe.validation.errors = prev;
+			PC.fe.errors = prev;
+		}
+	},
+
+	/**
+	 * Re-validate the layer that owns a choice (same as collect_errors_for_layer on that layer).
+	 *
+	 * @param {Backbone.Model} choice Choice model with layerId.
+	 * @return {Array}
+	 */
+	collect_errors_for_choice: function( choice ) {
+		if ( ! choice || ! choice.get || ! PC.fe.layers ) return [];
+		var layer = PC.fe.layers.get( choice.get( 'layerId' ) );
+		return layer ? this.collect_errors_for_layer( layer ) : [];
 	},
 	count_selected_choices_in_group: function( group_id ) {
 		var children = PC.fe.layers.filter( function( layer ) {
@@ -1464,9 +1921,10 @@ PC.fe.save_data = {
 
 					// The item is out of stock, so throw an error
 					if ( false === choice.get( 'available' ) ) {
-						PC.fe.errors.push( {
+						var separator_in = ( PC_config.lang && PC_config.lang.validation_separator_in ) ? PC_config.lang.validation_separator_in : ', ';
+						PC.fe.validation.errors.push( {
 							choice: choice,
-							message: PC_config.lang.out_of_stock_error_message.replace( '%s', model_data.name + ' > ' + choice.get_name() )
+							message: PC_config.lang.out_of_stock_error_message.replace( '%s', model_data.name + separator_in + choice.get_name() )
 						} );
 					}
 
@@ -1517,9 +1975,10 @@ PC.fe.save_data = {
 
 					// The item is out of stock, so throw an error
 					if ( false === choice.get( 'available' ) ) {
-						PC.fe.errors.push( {
+						var separator_in = ( PC_config.lang && PC_config.lang.validation_separator_in ) ? PC_config.lang.validation_separator_in : ', ';
+						PC.fe.validation.errors.push( {
 							choice: choice,
-							message: PC_config.lang.out_of_stock_error_message.replace( '%s', model_data.name + ' > ' + choice.get_name() )
+							message: PC_config.lang.out_of_stock_error_message.replace( '%s', model_data.name + separator_in + choice.get_name() )
 						} );
 					}
 				} else if ( is_required ) {
@@ -1546,7 +2005,7 @@ PC.fe.save_data = {
 		}
 
 		if ( require_error ) {	
-			PC.fe.errors.push( {
+			PC.fe.validation.errors.push( {
 				choice: false,
 				layer: model,
 				message: PC_config.lang.required_error_message.replace( '%s', model_data.name ) 
@@ -1564,6 +2023,7 @@ PC.fe.save_data = {
 
 PC.fe.views.stepsProgress = Backbone.View.extend( {
 	className: 'steps-progress--container',
+	tagName: 'nav',
 	initialize: function() {
 		this.render();
 		return this; 
@@ -1586,7 +2046,7 @@ PC.fe.views.stepsProgress = Backbone.View.extend( {
 	add_step: function( step ) {
 		var item = new PC.fe.views.stepsProgressItem( { model: step } );
 		item.$el.appendTo( this.$ol );
-	}
+	},
 } );
 
 PC.fe.views.stepsProgressItem = Backbone.View.extend( {
@@ -1693,6 +2153,9 @@ PC.fe.steps = {
 				if ( ! breadcrumb_position ) modal.toolbar.$( 'section.choices' ).before( this.breadcrumb.$el );
 			}
 
+			this.$live = $( '<div class="mkl-pc-current-step-name screen-reader-text" aria-live="polite" aria-atomic="true"></div>' );
+			modal.toolbar.$( 'section.choices' ).before( this.$live );
+
 			this.display_step();
 		}.bind( this ), 20 );
 
@@ -1701,6 +2164,15 @@ PC.fe.steps = {
 		}.bind( this ) );
 
 		this.initialized = true;
+	},
+	update_live_region: function() {
+		if ( ! this.current_step ) return;
+		const current_step = this.get_index( this.current_step );
+		const total_steps = PC.fe.steps.steps.length;
+		const step_number = current_step + 1;
+		const step_name = this.current_step.get( 'name' );
+		const step_label = PC_config.lang.steps_progress_current_step.replace( '%1$s', step_number ).replace( '%2$s', total_steps ).replace( '%3$s', step_name );
+		this.$live.text( step_label );
 	},
 	clean_existing_steps: function() {
 		if ( this.steps ) this.steps = null;
@@ -1750,24 +2222,17 @@ PC.fe.steps = {
 
 		var urlParams = new URLSearchParams( location.search );
 		var proceed = urlParams.has( 'pc-presets-admin' );
+
+		PC.fe.clear_validation_errors();
+
 		var validated_layer = PC.fe.save_data.is_layer_valid( this.current_step );
 		var errors = wp.hooks.applyFilters( 'PC.fe.validate_configuration', PC.fe.errors );
 		validated_layer = validated_layer && ! errors.length;
 		if ( ! proceed && ! validated_layer ) {
 			if ( errors.length ) {
-				// show errors and prevent adding to cart
-				console.log( 'Validation errors:', errors );
-				var messages = [];
-				_.each( errors, function( error ) {
-					if ( error.choice ) {
-						error.choice.set( 'has_error', error.message );
-					}
-					if ( error.layer ) {
-						error.layer.set( 'has_error', error.message );
-					}
-					messages.push( error.message );
-				} );
-				alert( messages.join( "\n" ) );
+				if ( PC.fe.show_validation_errors ) {
+					PC.fe.show_validation_errors( errors );
+				}
 				return false;
 			}
 		}
@@ -1797,6 +2262,8 @@ PC.fe.steps = {
 				if ( ! $first.parent().is( '.display-mode-dropdown' ) ) $first.trigger( 'click' );
 			}, 50 );
 		}
+
+		this.update_live_region();
 
 		wp.hooks.doAction( 'PC.fe.steps.display_step', this );
 	},
@@ -1840,12 +2307,15 @@ PC.fe.steps = {
 			this.render();
 		},
 		render: function() {
-			this.$el.html( this.template({}) );
+			// Render once, then update state in place (preserves focus).
+			if ( ! this.$( 'button.step-previous' ).length ) {
+				this.$el.html( this.template({}) );
+			}
 			var current_index = PC.fe.steps.get_index( PC.fe.steps.current_step );
 			if ( 0 == current_index ) {
-				this.$( 'button' ).prop( 'disabled', true );
+				this.$( 'button.step-previous' ).prop( 'disabled', true );
 			} else {
-				this.$( 'button' ).prop( 'disabled', false );
+				this.$( 'button.step-previous' ).prop( 'disabled', false );
 			}
 	
 		},
@@ -1868,6 +2338,11 @@ PC.fe.steps = {
 			this.render();
 		},
 		render: function() {
+			// Render once, then update label/state in place (preserves focus).
+			if ( ! this.$( 'button.step-next' ).length ) {
+				this.$el.html( this.template({ label: '' }) );
+			}
+
 			var label = '';
 			if ( PC.fe.config.steps_use_layer_name ) {
 				var steps = PC.fe.steps.get_steps();
@@ -1877,8 +2352,9 @@ PC.fe.steps = {
 					label = next_step.get( 'next_step_button_label' ) || next_step.get( 'name' );
 				}
 			} 
-
-			this.$el.html( this.template({ label: label }) );
+			if ( label ) {
+				this.$( 'button.step-next > span:not(.screen-reader-text)' ).first().text( label );
+			}
 		},
 		next: function( e ) {
 			e.preventDefault();
@@ -2025,7 +2501,7 @@ PC.fe.views.toolbar = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.append( this.template( { name: this.parent.options.title } ) );
+		this.$el.append( this.template( { name: this.parent.options.title, ID: PC.fe.active_product } ) );
 		this.$selection = this.$el.find('.choices'); 
 		// this.get_cart(); 
 		this.layers = new PC.fe.views.layers_list( { parent: this } );

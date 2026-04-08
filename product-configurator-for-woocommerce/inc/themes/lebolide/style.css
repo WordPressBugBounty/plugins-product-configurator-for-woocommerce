@@ -122,14 +122,6 @@ Supports: color_swatches, steps, columns, display mode: compact list
   width: auto;
   height: auto;
   background: var(--mkl_pc_color-main_background);
-  display: flex;
-  overflow: auto;
-  flex-wrap: wrap;
-  visibility: hidden;
-  align-items: flex-start;
-  opacity: 0;
-  transform: translateY(-30px);
-  transition: all 0.5s;
 }
 .mkl_pc .mkl_pc_container:not(body.configurator_is_inline .mkl_pc .mkl_pc_container) {
   top: 0;
@@ -144,6 +136,16 @@ Supports: color_swatches, steps, columns, display mode: compact list
     left: 0;
     right: 0;
   }
+}
+.mkl_pc .mkl_pc_container {
+  display: flex;
+  overflow: auto;
+  flex-wrap: wrap;
+  visibility: hidden;
+  align-items: flex-start;
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: all 0.5s;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_bg {
   display: none;
@@ -258,15 +260,17 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   transition: 0.2s all;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
+  opacity: 0;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   max-height: 100%;
   -webkit-user-drag: none;
-}
-.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
-  opacity: 0;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers .custom-html {
   position: absolute;
@@ -322,9 +326,6 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
   height: 30px;
   padding: 0;
   order: 1;
-}
-.mkl_pc .mkl_pc_container .mkl_pc_viewer > header > .cancel span {
-  display: none;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer > header > .cancel::before, .mkl_pc .mkl_pc_container .mkl_pc_viewer > header > .cancel::after {
   content: " ";
@@ -765,7 +766,6 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label {
   border: 1px solid var(--mkl_pc_color-border);
   height: auto;
-  cursor: pointer;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label::before {
   content: "";
@@ -782,6 +782,9 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label:hover::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label:hover::before, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label:focus::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label:focus::before {
   background: var(--mkl_pc_color-primary);
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group button.choice-group-label {
+  cursor: pointer;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.is-group + .is-group {
   margin-top: 0.2em;
@@ -1353,9 +1356,9 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
 .mkl_pc .mkl_pc_container footer span.save-your-design-modal-container {
   padding-right: 0;
 }
-.mkl_pc .mkl_pc_container footer a.save-your-design svg path,
+.mkl_pc .mkl_pc_container footer .save-your-design svg path,
 .mkl_pc .mkl_pc_container footer .mkl_pc .mkl_pc_container .mkl-pc-show-form svg path,
-.mkl_pc .mkl_pc_container footer a.save-your-design--pdf svg path {
+.mkl_pc .mkl_pc_container footer .save-your-design--pdf svg path {
   fill: var(--mkl_pc_color-primary);
 }
 .mkl_pc .mkl_pc_container > .share-your-design--container {
@@ -1396,7 +1399,7 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
   left: 0;
   background: rgba(0, 0, 0, 0.8);
 }
-.mkl_pc .mkl_pc_container a.syd-share-close {
+.mkl_pc .mkl_pc_container .syd-share-close {
   position: absolute;
   top: -60px;
   width: 40px;
@@ -1721,15 +1724,6 @@ body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choic
 .tippy-box {
   border-radius: 12px;
   padding: 10px;
-}
-
-.tippy-content span.text, .tippy-content span.description, .tippy-content span.choice-price {
-  display: block;
-}
-
-.tippy-content span.choice-price {
-  font-size: 0.8em;
-  opacity: 0.6;
 }
 
 /* Elementor fix */

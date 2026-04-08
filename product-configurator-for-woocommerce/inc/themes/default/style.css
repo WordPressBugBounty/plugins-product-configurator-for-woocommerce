@@ -273,15 +273,17 @@ Description:  Default theme, with sliding menu
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   transition: 0.2s all;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
+  opacity: 0;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   max-height: 100%;
   -webkit-user-drag: none;
-}
-.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
-  opacity: 0;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers .custom-html {
   position: absolute;
@@ -335,11 +337,12 @@ Description:  Default theme, with sliding menu
   background: transparent;
   border: none;
   box-shadow: none;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  top: 30px;
-  right: 30px;
+  top: 10px;
+  right: 10px;
+  transition: all 0.2s;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar > header > .cancel span {
   display: none;
@@ -351,15 +354,19 @@ Description:  Default theme, with sliding menu
   background: #000;
   position: absolute;
   top: 50%;
-  left: 0;
+  left: 50%;
   transform-origin: 50%;
-  transform: rotate(45deg);
+  transform: translateX(-50%) rotate(45deg);
   transition: all 0.2s;
   border-radius: 1px;
   display: block;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar > header > .cancel::after {
-  transform: rotate(-45deg);
+  transform: translateX(-50%) rotate(-45deg);
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar > header > .cancel:hover, .mkl_pc .mkl_pc_container .mkl_pc_toolbar > header > .cancel:focus {
+  cursor: pointer;
+  transform: scale(1.2) rotate(90deg);
 }
 @media (max-width: 760px) {
   .mkl_pc .mkl_pc_container .mkl_pc_toolbar > header {
@@ -392,6 +399,8 @@ Description:  Default theme, with sliding menu
     position: absolute;
     top: 10px;
     right: 10px;
+    width: 20px;
+    height: 20px;
   }
   .mkl_pc .mkl_pc_container .mkl_pc_toolbar > header .cancel::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar > header .cancel::before {
     background: #FFF;
@@ -467,6 +476,8 @@ Description:  Default theme, with sliding menu
   color: var(--mkl_pc_color-layers_button_text_color);
   font-weight: normal;
   white-space: normal;
+  font-size: 1rem;
+  text-transform: none;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li button:hover, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li button:focus {
   color: var(--mkl_pc_color-primary_hover);
@@ -484,8 +495,8 @@ Description:  Default theme, with sliding menu
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li button span.selected-choice {
   display: block;
   font-size: 0.6rem;
-  text-transform: uppercase;
-  opacity: 0.5;
+  text-transform: none;
+  opacity: 0.6;
 }
 @media (max-width: 660px) {
   .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li button {
@@ -579,7 +590,6 @@ Description:  Default theme, with sliding menu
   transition: all 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01);
   background: #f7f7f7;
   transform: translateX(100%);
-  /* Child layer */
 }
 @media (max-width: 760px) {
   .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices {
@@ -866,7 +876,6 @@ Description:  Default theme, with sliding menu
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.layer-choices-title > span a.close span {
   border-bottom: none;
   box-shadow: none;
-  display: none;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.layer-choices-title > span a.close:focus {
   outline: none;
@@ -897,6 +906,9 @@ Description:  Default theme, with sliding menu
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.layer-choices-title > span a.close:focus::after, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.layer-choices-title > span a.close:hover::after {
   transform: translateX(8px) rotate(35deg);
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices {
+  /* Child layer */
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.layers-list-item > button {
   padding-right: 40px;
@@ -1080,11 +1092,11 @@ Description:  Default theme, with sliding menu
   }
 }
 @media (max-width: 660px) {
-  .mkl_pc .mkl_pc_container footer button.configurator-add-to-cart svg {
-    max-width: 25px;
-  }
   .mkl_pc .mkl_pc_container footer button.configurator-add-to-cart svg path {
     fill: #36383a;
+  }
+  .mkl_pc .mkl_pc_container footer button.configurator-add-to-cart svg {
+    max-width: 25px;
   }
 }
 @media (max-width: 660px) {
@@ -1359,17 +1371,6 @@ body.configurator_is_inline .mkl_pc .mkl_pc_container .cancel {
   display: none;
 }
 
-.tippy-content span.text, .tippy-content span.description, .tippy-content span.choice-price, .tippy-content span.out-of-stock {
-  display: block;
-  text-transform: uppercase;
-  font-size: 80%;
-}
-
-.tippy-content span.choice-price {
-  font-size: 0.8em;
-  opacity: 0.6;
-}
-
 /* Code For Loading Screen */
 .mkl-configurator-inline.is-shortcode.configure-product:empty {
   height: 60vh;
@@ -1449,8 +1450,25 @@ body.configurator_is_inline .mkl_pc .mkl_pc_container .cancel {
   margin-right: 5px;
 }
 
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar .mkl-pc-validation-summary {
+  border-radius: 0;
+  margin: 0;
+  border-left-width: 4px;
+}
+
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li.layers-list-item.mkl_pc_summary.type-summary {
   font-size: 1rem;
   padding: 19px;
+}
+
+/* twentytwentyfive theme fix */
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container footer .form button + button {
+  margin-left: 6px;
+}
+
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container footer .form input.qty {
+  font-size: 1rem;
+  padding: 1rem;
+  line-height: inherit;
 }
 /*# sourceMappingURL=../../../maps/inc/themes/default/style.css.map */

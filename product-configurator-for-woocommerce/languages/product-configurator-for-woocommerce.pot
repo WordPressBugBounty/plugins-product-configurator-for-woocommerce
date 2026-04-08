@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2026-02-26 08:14+0000\n"
+"POT-Creation-Date: 2026-04-08 13:53+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -33,6 +33,10 @@ msgstr ""
 msgid "WooCommerce Version 3+ required."
 msgstr ""
 
+#: src/inc/ajax.php:79, src/inc/ajax.php:85
+msgid "Error getting the configurator data:"
+msgstr ""
+
 #: src/inc/ajax.php:209
 msgid "Error saving the data:"
 msgstr ""
@@ -41,12 +45,52 @@ msgstr ""
 msgid "The session seems to have expired."
 msgstr ""
 
+#: src/inc/ajax.php:213
+msgid "You are not allowed to edit this product."
+msgstr ""
+
+#: src/inc/ajax.php:217
+msgid "Expecting a data type"
+msgstr ""
+
+#: src/inc/ajax.php:224
+msgid "No data was received"
+msgstr ""
+
+#: src/inc/ajax.php:264
+msgid "You are not allowed to purge the configuration cache."
+msgstr ""
+
+#: src/inc/ajax.php:273
+msgid "You are not allowed to toggle the configuration images in the library."
+msgstr ""
+
 #: src/inc/ajax.php:294
 msgid "%d rows were affected"
 msgstr ""
 
+#: src/inc/ajax.php:302
+msgid "You are not allowed to fix the image ids."
+msgstr ""
+
+#: src/inc/ajax.php:312
+msgid "You are not allowed to fix the image ids from the configurator."
+msgstr ""
+
 #: src/inc/ajax.php:315
 msgid "Error processing the request:"
+msgstr ""
+
+#: src/inc/ajax.php:336, src/inc/ajax.php:342
+msgid "No data to process"
+msgstr ""
+
+#: src/inc/ajax.php:347
+msgid "Unauthorized action"
+msgstr ""
+
+#: src/inc/ajax.php:409
+msgid "You are not allowed to get the configurable products."
 msgstr ""
 
 #: src/inc/ajax.php:471, src/inc/languages.php:63, src/inc/admin/settings-page.php:1031
@@ -69,7 +113,7 @@ msgstr ""
 msgid "Layers of the product "
 msgstr ""
 
-#: src/inc/db.php:271, src/inc/db.php:290, src/inc/db.php:309, src/inc/db.php:336, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:16, src/inc/admin/views/html-product-configurator-templates.php:334, src/inc/admin/views/html-product-configurator-templates.php:433
+#: src/inc/db.php:271, src/inc/db.php:290, src/inc/db.php:309, src/inc/db.php:336, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:16, src/inc/admin/views/html-product-configurator-templates.php:334, src/inc/admin/views/html-product-configurator-templates.php:433, src/inc/frontend/views/html-product-configurator-templates.php:122
 msgid "Cancel"
 msgstr ""
 
@@ -149,7 +193,7 @@ msgstr ""
 msgid "Select at least %i items in %s"
 msgstr ""
 
-#: src/inc/languages.php:52, src/inc/admin/settings-page.php:905, src/inc/admin/settings-page.php:911, src/inc/frontend/views/html-product-configurator-templates.php:82
+#: src/inc/languages.php:52, src/inc/admin/settings-page.php:905, src/inc/admin/settings-page.php:911, src/inc/frontend/views/html-product-configurator-templates.php:79
 msgid "Reset configuration"
 msgstr ""
 
@@ -157,7 +201,7 @@ msgstr ""
 msgid "Edit configuration"
 msgstr ""
 
-#: src/inc/languages.php:54, src/inc/admin/settings-page.php:929, src/inc/admin/settings-page.php:935, src/inc/frontend/product.php:261
+#: src/inc/languages.php:54, src/inc/admin/settings-page.php:929, src/inc/admin/settings-page.php:935, src/inc/frontend/product.php:263
 msgid "Edit item in cart"
 msgstr ""
 
@@ -184,7 +228,7 @@ msgctxt "Previous step button label"
 msgid "Previous"
 msgstr ""
 
-#: src/inc/languages.php:62, src/inc/admin/settings-page.php:1019, src/inc/frontend/views/parts/toolbar.php:40
+#: src/inc/languages.php:62, src/inc/admin/settings-page.php:1019, src/inc/frontend/views/parts/toolbar.php:41
 msgctxt "Next step button label"
 msgid "Next"
 msgstr ""
@@ -781,7 +825,7 @@ msgstr ""
 msgid "Configuration (meta label in the cart)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:971, src/inc/compatibility/yith-quote-request.php:248, src/inc/frontend/cart.php:243, src/inc/frontend/order.php:88, src/inc/frontend/order.php:230, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
+#: src/inc/admin/settings-page.php:971, src/inc/compatibility/yith-quote-request.php:281, src/inc/frontend/cart.php:243, src/inc/frontend/order.php:88, src/inc/frontend/order.php:230, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
 msgid "Configuration"
 msgstr ""
 
@@ -921,11 +965,89 @@ msgstr ""
 msgid "%s is required"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:635
+#: src/inc/frontend/frontend-woocommerce.php:413
+msgctxt "Screen reader text, Selected choices prefix"
+msgid "Selected: %s"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:414
+msgctxt "Screen reader text, Selected choices none"
+msgid "Selected: none"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:415
+msgctxt "Screen reader text, choice action selected"
+msgid "selected"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:416
+msgctxt "Screen reader text, choice action removed"
+msgid "removed"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:417
+msgctxt "Screen reader text, choice action announcement template. 1: layer name, 2: action, 3: choice name"
+msgid "%1$s: %2$s %3$s"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:418
+msgctxt "Screen reader text, validation errors count"
+msgid "%d errors found."
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:419
+msgctxt "Screen reader text, focus moved to first invalid control"
+msgid "Focus moved to first error."
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:420
+msgctxt "Screen reader text, focus moved to validation summary"
+msgid "Focus moved to validation summary."
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:421
+msgctxt "Screen reader text, validation summary heading"
+msgid "Please review the following errors:"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:422
+msgctxt "Screen reader text, total price label template. %s: formatted total price"
+msgid "Total: %s"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:423
+msgctxt "Screen reader text, separator used between layer and choice/group names in validation messages"
+msgid ", "
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:424
+msgctxt "Aria label of the choices list"
+msgid "Select options for the product"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:425
+msgid "Product configurator"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:426
+msgctxt "Screen reader text, current step label template. %1$s: step number, %2$s: total steps, %3$s: step name"
+msgid "Current step %1$s of %2$s: %3$s"
+msgstr ""
+
+#: src/inc/frontend/frontend-woocommerce.php:649
 msgid "SKU:"
 msgstr ""
 
-#: src/inc/frontend/product.php:306
+#: src/inc/frontend/product.php:115
+msgid "Press the Configure button to enter the product configurator (next element)"
+msgstr ""
+
+#: src/inc/frontend/product.php:242
+msgctxt "Screen reader text, total price prefix for add to cart button"
+msgid "Total item price: "
+msgstr ""
+
+#: src/inc/frontend/product.php:308
 msgid "Please select a variation to configure"
 msgstr ""
 
@@ -1492,25 +1614,37 @@ msgstr ""
 msgid "Configuration price"
 msgstr ""
 
-#: src/inc/frontend/views/html-product-configurator-templates.php:20
-msgctxt "Aria label for the "
-msgid "Product configurator application - tab to the first configuration item"
-msgstr ""
-
 #: src/inc/frontend/views/html-product-configurator-templates.php:33
 msgid "Loading Data"
 msgstr ""
 
-#: src/inc/frontend/views/html-product-configurator-templates.php:117
+#: src/inc/frontend/views/html-product-configurator-templates.php:66, src/inc/frontend/views/html-product-configurator-templates.php:117
+msgid "Currently configuring product:"
+msgstr ""
+
+#: src/inc/frontend/views/html-product-configurator-templates.php:119
+msgid "Use Tab and Shift+Tab to move between Layers, Choices and Preview areas."
+msgstr ""
+
+#: src/inc/frontend/views/html-product-configurator-templates.php:120
+msgid "Press Escape to close the configurator."
+msgstr ""
+
+#: src/inc/frontend/views/html-product-configurator-templates.php:122
 msgctxt "Aria label of the main configurator close button"
 msgid "Close the configurator app"
 msgstr ""
 
-#: src/inc/frontend/views/html-product-configurator-templates.php:207
+#: src/inc/frontend/views/html-product-configurator-templates.php:130
+msgctxt "Accessible landmark label for the configurator choices area"
+msgid "Choices"
+msgstr ""
+
+#: src/inc/frontend/views/html-product-configurator-templates.php:219
 msgid "Confirm selection and continue configuring the product"
 msgstr ""
 
-#: src/inc/frontend/views/html-product-configurator-templates.php:216
+#: src/inc/frontend/views/html-product-configurator-templates.php:228
 msgctxt "Part of message displayed when the product is successfully added to the cart"
 msgid "Done!"
 msgstr ""
@@ -1655,7 +1789,21 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+#: src/inc/frontend/views/parts/choices.php:4
+msgid "Close the choices list"
+msgstr ""
+
 #: src/inc/frontend/views/parts/product-viewer.php:4
 msgctxt "Accessible label of the configurator viewer"
 msgid "Product live preview with layered images"
+msgstr ""
+
+#: src/inc/frontend/views/parts/toolbar.php:31
+msgctxt "Screen reader text, previous step button prefix"
+msgid "Previous step: "
+msgstr ""
+
+#: src/inc/frontend/views/parts/toolbar.php:45
+msgctxt "Screen reader text, next step button prefix"
+msgid "Next step: "
 msgstr ""
