@@ -4,7 +4,7 @@ Tags: woocommerce,customize,product addons,custom product, product builder
 Donate link: https://paypal.me/marclacro1x
 Requires at least: 5.9
 Tested up to: 7.0
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 Requires PHP: 7.4
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -44,6 +44,7 @@ Have feedback, ideas, or found a bug? Report issues on [GitHub](https://github.c
   * Use or override linked product pricing
 * **🔤 Live Text Overlay** *(via add-on)* – Let customers preview custom text with your fonts and colors—ideal for engraving, embroidery, and personalization.
 * **🧑‍💻 Developer Friendly** – Includes hooks, filters, and a clean, commented codebase. Limited docs for now, but open support is available.
+* **🐕‍🦺 Accessible** – Full keyboard use, screen-reader friendly labels and live announcements, validation errors shown in-page with links to each field—no blocking JavaScript alerts.
 
 === Shortcodes ===
 
@@ -145,6 +146,10 @@ We recommend using a plugin such as WP-Optimize for all-round performance improv
 
 
 == Changelog ==
+
+= 1.6.2 - 10/Apr/2026 =
+
+* FIX: missing style in theme Le Bolide
 
 = 1.6.1 - 08/Apr/2026 =
 

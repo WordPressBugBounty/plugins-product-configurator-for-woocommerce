@@ -1731,4 +1731,19 @@ nav.mkl-pc--steps div {
   width: 100%;
   margin-top: 30px;
 }
+
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=text], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=number], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=email], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=tel], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=url], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=password], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=search], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=date], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay textarea, .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay select,
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=text],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=number],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=email],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=tel],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=url],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=password],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=search],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=date],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item textarea,
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item select {
+  padding: 1em;
+  border: 1px solid var(--mkl_pc_color-border);
+}
 /*# sourceMappingURL=../../../maps/inc/themes/la-pomme/style.css.map */

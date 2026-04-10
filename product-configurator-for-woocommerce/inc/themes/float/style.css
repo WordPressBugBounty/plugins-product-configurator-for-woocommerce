@@ -1081,6 +1081,7 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   border-left: 2px solid #000;
   border-bottom: 2px solid #000;
   transform: translateY(-50%) rotate(-45deg);
+  box-sizing: border-box;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices.display-mode-dropdown > .choices-list li.active > button.choice-item:hover::before, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices.display-mode-dropdown > .choices-list li.active > button.choice-item:focus::before, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.display-mode-dropdown .layer_choices.display-mode-dropdown > .choices-list li.active > button.choice-item:hover::before, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.display-mode-dropdown .layer_choices.display-mode-dropdown > .choices-list li.active > button.choice-item:focus::before {
   border-color: #FFF;

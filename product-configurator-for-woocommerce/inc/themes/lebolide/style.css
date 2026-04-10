@@ -327,6 +327,9 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
   padding: 0;
   order: 1;
 }
+.mkl_pc .mkl_pc_container .mkl_pc_viewer > header > .cancel span {
+  display: none;
+}
 .mkl_pc .mkl_pc_container .mkl_pc_viewer > header > .cancel::before, .mkl_pc .mkl_pc_container .mkl_pc_viewer > header > .cancel::after {
   content: " ";
   width: 20px;
@@ -623,6 +626,7 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
   border-left: 2px solid #FFF;
   opacity: 0;
   transition: 0.2s all;
+  box-sizing: border-box;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.choices-list li.choice:not(.is-group):hover {
   --choice-border-color: #777;
@@ -980,6 +984,7 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
   border-left: 2px solid #000;
   border-bottom: 2px solid #000;
   transform: translateY(-50%) rotate(-45deg);
+  box-sizing: border-box;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices.display-mode-dropdown > .choices-list li.active > button.choice-item:hover::before, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices li.display-mode-dropdown .layer_choices.display-mode-dropdown > .choices-list li.active > button.choice-item:focus::before, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.display-mode-dropdown .layer_choices.display-mode-dropdown > .choices-list li.active > button.choice-item:hover::before, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices li.display-mode-dropdown .layer_choices.display-mode-dropdown > .choices-list li.active > button.choice-item:focus::before {
   border-color: #FFF;
@@ -1199,6 +1204,7 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
 }
 
 .mkl_pc .mkl_pc_container button.configurator-add-to-cart,
+.mkl_pc .mkl_pc_container button.add-to-quote,
 .mkl_pc .mkl_pc_container .mkl-pc--steps button {
   background: #000;
   border: 1px solid #000;
@@ -1209,6 +1215,7 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
   font-weight: 400;
 }
 .mkl_pc .mkl_pc_container button.configurator-add-to-cart svg,
+.mkl_pc .mkl_pc_container button.add-to-quote svg,
 .mkl_pc .mkl_pc_container .mkl-pc--steps button svg {
   display: inline-block;
   width: 20px;
@@ -1216,6 +1223,7 @@ body.admin-bar .mkl_pc .mkl_pc_container .mkl_pc_viewer {
   transform: translateX(10px);
 }
 .mkl_pc .mkl_pc_container button.configurator-add-to-cart svg path,
+.mkl_pc .mkl_pc_container button.add-to-quote svg path,
 .mkl_pc .mkl_pc_container .mkl-pc--steps button svg path {
   fill: #FFF;
 }
@@ -1670,6 +1678,7 @@ body.configurator_is_inline .mkl-pc-preset-container .mkl_pc .mkl_pc_admin {
   border-radius: 0;
   border-bottom: 3px solid #777;
   border-left: 3px solid #777;
+  box-sizing: border-box;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors .choices-list li.choice.active button.choice-item:hover,
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul ul.layer_choices.display-mode-colors .choices-list li.choice.active button.choice-item:focus {
@@ -1960,5 +1969,27 @@ nav.mkl-pc--steps div {
 
 body.show-add-to-cart-modal .mkl_pc_container .adding-to-cart--modal {
   position: fixed;
+}
+
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .form input.qty {
+  font-size: 1rem;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: inherit;
+}
+
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=text], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=number], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=email], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=tel], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=url], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=password], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=search], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay input[type=date], .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay textarea, .theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layer_choices.text-overlay select,
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=text],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=number],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=email],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=tel],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=url],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=password],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=search],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item input[type=date],
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item textarea,
+.theme-twentytwentyfive .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer_choices li.choices-list li.form-item select {
+  padding: 8px;
+  border: 1px solid var(--mkl_pc_color-border);
 }
 /*# sourceMappingURL=../../../maps/inc/themes/lebolide/style.css.map */
