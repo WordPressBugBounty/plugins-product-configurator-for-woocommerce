@@ -1794,6 +1794,15 @@ nav.mkl-pc--steps button.step-previous:disabled svg path {
   outline: 2px solid rgba(122, 19, 19, 0.231372549);
   outline-offset: -2px;
 }
+@media (max-width: 660px) {
+  .mkl_pc .mkl_pc_container .mkl_pc_toolbar .mkl-pc-validation-summary {
+    position: fixed;
+    top: 40px;
+    width: 100vw;
+    left: 0;
+    transition: opacity 0.3s;
+  }
+}
 
 /* Keyboard navigation focus */
 .keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar .layer-item:focus,

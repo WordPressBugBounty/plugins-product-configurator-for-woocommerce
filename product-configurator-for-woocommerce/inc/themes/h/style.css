@@ -1656,6 +1656,15 @@ TIPPY
   bottom: calc(var(--toolbar_height) + 10px);
   z-index: 10;
 }
+@media (max-width: 660px) {
+  .mkl-pc-validation-summary {
+    right: 0;
+    bottom: auto;
+    top: 0;
+    left: 0;
+    z-index: 60;
+  }
+}
 
 /* Divi fix */
 .et_divi_theme:not(.configurator_is_inline) .mkl_pc {

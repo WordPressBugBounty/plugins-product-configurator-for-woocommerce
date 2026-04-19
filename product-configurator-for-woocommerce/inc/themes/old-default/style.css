@@ -1372,6 +1372,21 @@ body.configurator_is_inline .mkl_pc .mkl_pc_container .cancel {
   animation: configurator-load 1s infinite ease-in-out;
 }
 
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar .mkl-pc-validation-summary {
+  border-radius: 0;
+  margin: 0;
+  border-left-width: 4px;
+}
+@media (max-width: 660px) {
+  .mkl_pc .mkl_pc_container .mkl_pc_toolbar .mkl-pc-validation-summary {
+    position: fixed;
+    top: 40px;
+    width: 100vw;
+    left: 0;
+    transition: opacity 0.3s;
+  }
+}
+
 /* Divi fix */
 .et_divi_theme:not(.configurator_is_inline) .mkl_pc {
   z-index: 100000;

@@ -261,6 +261,7 @@ PC.actionParameter = 'pc_get_data';
 		var $summary = $( '.mkl-pc-validation-summary' ).first();
 		if ( $summary.length ) {
 			$summary.empty().attr( 'hidden', 'hidden' );
+			$( 'body' ).removeClass( 'has-validation-errors' );
 		}
 		$( '.mkl_pc .mkl_pc_container .mkl_pc_toolbar [aria-invalid="true"]' ).removeAttr( 'aria-invalid' );
 		$( '.mkl_pc .mkl_pc_container .mkl_pc_toolbar [data-pc-validation-describedby]' ).each( function() {
@@ -326,8 +327,9 @@ PC.actionParameter = 'pc_get_data';
 			$summary = $( '<div class="mkl-pc-validation-summary" role="alert" aria-live="assertive" aria-atomic="true" tabindex="-1" hidden="hidden"></div>' );
 		}
 		place_validation_summary( $summary, placement );
-
 		PC.fe.validation.clear_errors();
+		
+		$( 'body' ).addClass( 'has-validation-errors' );
 
 		var messages = [];
 		var message_items = [];
