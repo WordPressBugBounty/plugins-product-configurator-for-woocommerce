@@ -1,7 +1,12 @@
-<?php 
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 global $is_IE;
 $class = 'media-modal wp-core-ui pc-modal';
-if ( $is_IE && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 7') !== false )
+$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) : '';
+if ( $is_IE && strpos( $user_agent, 'MSIE 7' ) !== false )
 	$class .= ' ie7';
 
 function mkl_pc_get_admin_actions() {
@@ -28,8 +33,8 @@ GENERAL TEMPLATES
  ?>
 <?php do_action('mkl_pc_admin_templates_before') ?>
 <script type="text/html" id="tmpl-mkl-modal">
-	<div class="<?php echo $class; ?>">
-		<button type="button" class="media-modal-close"><span class="media-modal-icon"><span class="screen-reader-text"><?php _e( 'Close media panel' ); ?></span></span></button>
+	<div class="<?php echo esc_attr( $class ); ?>">
+		<button type="button" class="media-modal-close"><span class="media-modal-icon"><span class="screen-reader-text"><?php esc_html_e( 'Close media panel', 'product-configurator-for-woocommerce' ); ?></span></span></button>
 		<div class="media-modal-content">
 			<div class="media-frame wp-core-ui">
 				
@@ -44,7 +49,7 @@ GENERAL TEMPLATES
 </script>
 
 <script type="text/html" id="tmpl-mkl-pc-menu">	
-	<h2 class="media-frame-menu-heading"><?php _e( 'Actions' ); ?></h2>
+	<h2 class="media-frame-menu-heading"><?php esc_html_e( 'Actions', 'product-configurator-for-woocommerce' ); ?></h2>
 	<div class="media-frame-menu">
 		<div role="tablist" aria-orientation="vertical" class="media-menu">
 			<div class="loading-placeholder"></div>
@@ -60,7 +65,7 @@ GENERAL TEMPLATES
 	<div class="media-frame-title">
 		<h1>{{data.title}}</h1>
 		<button type="button" class="button button-link media-frame-menu-toggle" aria-expanded="false">
-			<?php _e( 'Menu' ); ?> <span class="dashicons dashicons-arrow-down" aria-hidden="true" aria-expanded="true"></span>
+			<?php esc_html_e( 'Menu', 'product-configurator-for-woocommerce' ); ?> <span class="dashicons dashicons-arrow-down" aria-hidden="true" aria-expanded="true"></span>
 		</button>
 		<span class="description">{{data.description}}</span>
 	</div>
@@ -70,7 +75,7 @@ GENERAL TEMPLATES
 	<div class="media-frame-toolbar">
 		<div class="media-toolbar">
 			<div class="media-toolbar-primary">
-				<span class="spinner"></span><span class="saved-message"><?php _e('Saved') ?></span>
+				<span class="spinner"></span><span class="saved-message"><?php esc_html_e( 'Saved', 'product-configurator-for-woocommerce' ); ?></span>
 			</div>
 		</div>
 	</div>
@@ -78,8 +83,8 @@ GENERAL TEMPLATES
 
 <script type="text/html" id="tmpl-mkl-pc-frame-title-buttons-notused">
 	<div class="button-group media-button-group">
-		<button type="button" class="button media-button button-large pc-main-cancel"><?php _e( 'Cancel' ); ?></button>
-		<button type="button" class="button media-button button-primary button-large pc-main-save-all"><?php _e( 'Save', 'product-configurator-for-woocommerce' ); ?></button>
+		<button type="button" class="button media-button button-large pc-main-cancel"><?php esc_html_e( 'Cancel', 'product-configurator-for-woocommerce' ); ?></button>
+		<button type="button" class="button media-button button-primary button-large pc-main-save-all"><?php esc_html_e( 'Save', 'product-configurator-for-woocommerce' ); ?></button>
 	</div>
 </script>
 <?php 
@@ -95,21 +100,21 @@ STRUCTURE / VIEWS TEMPLATES (They will share the same views, using different mod
 		<div class="structure-content has-toolbar <# if ( data.collectionName && 'layers' == data.collectionName ) { #> has-bottom-toolbar<# } #>">
 			<div class="structure-toolbar">
 				<h4><input type="text" placeholder="{{data.input_placeholder}}"></h4>
-				<button type="button" class="button-primary add-layer"><span><?php _e( 'Add' ); ?></span></button>
+				<button type="button" class="button-primary add-layer"><span><?php esc_html_e( 'Add', 'product-configurator-for-woocommerce' ); ?></span></button>
 			</div>
 			<div class="mkl-list layers ui-sortable sortable-list">
 			</div>
 			<div class="floating-add">
 				<button class="mkl-floating-add-item">
 					<i class="dashicons dashicons-plus-alt2"></i>
-					<span class="screen-reader-text"><?php _e( 'Add item here' ); ?></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Add item here', 'product-configurator-for-woocommerce' ); ?></span>
 				</button>
 			</div>
 			<# if ( data.collectionName && 'layers' == data.collectionName ) { #>
 				<div class="order-toolbar">
 					<div class="button-group media-button-group">
-						<button data-order_type="order" type="button" class="button button-primary order-layers"><span><?php _e( 'Reorder the menu' ); ?></span></button>
-						<button data-order_type="image_order" type="button" class="button order-layers"><span><?php _e( 'Reorder the images' ); ?></span></button>
+						<button data-order_type="order" type="button" class="button button-primary order-layers"><span><?php esc_html_e( 'Reorder the menu', 'product-configurator-for-woocommerce' ); ?></span></button>
+						<button data-order_type="image_order" type="button" class="button order-layers"><span><?php esc_html_e( 'Reorder the images', 'product-configurator-for-woocommerce' ); ?></span></button>
 					</div>
 				</div>
 			<# } #>
@@ -130,9 +135,20 @@ STRUCTURE / VIEWS TEMPLATES (They will share the same views, using different mod
 <script type="text/html" id="tmpl-mkl-pc-conditional-placeholder">
 	<div class="media-frame-content conditional">
 		<div class="tab_content">
-			<p><?php printf( _x( '%s is available as %san add-on%s.', 'First placeholder is the add-on name, second and third are the link tags to the add-on', 'product-configurator-for-woocommerce' ), __( 'Conditional logic', 'product-configurator-for-woocommerce' ), '<a href="https://wc-product-configurator.com/product/conditional-logic/" target="_blank" class="mkl-pc-link--external">', '</a>' ); ?></p>
-			<p><?php _e( 'Create complex configurations with the ability, among others, to show, hide or select items depending on various actions.', 'product-configurator-for-woocommerce' ) ?></p>
-			<p><a href="#" class="hide-notice"><?php _e( "Please don't show this again.", 'product-configurator-for-woocommerce' ) ?></a></p>
+			<p>
+				<?php
+				$msg = sprintf(
+					/* translators: 1: add-on name, 2: opening link tag, 3: closing link tag */
+					esc_html_x( '%1$s is available as %2$san add-on%3$s.', 'First placeholder is the add-on name, second and third are the link tags to the add-on', 'product-configurator-for-woocommerce' ),
+					esc_html__( 'Conditional logic', 'product-configurator-for-woocommerce' ),
+					'<a href="' . esc_url( 'https://wc-product-configurator.com/product/conditional-logic/' ) . '" target="_blank" class="mkl-pc-link--external">',
+					'</a>'
+				);
+				echo wp_kses_post( $msg );
+				?>
+			</p>
+			<p><?php esc_html_e( 'Create complex configurations with the ability, among others, to show, hide or select items depending on various actions.', 'product-configurator-for-woocommerce' ) ?></p>
+			<p><a href="#" class="hide-notice"><?php esc_html_e( "Please don't show this again.", 'product-configurator-for-woocommerce' ) ?></a></p>
 		</div>
 	</div>
 </script>
@@ -163,7 +179,7 @@ STRUCTURE / VIEWS TEMPLATES (They will share the same views, using different mod
 	<div class="form-details">
 		<header>
 			<h2>
-				<?php _e('Details', 'product-configurator-for-woocommerce' ); ?>
+				<?php esc_html_e('Details', 'product-configurator-for-woocommerce' ); ?>
 			</h2>
 			<?php echo mkl_pc_get_admin_actions(); ?>
 		</header>
@@ -173,15 +189,15 @@ STRUCTURE / VIEWS TEMPLATES (They will share the same views, using different mod
 	</div>
 
 	<div class="mkl-pc-image-settings">
-		<h2><?php _e('Angles\'s picture', 'product-configurator-for-woocommerce' ) ?></h2>
+		<h2><?php esc_html_e('Angles\'s picture', 'product-configurator-for-woocommerce' ) ?></h2>
 		<div class="thumbnail thumbnail-image">
 			<# if ( data.image.url != '' ) { #>
 				<img src="{{data.image.url}}" height="40" class="layer-img" />
 			<# } #>
 		</div>
-		<a class="edit-attachment" href="#"><?php _e('Add / Change picture', 'product-configurator-for-woocommerce' ) ?></a>
+		<a class="edit-attachment" href="#"><?php esc_html_e('Add / Change picture', 'product-configurator-for-woocommerce' ) ?></a>
 		<# if ( data.image.url != '' ) { #>
-			| <a class="remove-attachment" href="#"><?php _e('Remove picture', 'product-configurator-for-woocommerce' ) ?></a>
+			| <a class="remove-attachment" href="#"><?php esc_html_e('Remove picture', 'product-configurator-for-woocommerce' ) ?></a>
 		<# } #>
 	</div>
 </script>
@@ -189,7 +205,7 @@ STRUCTURE / VIEWS TEMPLATES (They will share the same views, using different mod
 <script type="text/html" id="tmpl-mkl-pc-structure-layer-form">
 	<div class="form-details">
 		<header>
-			<h2><?php _e('Details', 'product-configurator-for-woocommerce' ) ?> - [ID: {{data._id}}]</h2>
+			<h2><?php esc_html_e('Details', 'product-configurator-for-woocommerce' ) ?> - [ID: {{data._id}}]</h2>
 			<?php echo mkl_pc_get_admin_actions(); ?>
 		</header>
 
@@ -200,15 +216,15 @@ STRUCTURE / VIEWS TEMPLATES (They will share the same views, using different mod
 
 	<# if ( 'summary' != data.type ) { #>
 		<div class="mkl-pc-image-settings">
-			<h2><?php _e('Layer\'s icon', 'product-configurator-for-woocommerce' ) ?></h2>
+			<h2><?php esc_html_e('Layer\'s icon', 'product-configurator-for-woocommerce' ) ?></h2>
 			<div class="thumbnail thumbnail-image">
 				<# if ( data.image.url != '' ) { #>
 					<img src="{{data.image.url}}" height="40" class="layer-img" />
 				<# } #>
 			</div>
-			<a class="edit-attachment" href="#"><?php _e('Add / Change picture', 'product-configurator-for-woocommerce' ) ?></a>
+			<a class="edit-attachment" href="#"><?php esc_html_e('Add / Change picture', 'product-configurator-for-woocommerce' ) ?></a>
 			<# if ( data.image.url != '' ) { #>
-				| <a class="remove-attachment" href="#"><?php _e('Remove picture', 'product-configurator-for-woocommerce' ) ?></a>
+				| <a class="remove-attachment" href="#"><?php esc_html_e('Remove picture', 'product-configurator-for-woocommerce' ) ?></a>
 			<# } #>
 		</div>
 	<# } #>
@@ -262,13 +278,13 @@ CONTENT TEMPLATES
 	<button class="active-layer"></button>
 	<div class="structure-toolbar">
 		<h4><input type="text" placeholder="{{PC.lang.choice_new_placeholder}}"></h4>
-		<button type="button" class="button-primary add-layer"><span><?php _e('Add'); ?></span></button>
+		<button type="button" class="button-primary add-layer"><span><?php esc_html_e( 'Add', 'product-configurator-for-woocommerce' ); ?></span></button>
 	</div>
 	<div class="mkl-list choices ui-sortable sortable-list">
 	</div>
 	<# if ( data.has_clipboard_data ) { #> 
 	<div class="paste">
-		<button type="button" class="button-primary paste-items"><span><?php _e( 'Paste' ); ?></span></button>
+		<button type="button" class="button-primary paste-items"><span><?php esc_html_e( 'Paste', 'product-configurator-for-woocommerce' ); ?></span></button>
 	</div>
 	<# } #> 
 </script>
@@ -294,7 +310,7 @@ CONTENT TEMPLATES
 <script type="text/html" id="tmpl-mkl-pc-content-choice-form">
 	<div class="form-details">
 		<header>
-			<h2><?php _e('Choice informations', 'product-configurator-for-woocommerce' ) ?> [ID: {{data._id}}]</h2>
+			<h2><?php esc_html_e('Choice informations', 'product-configurator-for-woocommerce' ) ?> [ID: {{data._id}}]</h2>
 			<?php echo mkl_pc_get_admin_actions(); ?>
 		</header>
 
@@ -306,11 +322,11 @@ CONTENT TEMPLATES
 		<# if ( wp.hooks.applyFilters( 'PC.admin.show_choice_images', true, data ) ) { #>
 			<div class="options mkl-pc-image-settings">
 				<# if ( data.is_group ) { #>
-					<h3><?php _e( 'Group thumbnail', 'product-configurator-for-woocommerce' ) ?></h3>
+					<h3><?php esc_html_e( 'Group thumbnail', 'product-configurator-for-woocommerce' ) ?></h3>
 				<# } else if ( 'text-overlay' == data.layer_type ) { #>
-					<h3><?php _e( 'Text positions', 'product-configurator-for-woocommerce' ) ?></h3>
+					<h3><?php esc_html_e( 'Text positions', 'product-configurator-for-woocommerce' ) ?></h3>
 				<# } else { #>
-					<h3><?php _e( 'Pictures', 'product-configurator-for-woocommerce' ) ?></h3>
+					<h3><?php esc_html_e( 'Pictures', 'product-configurator-for-woocommerce' ) ?></h3>
 				<# } #>
 				<div class="views">
 					
@@ -322,38 +338,38 @@ CONTENT TEMPLATES
 
 <script type="text/html" id="tmpl-mkl-pc-multiple-edit-form">
 	<div class="form-details">
-		<h3><?php _e('Multiple selection', 'product-configurator-for-woocommerce' ) ?></h3>
+		<h3><?php esc_html_e('Multiple selection', 'product-configurator-for-woocommerce' ) ?></h3>
 		<div class="form-info">
 			<div class="details">
 				<div class="multiple-edit--action">
-					<button type="button" class="button-link delete delete-layer" data-delete="prompt"><?php _e('Delete the selected items', 'product-configurator-for-woocommerce' ) ?></button>
+					<button type="button" class="button-link delete delete-layer" data-delete="prompt"><?php esc_html_e('Delete the selected items', 'product-configurator-for-woocommerce' ) ?></button>
 					<div class="prompt-delete hidden notice">
-						<p><?php _e( 'Do you realy want to delete the selected items?', 'product-configurator-for-woocommerce' ); ?></p>
+						<p><?php esc_html_e( 'Do you realy want to delete the selected items?', 'product-configurator-for-woocommerce' ); ?></p>
 						<p>
-							<button type="button" class="button button-primary delete confirm-delete-layer" data-delete="confirm"><?php _e('Delete', 'product-configurator-for-woocommerce' ) ?></button>
-							<button type="button" class="button cancel-delete-layer" data-delete="cancel"><?php _e('Cancel', 'product-configurator-for-woocommerce' ) ?></button>
+							<button type="button" class="button button-primary delete confirm-delete-layer" data-delete="confirm"><?php esc_html_e('Delete', 'product-configurator-for-woocommerce' ) ?></button>
+							<button type="button" class="button cancel-delete-layer" data-delete="cancel"><?php esc_html_e('Cancel', 'product-configurator-for-woocommerce' ) ?></button>
 						</p>
 					</div>
 				</div>
 				<div class="multiple-edit--action">
-					<h3><?php _e( 'Reorder the selected items', 'product-configurator-for-woocommerce' ) ?></h3>
+					<h3><?php esc_html_e( 'Reorder the selected items', 'product-configurator-for-woocommerce' ) ?></h3>
 					<div class="order">
 						<button class="button up" type="button"><i class="dashicons dashicons-arrow-up-alt2"></i></button>
 						<button class="button down" type="button"><i class="dashicons dashicons-arrow-down-alt2"></i></button>
 					</div>
 				</div>
 				<div class="multiple-edit--action">
-					<h3><?php _e( 'Copy the selected items', 'product-configurator-for-woocommerce' ) ?></h3>
+					<h3><?php esc_html_e( 'Copy the selected items', 'product-configurator-for-woocommerce' ) ?></h3>
 					<div class="copy">
-						<button type="button" class="button button-primary"><?php _e( 'Copy items', 'product-configurator-for-woocommerce' ) ?></button>
+						<button type="button" class="button button-primary"><?php esc_html_e( 'Copy items', 'product-configurator-for-woocommerce' ) ?></button>
 					</div>
 				</div>
 				<# if ( data.render_group ) { #>
 					<div class="multiple-edit--action">
-						<h3><?php _e( 'Create a group with the selected items', 'product-configurator-for-woocommerce' ) ?></h3>
+						<h3><?php esc_html_e( 'Create a group with the selected items', 'product-configurator-for-woocommerce' ) ?></h3>
 						<div class="group">
 							<input type="text" placeholder="<?php esc_attr_e( 'Group name', 'product-configurator-for-woocommerce' ); ?>" >
-							<button type="button" class="button button-primary"><?php _e( 'Group items', 'product-configurator-for-woocommerce' ) ?></button>
+							<button type="button" class="button button-primary"><?php esc_html_e( 'Group items', 'product-configurator-for-woocommerce' ) ?></button>
 						</div>
 					</div>
 				<# } #>
@@ -367,15 +383,15 @@ CONTENT TEMPLATES
 		<# if ( ! data.is_group ) { #>
 		<h4>{{data.angle_name}}</h4>
 		<div class="picture main-picture" data-edit="image">
-			<span><?php _e( 'Main Image', 'product-configurator-for-woocommerce' ); ?></span>
+			<span><?php esc_html_e( 'Main Image', 'product-configurator-for-woocommerce' ); ?></span>
 			<# if(data.image.url != '' ) { #>
 			<img class="edit-attachment" src="{{data.image.url}}" alt="">
 			<# } else { #>
-			<img class="edit-attachment" src="<?= MKL_PC_ASSETS_URL.'admin/images/empty.jpg' ?>" alt="">
+			<img class="edit-attachment" src="<?php echo esc_url( MKL_PC_ASSETS_URL.'admin/images/empty.jpg' ); ?>" alt="">
 			<# } #>
 
 			<a class="edit-attachment" href="#">
-				<span class="screen-reader-text"><?php _e( 'Add / Edit image', 'product-configurator-for-woocommerce' ); ?></span>
+				<span class="screen-reader-text"><?php esc_html_e( 'Add / Edit image', 'product-configurator-for-woocommerce' ); ?></span>
 				<# if ( data.image.url != '' ) { #>
 					<span class="dashicons dashicons-edit"></span>
 				<# } else { #>
@@ -384,21 +400,21 @@ CONTENT TEMPLATES
 			</a>
 
 			<# if ( data.image.url != '' ) { #>
-				<a class="remove-attachment" href="#"><span class="dashicons dashicons-no"></span><span class="screen-reader-text"><?php _e('Remove picture', 'product-configurator-for-woocommerce' ) ?></span></a>
+				<a class="remove-attachment" href="#"><span class="dashicons dashicons-no"></span><span class="screen-reader-text"><?php esc_html_e('Remove picture', 'product-configurator-for-woocommerce' ) ?></span></a>
 			<# } #>
 		</div>
 		<# } #>
 		<# if ( data?.angle?.has_thumbnails ) { #>
 			<div class="picture thumbnail-picture" data-edit="thumbnail">
-				<# if ( ! data.is_group ) { #><span><?php _e( 'Thumbnail', 'product-configurator-for-woocommerce' ); ?></span><# } #>
+				<# if ( ! data.is_group ) { #><span><?php esc_html_e( 'Thumbnail', 'product-configurator-for-woocommerce' ); ?></span><# } #>
 				<# if ( data.thumbnail.url != '' ) { #>
 				<img class="edit-attachment" src="{{data.thumbnail.url}}" alt="">
 				<# } else { #>
-				<img class="edit-attachment" src="<?= MKL_PC_ASSETS_URL.'admin/images/empty.jpg' ?>" alt="">
+				<img class="edit-attachment" src="<?php echo esc_url( MKL_PC_ASSETS_URL.'admin/images/empty.jpg' ); ?>" alt="">
 				<# } #>
 
 				<a class="edit-attachment" href="#">
-					<span class="screen-reader-text"><?php _e( 'Add / Edit image', 'product-configurator-for-woocommerce' ); ?></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Add / Edit image', 'product-configurator-for-woocommerce' ); ?></span>
 					<# if ( data.thumbnail.url != '' ) { #>
 						<span class="dashicons dashicons-edit"></span>
 					<# } else { #>
@@ -406,7 +422,7 @@ CONTENT TEMPLATES
 					<# } #>
 				</a>
 				<# if ( data.thumbnail.url != '' ) { #>
-					<a class="remove-attachment" href="#"><span class="dashicons dashicons-no"></span><span class="screen-reader-text"><?php _e('Remove picture', 'product-configurator-for-woocommerce' ) ?></span></a>
+					<a class="remove-attachment" href="#"><span class="dashicons dashicons-no"></span><span class="screen-reader-text"><?php esc_html_e('Remove picture', 'product-configurator-for-woocommerce' ) ?></span></a>
 				<# } #>
 			</div>
 		<# } #>
@@ -418,7 +434,7 @@ CONTENT TEMPLATES
 	<div class="media-frame-content content">
 		<div class="no-data">
 			<p>
-				<?php _e('You need to have Layers and Angles set before entering any content.') ?>
+				<?php esc_html_e( 'You need to have Layers and Angles set before entering any content.', 'product-configurator-for-woocommerce' ); ?>
 			</p>
 		</div>	
 	</div>
@@ -426,11 +442,11 @@ CONTENT TEMPLATES
 
 <script type="text/html" id="tmpl-mkl-pc-product-selector">
 	<div class="mkl-pc-product-selector">
-		<h3><?php _e( 'Select a product:', 'product-configurator-for-woocommerce' ); ?></h3>
-		<select style="width: 100%;" class="wc-product-search" name="linked_woocommerce_products[]" data-placeholder="<?php _e( 'Search for a product&hellip;', 'woocommerce' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-limit="200">
+		<h3><?php esc_html_e( 'Select a product:', 'product-configurator-for-woocommerce' ); ?></h3>
+		<select style="width: 100%;" class="wc-product-search" name="linked_woocommerce_products[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'woocommerce' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-limit="200">
 		</select>
-		<button class="button button-primary select" disabled><?php _e( 'Choose', 'product-configurator-for-woocommerce' ); ?></button>
-		<button class="button cancel"><?php _e( 'Cancel', 'product-configurator-for-woocommerce' ); ?></button>
+		<button class="button button-primary select" disabled><?php esc_html_e( 'Choose', 'product-configurator-for-woocommerce' ); ?></button>
+		<button class="button cancel"><?php esc_html_e( 'Cancel', 'product-configurator-for-woocommerce' ); ?></button>
 	</div>
 </script>
 
@@ -445,14 +461,14 @@ IMPORT / EXPORT
 	<div class="media-frame-content import-export">
 		<div class="import-export-content">
 			<div class="import">
-				<h3><?php _e( 'Import', 'product-configurator-for-woocommerce' ); ?></h3>
-				<p><button class="button" data-action="import-from-file"><?php _e( 'Import configuration', 'product-configurator-for-woocommerce' ); ?></button></p>
-				<!-- <p><?php _e( 'Or' ); ?></p>
-				<p><button class="button" data-action="import-from-product"><?php _e( 'Import an other product', 'product-configurator-for-woocommerce' ); ?></button></p> -->
+				<h3><?php esc_html_e( 'Import', 'product-configurator-for-woocommerce' ); ?></h3>
+				<p><button class="button" data-action="import-from-file"><?php esc_html_e( 'Import configuration', 'product-configurator-for-woocommerce' ); ?></button></p>
+				<!-- <p><?php esc_html_e( 'Or', 'product-configurator-for-woocommerce' ); ?></p>
+				<p><button class="button" data-action="import-from-product"><?php esc_html_e( 'Import an other product', 'product-configurator-for-woocommerce' ); ?></button></p> -->
 			</div>
 			<div class="export">
-				<h3><?php _e( 'Export', 'product-configurator-for-woocommerce' ); ?></h3>
-				<p><button class="button" data-action="export-data"><?php _e( 'Export configuration data', 'product-configurator-for-woocommerce' ); ?></button></p>
+				<h3><?php esc_html_e( 'Export', 'product-configurator-for-woocommerce' ); ?></h3>
+				<p><button class="button" data-action="export-data"><?php esc_html_e( 'Export configuration data', 'product-configurator-for-woocommerce' ); ?></button></p>
 			</div>
 		</div>
 		<div class="importer-action-content">
@@ -473,29 +489,29 @@ IMPORT / EXPORT
 </script>
 
 <script type="text/html" id="tmpl-mkl-pc-importer--product">
-	<h3><?php _e( 'Choose a product', 'product-configurator-for-woocommerce' ); ?></h3>
-	<select style="width: 50%;" class="wc-product-search" name="linked_woocommerce_products[]" data-placeholder="<?php _e( 'Search for a product&hellip;', 'woocommerce' ); ?>" data-action="woocommerce_json_search_products_and_variations">
+	<h3><?php esc_html_e( 'Choose a product', 'product-configurator-for-woocommerce' ); ?></h3>
+	<select style="width: 50%;" class="wc-product-search" name="linked_woocommerce_products[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'woocommerce' ); ?>" data-action="woocommerce_json_search_products_and_variations">
 	</select>
-	<button class="button next" disabled>Next</button>
+	<button class="button next" disabled><?php echo esc_html_x( 'Next', 'Next button label, in the admin import screen', 'product-configurator-for-woocommerce' ); ?></button>
 </script>
 
 <script type="text/html" id="tmpl-mkl-pc-importer--file-upload">
-	<h3><?php _e( 'Select a file', 'product-configurator-for-woocommerce' ); ?></h3>
-	<p><?php _e( 'Select the JSON file you exported previously.', 'product-configurator-for-woocommerce' ); ?></p>
+	<h3><?php esc_html_e( 'Select a file', 'product-configurator-for-woocommerce' ); ?></h3>
+	<p><?php esc_html_e( 'Select the JSON file you exported previously.', 'product-configurator-for-woocommerce' ); ?></p>
 	<input type="file" id="jsonfileinput" />
 </script>
 
 <script type="text/html" id="tmpl-mkl-pc-importer--configuration-preview">
 	<div class="preview-action">
-		<h3><?php _e( 'Preview', 'product-configurator-for-woocommerce' ); ?></h3>
-		<p><?php _e( 'Review the data and press Import data to import it to this product.', 'product-configurator-for-woocommerce' ); ?></p>
-		<p><strong><?php _e( 'Note that any existing configuration will be overriden.', 'product-configurator-for-woocommerce' ); ?></strong></p>
-		<button class="import-selected button button-primary" type="button"><?php _e( 'Import data', 'product-configurator-for-woocommerce' ); ?></button>
+		<h3><?php esc_html_e( 'Preview', 'product-configurator-for-woocommerce' ); ?></h3>
+		<p><?php esc_html_e( 'Review the data and press Import data to import it to this product.', 'product-configurator-for-woocommerce' ); ?></p>
+		<p><strong><?php esc_html_e( 'Note that any existing configuration will be overriden.', 'product-configurator-for-woocommerce' ); ?></strong></p>
+		<button class="import-selected button button-primary" type="button"><?php esc_html_e( 'Import data', 'product-configurator-for-woocommerce' ); ?></button>
 	</div>
 	<div class="preview-content">
 		<# if ( data.layers ) { #>
 			<div class="preview-content--collection">
-				<h4><?php _e( 'Layers and content:', 'product-configurator-for-woocommerce' ); ?></h4>
+				<h4><?php esc_html_e( 'Layers and content:', 'product-configurator-for-woocommerce' ); ?></h4>
 				<ul class="ul-disc">
 					<# PC._us.each( data.layers, function( layer ) { #>
 						<li>{{layer.name}}
@@ -517,7 +533,7 @@ IMPORT / EXPORT
 
 		<# if ( data.angles ) { #>
 			<div class="preview-content--collection">
-				<h4><?php _e( 'Angles:', 'product-configurator-for-woocommerce' ); ?></h4>
+				<h4><?php esc_html_e( 'Angles:', 'product-configurator-for-woocommerce' ); ?></h4>
 				<ul class="ul-disc">
 					<# PC._us.each( data.angles, function( angle ) { #>
 						<li>{{angle.name}}</li>
@@ -528,7 +544,7 @@ IMPORT / EXPORT
 
 		<# if ( data.conditions ) { #>
 			<div class="preview-content--collection">
-				<h4><?php _e( 'Conditions', 'product-configurator-for-woocommerce' ); ?></h4>
+				<h4><?php esc_html_e( 'Conditions', 'product-configurator-for-woocommerce' ); ?></h4>
 				<ul class="ul-disc">
 					<# PC._us.each( data.conditions, function( condition ) { #>
 						<li>{{condition.name}}</li>
@@ -542,35 +558,35 @@ IMPORT / EXPORT
 
 
 <script type="text/html" id="tmpl-mkl-pc-importer--configuration-imported">
-	<h3><?php _e( 'The import process is complete.', 'product-configurator-for-woocommerce' ); ?></h3>
-	<p><?php _e( 'Please check the different elements (Layers, views, content...), and save if you are happy with it.', 'product-configurator-for-woocommerce' ); ?></p>
-	<p><?php _e( 'Alternatively you can save here.', 'product-configurator-for-woocommerce' ); ?></p>
-	<button type="button" class="button primary save"><?php _e( 'Save', 'product-configurator-for-woocommerce' ); ?></button>
-	<h4><?php _e( 'Importing from a different site?', 'product-configurator-for-woocommerce' ); ?></h4>
-	<p><?php _e( 'When importing from a different site, the images need to be added to the library separately.', 'product-configurator-for-woocommerce' ); ?></p>
-	<p><?php _e( 'If you already imported the matching images to the library, you can use the following tool to try to match the images.', 'product-configurator-for-woocommerce' ); ?></p>
-	<button type="button" class="button primary save-and-fix-images"><?php _e( 'Save and fix images', 'product-configurator-for-woocommerce' ); ?></button>
+	<h3><?php esc_html_e( 'The import process is complete.', 'product-configurator-for-woocommerce' ); ?></h3>
+	<p><?php esc_html_e( 'Please check the different elements (Layers, views, content...), and save if you are happy with it.', 'product-configurator-for-woocommerce' ); ?></p>
+	<p><?php esc_html_e( 'Alternatively you can save here.', 'product-configurator-for-woocommerce' ); ?></p>
+	<button type="button" class="button primary save"><?php esc_html_e( 'Save', 'product-configurator-for-woocommerce' ); ?></button>
+	<h4><?php esc_html_e( 'Importing from a different site?', 'product-configurator-for-woocommerce' ); ?></h4>
+	<p><?php esc_html_e( 'When importing from a different site, the images need to be added to the library separately.', 'product-configurator-for-woocommerce' ); ?></p>
+	<p><?php esc_html_e( 'If you already imported the matching images to the library, you can use the following tool to try to match the images.', 'product-configurator-for-woocommerce' ); ?></p>
+	<button type="button" class="button primary save-and-fix-images"><?php esc_html_e( 'Save and fix images', 'product-configurator-for-woocommerce' ); ?></button>
 </script>
 
 <script type="text/html" id="tmpl-mkl-pc-importer--layers">
 	<# if ( ! data ) { #>
-		<h3>No product selected</h3>
+		<h3><?php esc_html_e( 'No product selected', 'product-configurator-for-woocommerce' ); ?></h3>
 	<# } else { #>
 		<# if ( data.product_name ) { #><h3>{{data.product_name}}</h3><# } #>
 		<div class="form">
-			<h4>New layers</h4>
+			<h4><?php esc_html_e( 'New layers', 'product-configurator-for-woocommerce' ); ?></h4>
 			<label><input type="radio" required name="which-layers" value="everything"> Import all layers</label>
 			<label><input type="radio" required name="which-layers" value="selected"> Import selected layers</label>
 			
-			<h4>Existing layers</h4>
-			<label><input type="radio" required name="existing-layers" value="append"> Add to existing layers</label>
-			<label><input type="radio" required name="existing-layers" value="append-no-duplicate"> Add to existing with no duplicates</label>
-			<label><input type="radio" required name="existing-layers" value="replace"> Replace existing layers</label>
+			<h4><?php esc_html_e( 'Existing layers', 'product-configurator-for-woocommerce' ); ?></h4>
+			<label><input type="radio" required name="existing-layers" value="append"><?php esc_html_e( 'Add to existing layers', 'product-configurator-for-woocommerce' ); ?></label>
+			<label><input type="radio" required name="existing-layers" value="append-no-duplicate"><?php esc_html_e( 'Add to existing with no duplicates', 'product-configurator-for-woocommerce' ); ?></label>
+			<label><input type="radio" required name="existing-layers" value="replace"><?php esc_html_e( 'Replace existing layers', 'product-configurator-for-woocommerce' ); ?></label>
 
-			<h4>Layers thumbnails</h4>
-			<label><input type="checkbox" name="layer-thumbnails" value="1"> Import thumbnails</label>
+			<h4><?php esc_html_e( 'Layers thumbnails', 'product-configurator-for-woocommerce' ); ?></h4>
+			<label><input type="checkbox" name="layer-thumbnails" value="1"><?php esc_html_e( 'Import thumbnails', 'product-configurator-for-woocommerce' ); ?></label>
 
-			<button class="button next">Next</button>
+			<button class="button next"><?php echo esc_html_x( 'Next', 'Next button label, in the admin import screen', 'product-configurator-for-woocommerce' ); ?></button>
 		</div>
 		<div class="selector-container">
 		</div>
@@ -579,23 +595,23 @@ IMPORT / EXPORT
 
 <script type="text/html" id="tmpl-mkl-pc-importer--angles">
 	<# if ( ! data ) { #>
-		<h3>No product selected</h3>
+		<h3><?php esc_html_e( 'No product selected', 'product-configurator-for-woocommerce' ); ?></h3>
 	<# } else { #>
 		<# if ( data.product_name ) { #><h3>{{data.product_name}}</h3><# } #>
 		<div class="form">
-			<h4>New angles</h4>
-			<label><input type="radio" required name="which-angles" value="everything"> Import all angles</label>
-			<label><input type="radio" required name="which-angles" value="selected"> Import selected angles</label>
+			<h4><?php esc_html_e( 'New angles', 'product-configurator-for-woocommerce' ); ?></h4>
+			<label><input type="radio" required name="which-angles" value="everything"><?php esc_html_e( 'Import all angles', 'product-configurator-for-woocommerce' ); ?></label>
+			<label><input type="radio" required name="which-angles" value="selected"><?php esc_html_e( 'Import selected angles', 'product-configurator-for-woocommerce' ); ?></label>
 			
-			<h4>Existing angles</h4>
-			<label><input type="radio" required name="existing-angles" value="append"> Add to existing angles</label>
-			<label><input type="radio" required name="existing-angles" value="append-no-duplicate"> Add to existing with no duplicates</label>
-			<label><input type="radio" required name="existing-angles" value="replace"> Replace existing angles</label>
+			<h4><?php esc_html_e( 'Existing angles', 'product-configurator-for-woocommerce' ); ?></h4>
+			<label><input type="radio" required name="existing-angles" value="append"><?php esc_html_e( 'Add to existing angles', 'product-configurator-for-woocommerce' ); ?></label>
+			<label><input type="radio" required name="existing-angles" value="append-no-duplicate"><?php esc_html_e( 'Add to existing with no duplicates', 'product-configurator-for-woocommerce' ); ?></label>
+			<label><input type="radio" required name="existing-angles" value="replace"><?php esc_html_e( 'Replace existing angles', 'product-configurator-for-woocommerce' ); ?></label>
 
-			<h4>Angles thumbnails</h4>
-			<label><input type="checkbox" name="angle-thumbnails" value="1"> Import thumbnails</label>
+			<h4><?php esc_html_e( 'Angles thumbnails', 'product-configurator-for-woocommerce' ); ?></h4>
+			<label><input type="checkbox" name="angle-thumbnails" value="1"><?php esc_html_e( 'Import thumbnails', 'product-configurator-for-woocommerce' ); ?></label>
 
-			<button class="button next">Next</button>
+			<button class="button next"><?php echo esc_html_x( 'Next', 'Next button label, in the admin import screen', 'product-configurator-for-woocommerce' ); ?></button>
 		</div>
 		<div class="selector-container">
 		</div>
@@ -623,7 +639,7 @@ IMPORT / EXPORT
 <script type="text/html" id="tmpl-mkl-pc-setting--repeater">
 	<div class="options-list"></div>
 	<?php do_action( 'tmpl-mkl-pc-setting--repeater' ); ?>
-	<button class="button add-option" type="button"><i class="dashicons dashicons-plus"></i> <?php _e( 'Add option', 'product-configurator-for-woocommerce' ); ?></button>
+	<button class="button add-option" type="button"><i class="dashicons dashicons-plus"></i> <?php esc_html_e( 'Add option', 'product-configurator-for-woocommerce' ); ?></button>
 </script>
 
 <script type="text/html" id="tmpl-mkl-pc-setting--repeater-option">
@@ -666,7 +682,7 @@ IMPORT / EXPORT
 	<# } ); #>
 
 	<?php do_action( 'tmpl-mkl-pc-setting--repeater-option' ); ?>
-	<button class="button remove-option" type="button"><i class="dashicons dashicons-remove"></i><span><?php _e( 'Remove option', 'product-configurator-for-woocommerce' ); ?></span></button>
+	<button class="button remove-option" type="button"><i class="dashicons dashicons-remove"></i><span><?php esc_html_e( 'Remove option', 'product-configurator-for-woocommerce' ); ?></span></button>
 </script>
 
 <?php do_action('mkl_pc_admin_templates_after') ?>

@@ -94,14 +94,17 @@ class Cache {
 
 		$location = $this->get_cache_location();
 		$file_name = $this->get_config_file_name($product_id);
-		if ( wp_mkdir_p( $location['path'] ) ) {
-			$file_handle = @fopen( trailingslashit( $location['path'] ) . $file_name, 'w' );
-			if ( $file_handle ) {
-				fwrite( $file_handle, $data );
-				fclose( $file_handle );
-			}
-			return trailingslashit( $location['path'] ) . $file_name;
+		$dir = untrailingslashit( $location['path'] );
+		if ( ! Utils::fs_mkdir( $dir ) ) {
+			// Fallback to core helper for hosts where FS is not ready.
+			wp_mkdir_p( $dir );
 		}
+
+		$file_path = trailingslashit( $location['path'] ) . $file_name;
+		if ( ! Utils::fs_put_contents( $file_path, $data ) ) {
+			return '';
+		}
+		return $file_path;
 		return '';
 	}
 
@@ -113,33 +116,25 @@ class Cache {
 	public function delete_config_file( $product_id ) {
 		$location = $this->get_cache_location();
 		$file_name = $this->get_config_file_name( $product_id );
-		if ( file_exists( trailingslashit( $location['path'] ) . $file_name ) ) {
-			unlink( trailingslashit( $location['path'] ) . $file_name );
-		}
+		Utils::fs_delete( trailingslashit( $location['path'] ) . $file_name, false, 'f' );
 	}
 
 	public function purge() {
 		$location = $this->get_cache_location();
 		$src = $location[ 'path' ];
 		
-		if ( ! file_exists( $src ) ) return;
-
-		$handle = opendir($src);
-
-		if (false === $handle) return;
-
-		$file = readdir($handle);
-
 		$allowed_file_extensions = [ 'js', 'css', 'map' ];
+		$listing = Utils::fs_dirlist( $src, false );
+		if ( ! is_array( $listing ) ) return;
 
-		while (false !== $file) {
-
-			if ('.' != $file && '..' != $file && is_file($src . '/' . $file) && in_array( pathinfo( $file, PATHINFO_EXTENSION ), $allowed_file_extensions ) ) {
-				unlink($src . '/' . $file);
+		foreach ( $listing as $name => $info ) {
+			if ( empty( $info['type'] ) || 'f' !== $info['type'] ) {
+				continue;
 			}
-
-			$file = readdir($handle);
-
+			$ext = pathinfo( $name, PATHINFO_EXTENSION );
+			if ( in_array( $ext, $allowed_file_extensions, true ) ) {
+				Utils::fs_delete( trailingslashit( $src ) . $name, false, 'f' );
+			}
 		}
 	}
 
@@ -149,13 +144,13 @@ class Cache {
 	public function check_and_regenerate_js_file() {
 		if ( is_404() ) {
 			
-			$request_uri = $_SERVER['REQUEST_URI'];
+			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 	
 			// Check if the requested file is a missing JS file
 			if ( strpos( $request_uri, 'wp-content/uploads/mkl_product_configurations/product_configuration_') !== false && strpos($request_uri, '.js') !== false ) {
 				preg_match('/product_configuration_(\d+)\.js/', $request_uri, $matches);
 				if ( $matches ) {
-					$product_id = $matches[1];
+					$product_id = absint( $matches[1] );
 					// $file_path = WP_CONTENT_DIR . "/uploads/mkl_product_configurations/product_configuration_{$product_id}.js";
 	
 					// Regenerate the JavaScript content
@@ -163,7 +158,10 @@ class Cache {
 
 					if ( ! $file_path || ! file_exists( $file_path ) ) return;
 					
-					$content = file_get_contents( $file_path );
+					$content = \MKL\PC\Utils::fs_get_contents( $file_path );
+					if ( false === $content ) {
+						return;
+					}
 	
 					// Change the response code to 200 (OK) instead of 404
 					status_header(200);
@@ -172,7 +170,7 @@ class Cache {
 					header('Content-Type: application/javascript');
 	
 					// Output the regenerated content
-					echo $content;
+					echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JS response body
 					exit;
 				}
 			}

@@ -93,7 +93,10 @@ class Frontend_Woocommerce {
 	public function serve_image( $data ) {
 		if ( ! Utils::check_image_requirements() ) {
 			header("Content-type: image/png");
-			readfile( MKL_PC_ASSETS_PATH . 'images/image-error.png' );
+			$image = Utils::fs_get_contents( MKL_PC_ASSETS_PATH . 'images/image-error.png' );
+			if ( false !== $image ) {
+				echo $image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- binary image response
+			}
 			return;
 		}
 
@@ -101,7 +104,10 @@ class Frontend_Woocommerce {
 		$images = explode( '-', $data->get_param( 'images' ) );
 		if ( empty( $images ) ) {
 			header("Content-type: image/gif");
-			readfile( WPINC . '/images/blank.gif' );
+			$image = Utils::fs_get_contents( WPINC . '/images/blank.gif' );
+			if ( false !== $image ) {
+				echo $image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- binary image response
+			}
 			return;
 		}
 		$content = [];
@@ -409,20 +415,31 @@ class Frontend_Woocommerce {
 				'money_decimal' => esc_attr( wc_get_price_decimal_separator() ),
 				'money_thousand' => esc_attr( wc_get_price_thousand_separator() ),
 				'money_format' => esc_attr( str_replace( array( '%1$s', '%2$s', '&nbsp;' ), array( '%s', '%v', ' ' ), $money_format ) ),
+				/* translators: %s: field name */
 				'required_error_message' => __( '%s is required', 'product-configurator-for-woocommerce' ),
+				/* translators: %s: choice name */
 				'selected_prefix' => _x( 'Selected: %s', 'Screen reader text, Selected choices prefix', 'product-configurator-for-woocommerce' ),
+				/* translators: %s: choice name */
 				'selected_none' => _x( 'Selected: none', 'Screen reader text, Selected choices none', 'product-configurator-for-woocommerce' ),
+				/* translators: %s: choice name */
 				'choice_action_selected' => _x( 'selected', 'Screen reader text, choice action selected', 'product-configurator-for-woocommerce' ),
 				'choice_action_removed' => _x( 'removed', 'Screen reader text, choice action removed', 'product-configurator-for-woocommerce' ),
+				/* translators: %1$s: layer name, %2$s: action, %3$s: choice name */
 				'choice_action_announce' => _x( '%1$s: %2$s %3$s', 'Screen reader text, choice action announcement template. 1: layer name, 2: action, 3: choice name', 'product-configurator-for-woocommerce' ),
+				/* translators: %d: number of errors */
 				'validation_errors_found' => _x( '%d errors found.', 'Screen reader text, validation errors count', 'product-configurator-for-woocommerce' ),
+				/* translators: %d: number of errors */
 				'validation_focus_moved' => _x( 'Focus moved to first error.', 'Screen reader text, focus moved to first invalid control', 'product-configurator-for-woocommerce' ),
+				/* translators: %d: number of errors */
 				'validation_focus_moved_to_summary' => _x( 'Focus moved to validation summary.', 'Screen reader text, focus moved to validation summary', 'product-configurator-for-woocommerce' ),
+				/* translators: %d: number of errors */
 				'validation_error_list_label' => _x( 'Please review the following errors:', 'Screen reader text, validation summary heading', 'product-configurator-for-woocommerce' ),
+				/* translators: %s: formatted total price */
 				'total_price_label_template' => _x( 'Total: %s', 'Screen reader text, total price label template. %s: formatted total price', 'product-configurator-for-woocommerce' ),
 				'validation_separator_in' => _x( ', ', 'Screen reader text, separator used between layer and choice/group names in validation messages', 'product-configurator-for-woocommerce' ),
 				'layers_aria_label' => esc_attr_x( 'Select options for the product', 'Aria label of the choices list', 'product-configurator-for-woocommerce' ),
 				'inline_region_aria_label' => __( 'Product configurator', 'product-configurator-for-woocommerce' ),
+				/* translators: %1$s: step number, %2$s: total steps, %3$s: step name */
 				'steps_progress_current_step' => _x( 'Current step %1$s of %2$s: %3$s', 'Screen reader text, current step label template. %1$s: step number, %2$s: total steps, %3$s: step name', 'product-configurator-for-woocommerce' ),
 			),
 			'config' => apply_filters( 'mkl_pc_js_config', array(
@@ -469,7 +486,7 @@ class Frontend_Woocommerce {
 			$args['config']['load_config_content'] = $saved_configuration_content;
 
 			if ( isset( $_REQUEST['edit_config_from_cart'] ) ) {
-				$args['config']['cart_item_key'] = esc_attr( $_REQUEST['load_config_from_cart'] );
+				$args['config']['cart_item_key'] = esc_attr( esc_html( sanitize_text_field( wp_unslash( $_REQUEST['load_config_from_cart'] ) ) ) );
 			}
 		} 
 
@@ -477,7 +494,11 @@ class Frontend_Woocommerce {
 			$args['config']['open_configurator'] = true;
 		}
 
-		wp_localize_script( 'mkl_pc/js/product_configurator', 'PC_config', apply_filters( 'mkl_pc_frontend_js_config', $args ) );
+		$localized_config = apply_filters( 'mkl_pc_frontend_js_config', $args );
+		if ( ! is_array( $localized_config ) ) {
+			$localized_config = [];
+		}
+		wp_localize_script( 'mkl_pc/js/product_configurator', 'PC_config', $localized_config );
 
 		if ( $prod && ! mkl_pc( 'settings')->get( 'async_data' ) ) {
 			wp_enqueue_script( 'mkl_pc/js/fe_data_'.$post->ID, Plugin::instance()->cache->get_config_file($post->ID), array(), ( $date_modified ? $date_modified->getTimestamp() : MKL_PC_VERSION ), true );
@@ -515,10 +536,16 @@ class Frontend_Woocommerce {
 		}
 
 		if ( 'underscore' === $handle ) {
-			$dir = MKL_PC_ASSETS_URL . 'js';
-			$tag = "<script src='{$dir}/underscore-before.min.js'></script>\n"
-			       . $tag
-			       . "<script src='{$dir}/underscore-after.min.js'></script>\n";
+			// Load wrapper code via WP APIs (Plugin Check disallows raw script tags).
+			wp_enqueue_script( 'underscore' );
+			$before = \MKL\PC\Utils::fs_get_contents( MKL_PC_ASSETS_PATH . 'js/underscore-before.min.js' );
+			if ( $before ) {
+				wp_add_inline_script( 'underscore', $before, 'before' );
+			}
+			$after = \MKL\PC\Utils::fs_get_contents( MKL_PC_ASSETS_PATH . 'js/underscore-after.min.js' );
+			if ( $after ) {
+				wp_add_inline_script( 'underscore', $after, 'after' );
+			}
 		}
 
 		return $tag;
@@ -533,14 +560,15 @@ class Frontend_Woocommerce {
 		$configuration_to_load = [];
 		if ( isset( $_REQUEST['load_config_from_cart'] ) ) {
 
+			$item_id = sanitize_text_field( wp_unslash( $_REQUEST['load_config_from_cart'] ) );
 			$wc_cart = WC()->cart;
-			$cart_item = $wc_cart->get_cart_item($_REQUEST['load_config_from_cart']);
+			$cart_item = $wc_cart->get_cart_item($item_id);
 
 			// Check for removed items
 			if ( empty( $cart_item ) ) {
 				$removed_items = $wc_cart->get_removed_cart_contents();
-				if ( isset( $removed_items[$_REQUEST['load_config_from_cart']] ) ) {
-					$cart_item = $removed_items[$_REQUEST['load_config_from_cart']];
+				if ( isset( $removed_items[$item_id] ) ) {
+					$cart_item = $removed_items[$item_id];
 				}
 			}
 
@@ -554,7 +582,7 @@ class Frontend_Woocommerce {
 		if ( isset( $_REQUEST['load_config_from_order'] ) ) {
 			$current_user_can_view_config = current_user_can( 'manage_woocommerce' );
 			if ( ! $current_user_can_view_config ) {
-				$order_id = wc_get_order_id_by_order_item_id( $_REQUEST['load_config_from_order'] );
+				$order_id = wc_get_order_id_by_order_item_id( sanitize_text_field( wp_unslash( $_REQUEST['load_config_from_order'] ) ) );
 				$order = wc_get_order( $order_id );
 				if ( is_a( $order, 'WC_Order' ) ) {
 					if ( $order->get_customer_id() === get_current_user_id() ) {
@@ -568,13 +596,13 @@ class Frontend_Woocommerce {
 			 * Default to true if the current user can "manage_woocommerce", or the current user is the order's customer.
 			 */
 			if ( apply_filters( 'mkl_pc/current_user_can_view_order_config', $current_user_can_view_config ) ) {
-				$config = wc_get_order_item_meta( (int) $_REQUEST['load_config_from_order'], '_configurator_data_raw', true );
+				$config = wc_get_order_item_meta( (int) sanitize_text_field( wp_unslash( $_REQUEST['load_config_from_order'] ) ), '_configurator_data_raw', true );
 				if ( $config ) $configuration_to_load = $config;
 			}
 		}
 
 		if ( isset( $_REQUEST['load-preset'] ) ) {
-			$p = get_post( (int) $_REQUEST['load-preset'] );
+			$p = get_post( (int) sanitize_text_field( wp_unslash( $_REQUEST['load-preset'] ) ) );
 			if ( $p && 'mkl_pc_configuration' === $p->post_type && 'preset' === $p->post_status ) {
 				$configuration_to_load = json_decode( $p->post_content );
 			}

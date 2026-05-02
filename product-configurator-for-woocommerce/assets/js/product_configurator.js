@@ -824,6 +824,7 @@ PC.actionParameter = 'pc_get_data';
 			// Savoy compatibility
 			if ( $.nmThemeInstance && $.nmThemeInstance.quantityInputsBindButtons ) $.nmThemeInstance.quantityInputsBindButtons( $('.mkl_pc') );
 
+			if ( 'function' === typeof avadaAddQuantityBoxes ) avadaAddQuantityBoxes();
 			// Reset config
 			if ( wp.hooks.applyFilters( 'PC.fe.reset.on.start', true ) ) PC.fe.contents.content.resetConfig();
 

@@ -28,7 +28,7 @@ class Admin_Variable_Product {
 	 */
 	public function save_mode( $product_id ) {
 		if ( isset( $_POST[MKL_PC_PREFIX.'_variable_configuration_mode'] ) ) {
-			update_post_meta( $product_id, MKL_PC_PREFIX.'_variable_configuration_mode', sanitize_key( $_POST[MKL_PC_PREFIX.'_variable_configuration_mode'] ) );
+			update_post_meta( $product_id, MKL_PC_PREFIX.'_variable_configuration_mode', sanitize_key( wp_unslash( $_POST[MKL_PC_PREFIX.'_variable_configuration_mode'] ) ) );
 		}
 		update_post_meta( $product_id, MKL_PC_PREFIX.'_all_variations_are_configurable', isset( $_POST[MKL_PC_PREFIX.'_all_variations_are_configurable'] ) ? 'yes' : 'no' );
 	}
@@ -67,13 +67,13 @@ class Admin_Variable_Product {
 	public function general_tab_help_text() {
 		?>
 		<p class="show_if_variable">
-			<?php _e( 'Each variation also has to be set individualy as Configurable. ', 'mkl-pc-variable-product' ); ?>
+			<?php esc_html_e( 'Each variation also has to be set individualy as Configurable. ', 'product-configurator-for-woocommerce' ); ?>
 		</p>
 		<?php
 	}
 
 	public function set_configurable( $variation_id, $loop ) {
-		$variable_is_configurable = isset( $_POST[MKL_PC_PREFIX.'_is_configurable'] ) ? $_POST[MKL_PC_PREFIX.'_is_configurable'] : array();
+		$variable_is_configurable = isset( $_POST[MKL_PC_PREFIX.'_is_configurable'] ) ? (array) wp_unslash( $_POST[MKL_PC_PREFIX.'_is_configurable'] ) : array();
 		$_is_configurable = isset( $variable_is_configurable[$loop] ) ? 'yes' : 'no';
 		update_post_meta( $variation_id, MKL_PC_PREFIX.'_is_configurable', $_is_configurable );
 	}
@@ -81,14 +81,14 @@ class Admin_Variable_Product {
 	public function variation_options($loop, $variation_data, $variation) {
 		$configurable = get_post_meta( $variation->ID, MKL_PC_PREFIX.'_is_configurable', true);
 		?>
-		<label><input type="checkbox" class="checkbox variable_is_configurable" name="<?php echo MKL_PC_PREFIX.'_is_configurable[' .$loop ?>]" <?php checked( isset( $configurable ) ? $configurable : '', 'yes' ); ?> /> <?php _e( 'Configurable', 'mkl-pc-variable-product' ); ?> <?php echo wc_help_tip( __( 'Enable this option if variation is configurable', 'mkl-pc-variable-product' ) ); ?></label>
+		<label><input type="checkbox" class="checkbox variable_is_configurable" name="<?php echo esc_attr( MKL_PC_PREFIX.'_is_configurable[' .$loop . ']' ); ?>" <?php checked( isset( $configurable ) ? $configurable : '', 'yes' ); ?> /> <?php esc_html_e( 'Configurable', 'product-configurator-for-woocommerce' ); ?> <?php echo \wc_help_tip( esc_html__( 'Enable this option if variation is configurable', 'product-configurator-for-woocommerce' ) ); ?></label>
 		<?php
 	}
 	public function product_variation_data_fields($loop, $variation_data, $variation) {
 		
 		?>
 		<div class="toolbar show_if_variation_is_configurable">
-		<?php echo Plugin::instance()->admin->product->start_button( $variation->ID, $variation->post_parent ) ?>
+		<?php echo wp_kses_post( Plugin::instance()->admin->product->start_button( $variation->ID, $variation->post_parent ) ) ?>
 		</div>
 		<?php
 	}

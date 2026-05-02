@@ -6,8 +6,9 @@
 * Description: Allow customers to configure and customize their products using a live preview powered by a system of layers
 * Author: Marc Lacroix
 * Author URI: http://mklacroix.com
-* Version: 1.6.4
+* Version: 1.6.5
 * Requires PHP: 7.4
+* Requires Plugins: woocommerce
 * WC requires at least: 8
 * WC tested up to: 10
 *
@@ -15,15 +16,15 @@
 * Domain Path: /languages/
 *
 * Copyright: © 2015 mklacroix (email : marcus_lacroix@yahoo.fr)
-* License: GNU General Public License v3.0
-* License URI: http://www.gnu.org/licenses/gpl-3.0.html
+* License: GPLv2 or later
+* License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-define( 'MKL_PC_VERSION', '1.6.4' );
+define( 'MKL_PC_VERSION', '1.6.5' );
 define( 'MKL_PC_PREFIX', '_mkl_pc_' );
 define( 'MKL_PC_EXTENDS', 'woocommerce' ); 
 define( 'MKL_PC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
@@ -70,7 +71,7 @@ function mkl_pc_fail_php_version() {
 function mkl_pc_fail_loading_woocommerce() {
 	?>
 	<div class="notice notice-warning is-dismissible">
-		<p><?php _e( 'WooCommerce has to be active for WooCommerce Product configurator to work.', 'product-configurator-for-woocommerce' ) ?> </p>
+		<p><?php esc_html_e( 'WooCommerce has to be active for WooCommerce Product configurator to work.', 'product-configurator-for-woocommerce' ) ?> </p>
 	</div>
 	<?php
 }
@@ -78,7 +79,7 @@ function mkl_pc_fail_loading_woocommerce() {
 function mkl_pc_fail_woocommerce_version() {
 	?>
 	<div class="notice notice-warning is-dismissible">
-		<p><?php _e( 'Your WooCommerce version is too old for WooCommerce Product Configurator to work.', 'product-configurator-for-woocommerce' ); ?><br> <?php _e( 'WooCommerce Version 3+ required.', 'product-configurator-for-woocommerce' ); ?> </p>
+		<p><?php esc_html_e( 'Your WooCommerce version is too old for WooCommerce Product Configurator to work.', 'product-configurator-for-woocommerce' ); ?><br> <?php esc_html_e( 'WooCommerce Version 3+ required.', 'product-configurator-for-woocommerce' ); ?> </p>
 	</div>
 	<?php
 }

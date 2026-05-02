@@ -33,7 +33,8 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 		 * @return void
 		 */
 		public function updated_settings() {
-			if ( ! isset( $_REQUEST['option_page'] ) || 'mlk_pc_settings' != $_REQUEST['option_page'] ) return;
+			$option_page = isset( $_REQUEST['option_page'] ) ? sanitize_key( wp_unslash( $_REQUEST['option_page'] ) ) : '';
+			if ( 'mlk_pc_settings' !== $option_page ) return;
 			mkl_pc( 'cache' )->purge();
 		}
 
@@ -44,7 +45,7 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 		 * @return array
 		 */
 		public function plugin_settings_link( $links ) {
-			$settings_link = '<a href="' . admin_url( 'options-general.php?page=mkl_pc_settings' ) . '">' . __( 'Settings' ) . '</a>';
+			$settings_link = '<a href="' . admin_url( 'options-general.php?page=mkl_pc_settings' ) . '">' . __( 'Settings', 'product-configurator-for-woocommerce' ) . '</a>';
 			array_unshift($links, $settings_link);
 			return $links;
 		}
@@ -70,7 +71,7 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 		}
 
 		public function display() {
-			$active = isset( $_REQUEST['tab'] ) ? sanitize_key( $_REQUEST['tab'] ) : 'settings';
+			$active = isset( $_REQUEST['tab'] ) ? sanitize_key( wp_unslash( $_REQUEST['tab'] ) ) : 'settings';
 			$tabs = apply_filters( 'mkl_pc_settings_tabs', [
 				'settings' => __( 'Settings', 'product-configurator-for-woocommerce' ),
 				'addons' => __( 'Addons', 'product-configurator-for-woocommerce' ),
@@ -80,18 +81,18 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			<div class="wrap">
 				<header>
 					<h1>
-						<img src="<?php echo MKL_PC_ASSETS_URL; ?>admin/images/mkl-live-product-configurator-for-woocommerce.png" alt="Product Configurator for WooCommerce"/>
-						<span class="version"><?php echo MKL_PC_VERSION; ?></span>
+						<img src="<?php echo esc_url( MKL_PC_ASSETS_URL . 'admin/images/mkl-live-product-configurator-for-woocommerce.png' ); ?>" alt="<?php echo esc_attr__( 'Product Configurator for WooCommerce', 'product-configurator-for-woocommerce' ); ?>"/>
+						<span class="version"><?php echo esc_html( MKL_PC_VERSION ); ?></span>
 						<span class="by">by <a href="https://mklacroix.com" target="_blank">MKLACROIX</a></span>
 					</h1>
 					<div class="links">
-						<a href="http://wc-product-configurator.com"><?php _e( 'Product Configurator website', 'product-configurator-for-woocommerce' ); ?></a><!--  | <a href="http://wc-product-configurator.com"><?php _e( 'Addons', 'product-configurator-for-woocommerce' ); ?></a> | <a href="http://wc-product-configurator.com"><?php _e( 'Themes', 'product-configurator-for-woocommerce' ); ?></a> -->
+						<a href="https://wc-product-configurator.com"><?php esc_html_e( 'Product Configurator website', 'product-configurator-for-woocommerce' ); ?></a><!--  | <a href="http://wc-product-configurator.com"><?php esc_html_e( 'Addons', 'product-configurator-for-woocommerce' ); ?></a> | <a href="http://wc-product-configurator.com"><?php esc_html_e( 'Themes', 'product-configurator-for-woocommerce' ); ?></a> -->
 					</div>
 				</header>
 				<nav class="nav-tab-wrapper mkl-nav-tab-wrapper">
 					<?php
 					foreach( $tabs as $tab_id => $tab ) { ?>
-						<a href="#" class="nav-tab<?php echo ( $active === $tab_id ? ' nav-tab-active' : '' ); ?>" data-content="<?php echo esc_attr( $tab_id ); ?>"><?php echo $tab; ?></a>
+						<a href="#" class="nav-tab<?php echo ( $active === $tab_id ? ' nav-tab-active' : '' ); ?>" data-content="<?php echo esc_attr( $tab_id ); ?>"><?php echo esc_html( $tab ); ?></a>
 					<?php 
 					} ?>
 				</nav>
@@ -106,9 +107,9 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 														
 								foreach ( (array) $wp_settings_sections[ 'mlk_pc_settings' ] as $section ) {
 									// if ( 'labels' == $section['id'] ) continue;
-									echo '<section id="' . $section['id'] .'">';
+									echo '<section id="' . esc_attr( $section['id'] ) .'">';
 										if ( $section['title'] ) {
-											echo "<h2>{$section['title']}</h2>\n";
+											echo '<h2>' . esc_html( $section['title'] ) . "</h2>\n";
 										}
 								
 										if ( $section['callback'] ) {
@@ -131,49 +132,49 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				</div>
 
 				<div class="mkl-settings-content" data-content="addons">
-					<h2><?php _e( 'Addons', 'product-configurator-for-woocommerce' ); ?></h2>
+					<h2><?php esc_html_e( 'Addons', 'product-configurator-for-woocommerce' ); ?></h2>
 					<?php $this->display_addons(); ?>
 				</div>
 				<div class="mkl-settings-content" data-content="tools">
-					<h2><?php _e( 'Tools', 'product-configurator-for-woocommerce' ); ?></h2>
+					<h2><?php esc_html_e( 'Tools', 'product-configurator-for-woocommerce' ); ?></h2>
 					<hr>
-					<h3><?php _e( 'Configuration cache', 'product-configurator-for-woocommerce' ); ?></h3>
+					<h3><?php esc_html_e( 'Configuration cache', 'product-configurator-for-woocommerce' ); ?></h3>
 					<p>
-						<?php _e( 'The product configurations are cached on the disk for better performance.', 'product-configurator-for-woocommerce' ); ?>
-						<br><?php _e( 'The cache is refreshed every time you save the product or the configuration.', 'product-configurator-for-woocommerce' ); ?>
-						<br><?php _e( 'Using the button bellow, you can purge all the configuration cache.', 'product-configurator-for-woocommerce' ); ?>
-						<br><em><?php _e( '(The cache will be rebuilt the next time the file is requested)', 'product-configurator-for-woocommerce' ); ?></em>
+						<?php esc_html_e( 'The product configurations are cached on the disk for better performance.', 'product-configurator-for-woocommerce' ); ?>
+						<br><?php esc_html_e( 'The cache is refreshed every time you save the product or the configuration.', 'product-configurator-for-woocommerce' ); ?>
+						<br><?php esc_html_e( 'Using the button bellow, you can purge all the configuration cache.', 'product-configurator-for-woocommerce' ); ?>
+						<br><em><?php esc_html_e( '(The cache will be rebuilt the next time the file is requested)', 'product-configurator-for-woocommerce' ); ?></em>
 					</p>
-					<button type="button" class="button mkl-settings-purge-config-cache"><?php _e( 'Purge configuration cache', 'product-configurator-for-woocommerce' ); ?></button>
+					<button type="button" class="button mkl-settings-purge-config-cache"><?php esc_html_e( 'Purge configuration cache', 'product-configurator-for-woocommerce' ); ?></button>
 
-					<h3><?php _e( 'Fix images', 'product-configurator-for-woocommerce' ); ?></h3>
+					<h3><?php esc_html_e( 'Fix images', 'product-configurator-for-woocommerce' ); ?></h3>
 					<div class="configurable-products-list">
 						<div class="notice notice-warning below-h2">
 							<p>
-								<?php _e( 'This feature is experimental, please backup your database before using it!', 'product-configurator-for-woocommerce' ); ?>
-								<br><small><a href="https://wordpress.org/plugins/updraftplus/"><?php _e( 'I recommend UpdraftPlus for your backups.', 'product-configurator-for-woocommerce' ); ?></a></small>
+								<?php esc_html_e( 'This feature is experimental, please backup your database before using it!', 'product-configurator-for-woocommerce' ); ?>
+								<br><small><a href="https://wordpress.org/plugins/updraftplus/"><?php esc_html_e( 'I recommend UpdraftPlus for your backups.', 'product-configurator-for-woocommerce' ); ?></a></small>
 							</p>
 						</div>
 						<p>
-							<?php _e( 'If you imported a configurable product and the images do not match, you can try fixing the relationships with this tool.', 'product-configurator-for-woocommerce' ); ?>
+							<?php esc_html_e( 'If you imported a configurable product and the images do not match, you can try fixing the relationships with this tool.', 'product-configurator-for-woocommerce' ); ?>
 						</p>
 						<p>
-							<?php _e( 'How it works:', 'product-configurator-for-woocommerce' ); ?>
-							<br><?php _e( 'This tool looks for the pictures present in the configurator, and checks whether they are in the media library.', 'product-configurator-for-woocommerce' ); ?>
-							<br><?php _e( 'If no exact match is found, it looks for an image with the same file name, and updates the attachment ID in the configurator data.', 'product-configurator-for-woocommerce' ); ?>
+							<?php esc_html_e( 'How it works:', 'product-configurator-for-woocommerce' ); ?>
+							<br><?php esc_html_e( 'This tool looks for the pictures present in the configurator, and checks whether they are in the media library.', 'product-configurator-for-woocommerce' ); ?>
+							<br><?php esc_html_e( 'If no exact match is found, it looks for an image with the same file name, and updates the attachment ID in the configurator data.', 'product-configurator-for-woocommerce' ); ?>
 						</p>
 						<p>
-							<label for="configurable-products"><?php _e( 'Select a configurable product:', 'product-configurator-for-woocommerce' ); ?></label>
+							<label for="configurable-products"><?php esc_html_e( 'Select a configurable product:', 'product-configurator-for-woocommerce' ); ?></label>
 							<br><select id="configurable-products" style="width: 300px;"></select>
 						</p>
-						<button type="button" class="button mkl-settings-scan-images"><?php _e( 'Scan images', 'product-configurator-for-woocommerce' ); ?></button>
+						<button type="button" class="button mkl-settings-scan-images"><?php esc_html_e( 'Scan images', 'product-configurator-for-woocommerce' ); ?></button>
 					</div>
 
-					<h3><?php _e( 'Configuration images', 'product-configurator-for-woocommerce' ); ?></h3>
+					<h3><?php esc_html_e( 'Configuration images', 'product-configurator-for-woocommerce' ); ?></h3>
 					<?php $show_configs = mkl_pc( 'settings' )->get( 'show_config_images_in_the_library', true ); ?>
 					<button type="button" class="button mkl-settings-toggle-images-in-library" data-mode="<?php echo $show_configs ? 'hide' : 'show' ;?>">
-						<span class="hide-configurations-label"><?php _e( 'Hide the images generated by the configurator in the media library', 'product-configurator-for-woocommerce' ); ?></span>
-						<span class="show-configurations-label"><?php _e( 'Show the images generated by the configurator in the media library', 'product-configurator-for-woocommerce' ); ?></span>
+						<span class="hide-configurations-label"><?php esc_html_e( 'Hide the images generated by the configurator in the media library', 'product-configurator-for-woocommerce' ); ?></span>
+						<span class="show-configurations-label"><?php esc_html_e( 'Show the images generated by the configurator in the media library', 'product-configurator-for-woocommerce' ); ?></span>
 					</button>
 				</div>
 
@@ -186,7 +187,15 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 		
 		public function init() {
 
-			register_setting( 'mlk_pc_settings', 'mkl_pc__settings' );
+			register_setting(
+				'mlk_pc_settings',
+				'mkl_pc__settings',
+				[
+					'type'              => 'array',
+					'sanitize_callback' => [ $this, 'sanitize_settings' ],
+					'default'           => [],
+				]
+			);
 
 			add_settings_section(
 				'settings_section', 
@@ -1057,6 +1066,92 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			do_action( 'mkl_pc/register_settings', $this );
 		}
 
+		/**
+		 * Sanitize settings saved in the `mkl_pc__settings` option.
+		 *
+		 * @param mixed $input Raw settings from the request.
+		 * @return array
+		 */
+		public function sanitize_settings( $input ) {
+			if ( ! is_array( $input ) ) {
+				return [];
+			}
+
+			$output = [];
+
+			foreach ( $input as $key => $value ) {
+				$key = is_string( $key ) ? sanitize_key( $key ) : '';
+				if ( '' === $key ) {
+					continue;
+				}
+
+				$output[ $key ] = $this->sanitize_setting_value( $key, $value );
+			}
+
+			return $output;
+		}
+
+		/**
+		 * Sanitize a single setting value (supports nested arrays).
+		 *
+		 * @param string $key
+		 * @param mixed  $value
+		 * @return mixed
+		 */
+		private function sanitize_setting_value( $key, $value ) {
+			// Handle nested arrays (eg. multiple checkboxes).
+			if ( is_array( $value ) ) {
+				$sanitized = [];
+				foreach ( $value as $sub_key => $sub_value ) {
+					$sub_key = is_string( $sub_key ) ? sanitize_key( $sub_key ) : '';
+					if ( '' === $sub_key ) {
+						continue;
+					}
+					$sanitized[ $sub_key ] = $this->sanitize_setting_value( $key . '_' . $sub_key, $sub_value );
+				}
+				return $sanitized;
+			}
+
+			// Checkboxes in this settings page store "on".
+			if ( true === $value || 'on' === $value ) {
+				return 'on';
+			}
+			if ( false === $value || '' === $value || 0 === $value || '0' === $value ) {
+				return '';
+			}
+
+			// Only sanitize scalars going forward.
+			if ( ! is_scalar( $value ) ) {
+				return '';
+			}
+
+			$string_value = (string) $value;
+
+			// Key-based heuristics for common types.
+			if ( false !== strpos( $key, 'email' ) ) {
+				return sanitize_email( $string_value );
+			}
+
+			if ( false !== strpos( $key, 'url' ) || false !== strpos( $key, 'link' ) ) {
+				return esc_url_raw( $string_value );
+			}
+
+			if ( false !== strpos( $key, 'color' ) ) {
+				$color = sanitize_hex_color( $string_value );
+				return $color ? $color : sanitize_text_field( $string_value );
+			}
+
+			if ( false !== strpos( $key, 'id' ) && is_numeric( $string_value ) ) {
+				return absint( $string_value );
+			}
+
+			if ( is_numeric( $string_value ) && false !== strpos( $key, 'size' ) ) {
+				return (string) floatval( $string_value );
+			}
+
+			return sanitize_text_field( $string_value );
+		}
+
 		public function styling_section_callback() {
 			// echo __( 'This section description', 'product-configurator-for-woocommerce' );
 		}
@@ -1067,9 +1162,9 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			?>
 			<div class="theme_setting">
 				<div class="theme_setting_view"></div>
-				<input type='hidden' name='mkl_pc__settings[<?php echo $field_options['setting_name']; ?>]' value='<?php echo isset( $options[$field_options[ 'setting_name' ] ] ) ? $options[$field_options[ 'setting_name' ] ] : ''; ?>'>
+				<input type='hidden' name='mkl_pc__settings[<?php echo esc_attr( $field_options['setting_name'] ); ?>]' value='<?php echo isset( $options[ $field_options[ 'setting_name' ] ] ) ? esc_attr( $options[ $field_options[ 'setting_name' ] ] ) : ''; ?>'>
 			</div>
-			<p><a href="<?php echo add_query_arg( [ 'autofocus[section]' => 'mlk_pc', 'return' => urlencode( esc_url_raw( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) ], wp_customize_url() ); ?>"><?php _e( 'Edit the theme settings in the customizer', 'product-configurator-for-woocommerce' ); ?></a></p>
+			<p><a href="<?php echo esc_url( add_query_arg( [ 'autofocus[section]' => 'mlk_pc', 'return' => urlencode( esc_url_raw( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) ], wp_customize_url() ) ); ?>"><?php esc_html_e( 'Edit the theme settings in the customizer', 'product-configurator-for-woocommerce' ); ?></a></p>
 			<?php
 		}
 
@@ -1087,13 +1182,13 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			<fieldset class="checkboxes">
 			
 			<?php foreach ( $field_options[ 'options' ] as $key => $label ) {
-				printf( '<label><input name="mkl_pc__settings[' . esc_attr( $field_options[ 'setting_name' ] ) .'][' . esc_attr( $key ) .']" id="mkl_pc__settings-' . esc_attr( $field_options['setting_name'] ) . '-' . esc_attr( $key ) .'" type="checkbox" value="%s"%s>%s</label>', 'on', checked( in_array( $key, $value ), true, false ), $label );
+				printf( '<label><input name="mkl_pc__settings[' . esc_attr( $field_options[ 'setting_name' ] ) .'][' . esc_attr( $key ) .']" id="mkl_pc__settings-' . esc_attr( $field_options['setting_name'] ) . '-' . esc_attr( $key ) .'" type="checkbox" value="%s"%s>%s</label>', 'on', checked( in_array( $key, $value ), true, false ), esc_html( $label ) );
 			} ?>
 
 			</fieldset>
 			<?php
 			if ( isset( $field_options['description'] ) ) { ?>
-				<span class="field-description"><?php echo $field_options['description']; ?></span>
+				<span class="field-description"><?php echo wp_kses_post( $field_options['description'] ); ?></span>
 			<?php }
 		}
 
@@ -1114,7 +1209,7 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			<input <?php echo isset( $field_options[ 'placeholder' ] ) ? 'placeholder="' . esc_attr( $field_options[ 'placeholder' ] ) .'" ' : ''; ?>type='<?php echo esc_attr( $type ); ?>' name='mkl_pc__settings[<?php echo esc_attr( $field_options['setting_name'] ); ?>]' value='<?php echo isset( $options[$field_options[ 'setting_name' ] ] ) ? esc_attr( $options[$field_options[ 'setting_name' ] ] ) : ''; ?>'>
 			<?php
 			if ( isset( $field_options['description'] ) ) { ?>
-				<p class="field-description"><?php echo $field_options['description']; ?></p>
+				<p class="field-description"><?php echo wp_kses_post( $field_options['description'] ); ?></p>
 			<?php }
 		}
 
@@ -1125,14 +1220,16 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			<textarea <?php echo isset( $field_options[ 'placeholder' ] ) ? 'placeholder="' . esc_attr( $field_options[ 'placeholder' ] ) .'" ' : ''; ?>name='mkl_pc__settings[<?php echo esc_attr( $field_options['setting_name'] ); ?>]' class="widefat"><?php echo isset( $options[$field_options[ 'setting_name' ] ] ) ? esc_textarea( $options[$field_options[ 'setting_name' ] ] ) : ''; ?></textarea>
 			<?php
 			if ( isset( $field_options['description'] ) ) { ?>
-				<p class="field-description"><?php echo $field_options['description']; ?></p>
+				<p class="field-description"><?php echo wp_kses_post( $field_options['description'] ); ?></p>
 			<?php }
 		}
 
 		public function callback_select( $field_options = [] ) {
 			if ( ! isset( $field_options[ 'setting_name' ] ) ) return;
 			if ( ! isset( $field_options[ 'options' ] ) ) {
-				echo 'Options are missing for the this select field: ' . $field_options[ 'setting_name' ];
+				$options_missing = $field_options[ 'setting_name' ];
+				/* translators: %s is the name of the select field */
+				echo esc_html( sprintf( __( 'Options are missing for the this select field: %s' , 'product-configurator-for-woocommerce' ), $options_missing ) );
 				return;
 			}
 
@@ -1148,14 +1245,14 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			$value = $this->get_setting( $field_options[ 'setting_name' ], $default );
 
 			?>
-			<select name='mkl_pc__settings[<?php echo $field_options[ 'setting_name' ]; ?>]' id='mkl_pc__settings-<?php echo $field_options['setting_name']; ?>'>
+			<select name='mkl_pc__settings[<?php echo esc_attr( $field_options[ 'setting_name' ] ); ?>]' id='mkl_pc__settings-<?php echo esc_attr( $field_options['setting_name'] ); ?>'>
 				<?php foreach ( $field_options[ 'options' ] as $key => $label ) {
-					printf( '<option value="%s"%s>%s</option>', $key, selected( $value, $key, false ), $label );
+					printf( '<option value="%s"%s>%s</option>', esc_attr( $key ), selected( $value, $key, false ), esc_html( $label ) );
 				} ?>
 			</select>
 			<?php
 			if ( isset( $field_options['description'] ) ) { ?>
-				<span class="field-description"><?php echo $field_options['description']; ?></span>
+				<span class="field-description"><?php echo wp_kses_post( $field_options['description'] ); ?></span>
 			<?php }
 		}
 
@@ -1165,14 +1262,14 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			?>
 			<fieldset>
 				<?php foreach ( $field_options['options'] as $key => $label ) {
-					printf( '<label for="wpuf-%1$s[%2$s][%3$s]">',  'mkl_pc__settings', $field_options['setting_name'], $key );
-					printf( '<input type="radio" class="radio" id="wpuf-%1$s[%2$s][%3$s]" name="%1$s[%2$s]" value="%3$s" %4$s />', 'mkl_pc__settings', $field_options['setting_name'], $key, checked( $value, $key, false ) );
-					printf( '%1$s</label><br>', $label );
+					printf( '<label for="wpuf-%1$s[%2$s][%3$s]">',  'mkl_pc__settings', esc_attr( $field_options['setting_name'] ), esc_attr( $key ) );
+					printf( '<input type="radio" class="radio" id="wpuf-%1$s[%2$s][%3$s]" name="%1$s[%2$s]" value="%3$s" %4$s />', 'mkl_pc__settings', esc_attr( $field_options['setting_name'] ), esc_attr( $key ), checked( $value, $key, false ) );
+					printf( '%1$s</label><br>', esc_html( $label ) );
 				} ?>
 			</fieldset>
 			<?php
 			if ( isset( $field_options['description'] ) ) { ?>
-				<span class="field-description"><?php echo $field_options['description']; ?></span>
+				<span class="field-description"><?php echo wp_kses_post( $field_options['description'] ); ?></span>
 			<?php }
 		}
 
@@ -1180,10 +1277,10 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 			if ( ! isset( $field_options['setting_name'] ) ) return;
 			$value = $this->get_setting( $field_options[ 'setting_name' ] );
 			?>
-			<input type='checkbox' name='mkl_pc__settings[<?php echo $field_options['setting_name']; ?>]' <?php checked( $value, 'on' ); ?>>
+			<input type='checkbox' name='mkl_pc__settings[<?php echo esc_attr( $field_options['setting_name'] ); ?>]' <?php checked( $value, 'on' ); ?>>
 			<?php
 			if ( isset( $field_options['description'] ) ) { ?>
-				<span class="field-description"><?php echo $field_options['description']; ?></span>
+				<span class="field-description"><?php echo wp_kses_post( $field_options['description'] ); ?></span>
 			<?php }
 		}
 
@@ -1200,13 +1297,13 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 		}
 
 		private function display_mkl_theme() { 
-			
+			return;
 			?>
 			<div class="mkl-pc-addon mkl-pc-theme">
-				<figure><img src="<?php echo MKL_PC_ASSETS_URL .'admin/images/' ?>mkl-theme-thumbnail.png" alt=""></figure>
+				<figure><img src="<?php echo esc_url( MKL_PC_ASSETS_URL .'admin/images/mkl-theme-thumbnail.png' ) ?>" alt=""></figure>
 				<div class="content">
-					<h4><?php _e( 'Get the official Product Configurator themes', 'product-configurator-for-woocommerce' ) ?></h4>
-					<p><?php _e( 'Beautiful design, integrated live configuring interface, widgetized homepage, flexible, lightweight and much more...', 'product-configurator-for-woocommerce' ) ?></p>
+					<h4><?php esc_html_e( 'Get the official Product Configurator themes', 'product-configurator-for-woocommerce' ) ?></h4>
+					<p><?php esc_html_e( 'Beautiful design, integrated live configuring interface, widgetized homepage, flexible, lightweight and much more...', 'product-configurator-for-woocommerce' ) ?></p>
 					<em>Coming soon</em>
 					<?php
 					/*  <a href="<?php echo esc_url( $this->themes_url ); ?>" target="_blank" class="button button-primary button-large"><?php _e( 'View available themes', 'product-configurator-for-woocommerce' ) ?></a> */
@@ -1231,15 +1328,15 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				</figure>
 				<h4>
 					<?php echo esc_textarea( $addon->label ); ?>
-					<?php if ( $is_installed ) { echo ' <span class="installed">' . __( 'installed' ) . '</span>'; } ?>
+					<?php if ( $is_installed ) { echo ' <span class="installed">' . esc_html__( 'installed', 'product-configurator-for-woocommerce' ) . '</span>'; } ?>
 				</h4>
 				<div class="desc">
 					<?php echo esc_textarea( $addon->description ); ?>
 				</div>
 				<?php if ( ! $is_installed ) : ?>
-					<a href="<?php echo esc_url( $addon->product_url ) ?>" class="button button-primary button-large"><?php _e( 'Get the addon now' ) ?> <span class="dashicons dashicons-external"></span></a>
+					<a href="<?php echo esc_url( $addon->product_url ) ?>" class="button button-primary button-large"><?php esc_html_e( 'Get the addon now', 'product-configurator-for-woocommerce' ) ?> <span class="dashicons dashicons-external"></span></a>
 				<?php elseif(isset($addon->doc_url) && $addon->doc_url):  ?>
-				<a href="<?php echo esc_url( $addon->doc_url ) ?>" class="button button-primary button-large"><?php _e( 'Documentation' ) ?> <span class="dashicons dashicons-external"></span></a>
+				<a href="<?php echo esc_url( $addon->doc_url ) ?>" class="button button-primary button-large"><?php esc_html_e( 'Documentation', 'product-configurator-for-woocommerce' ) ?> <span class="dashicons dashicons-external"></span></a>
 				<?php endif; ?>
 			</div>
 		<?php
@@ -1252,7 +1349,8 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 
 		public function add_backbone_templates() {
 			global $pagenow;
-			if ( 'options-general.php' != $pagenow || ! isset( $_GET['page'] ) || 'mkl_pc_settings' != $_GET['page'] ) return;
+			$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+			if ( 'options-general.php' !== $pagenow || 'mkl_pc_settings' !== $page ) return;
 			
 			$themes = mkl_pc( 'themes' )->get_themes();
 			$data = [];
@@ -1268,19 +1366,19 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				<# if ( data.id ) { #>
 					<div class="img">
 						<# if ( data.img ) { #>
-							<img src="{{data.img}}" alt="<?php _e( 'Theme preview', 'product-configurator-for-woocommerce' ); ?>">
+							<img src="{{data.img}}" alt="<?php esc_html_e( 'Theme preview', 'product-configurator-for-woocommerce' ); ?>">
 						<# } else { #>
-							<span class="no-preview"><span class="no-preview--label"><?php _e( 'No preview', 'product-configurator-for-woocommerce' ); ?></span></span>
+							<span class="no-preview"><span class="no-preview--label"><?php esc_html_e( 'No preview', 'product-configurator-for-woocommerce' ); ?></span></span>
 						<# } #>
 					</div>
 					<div class="content">
 						<h4>{{data.Name}}</h4>
 						<p>{{{data.Description}}}</p>
-						<button type="button" class="button mkl-pc--change-theme button"><?php _e( 'Change' ); ?></button>
+						<button type="button" class="button mkl-pc--change-theme button"><?php esc_html_e( 'Change', 'product-configurator-for-woocommerce' ); ?></button>
 					</div>
 				<# } else { #>
-						<p class="no-theme"><?php _e( 'No theme is in use.', 'product-configurator-for-woocommerce' ); ?></p>
-						<button type="button" class="button mkl-pc--change-theme button-primary"><?php _e( 'Select a theme', 'product-configurator-for-woocommerce' ); ?></button>
+						<p class="no-theme"><?php esc_html_e( 'No theme is in use.', 'product-configurator-for-woocommerce' ); ?></p>
+						<button type="button" class="button mkl-pc--change-theme button-primary"><?php esc_html_e( 'Select a theme', 'product-configurator-for-woocommerce' ); ?></button>
 				<# } #>
 			</script>
 			<script type="template/html" id="tmpl-mkl-pc-themes">
@@ -1289,8 +1387,8 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 					<footer>
 						<div class="selection"></div>
 						<div class="actions">
-							<button type="button" class="button button-primary select-theme"><?php _e( 'Select the theme', 'product-configurator-for-woocommerce' ); ?></button>
-							<button type="button" class="button cancel"><?php _e( 'Cancel' ); ?></button>
+							<button type="button" class="button button-primary select-theme"><?php esc_html_e( 'Select the theme', 'product-configurator-for-woocommerce' ); ?></button>
+							<button type="button" class="button cancel"><?php esc_html_e( 'Cancel', 'product-configurator-for-woocommerce' ); ?></button>
 						</div>
 					</footer>
 				</div>
@@ -1303,9 +1401,9 @@ if ( ! class_exists('MKL\PC\Admin_Settings') ) {
 				</div>
 				<div class="theme-preview">
 					<# if ( data.img ) { #>
-						<img src="{{data.img}}" alt="<?php _e( 'Theme preview', 'product-configurator-for-woocommerce' ); ?>">
+						<img src="{{data.img}}" alt="<?php echo esc_attr( esc_html__( 'Theme preview', 'product-configurator-for-woocommerce' ) ); ?>">
 					<# } else { #>
-						<span class="no-preview"><span class="no-preview--label"><?php _e( 'No preview', 'product-configurator-for-woocommerce' ); ?></span></span>
+						<span class="no-preview"><span class="no-preview--label"><?php esc_html_e( 'No preview', 'product-configurator-for-woocommerce' ); ?></span></span>
 					<# } #>
 				</div>
 				<button class="trigger"></button>

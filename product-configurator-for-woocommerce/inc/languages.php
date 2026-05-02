@@ -44,10 +44,11 @@ class Languages {
 	public function get_translatable_options_defaults() {
 		return apply_filters( 'mkl_pc_translatable_settings_defaults', [
 			'mkl_pc__button_label' => __( 'Configure', 'product-configurator-for-woocommerce' ),
-			'sku_glue' => __( '', 'product-configurator-for-woocommerce' ),
+			'sku_glue' => '',
 			'sku_label' => __( 'SKU', 'product-configurator-for-woocommerce' ),
 			'mc_max_items_message' => __( 'You have reached the maximum number of selectable items', 'product-configurator-for-woocommerce' ),
 			'mc_max_items_message_global' => __( 'You have reached the maximum number of selectable items for this product', 'product-configurator-for-woocommerce' ),
+			/* translators: %i: number of items, %s: layer name */
 			'mc_min_items_required_message' => __( 'Select at least %i items in %s', 'product-configurator-for-woocommerce' ),
 			'reset_configuration_label' => __( 'Reset configuration', 'product-configurator-for-woocommerce' ),
 			'edit_configuration_label' => __( 'Edit configuration', 'product-configurator-for-woocommerce' ),
@@ -56,8 +57,8 @@ class Languages {
 			'loading_configurator_message' => __( 'Loading the configurator...', 'product-configurator-for-woocommerce' ),
 			'download_config_image' => __( 'Download configuration image', 'product-configurator-for-woocommerce' ),
 			'view_configuration' => _x( 'View configuration', 'Label of the link to view a configuration, in the cart or an order', 'product-configurator-for-woocommerce' ),
-			'configuration_costs_label' => __( 'Configuration costs:', 'mkl-pc-extra-price' ),
-			'adv_desc_close_label' => __( 'Close', 'mkl-pc-advanced-description' ),
+			'configuration_costs_label' => __( 'Configuration costs:', 'product-configurator-for-woocommerce' ),
+			'adv_desc_close_label' => __( 'Close', 'product-configurator-for-woocommerce' ),
 			'previous_step_label' => _x( 'Previous', 'Previous step button label', 'product-configurator-for-woocommerce' ),
 			'next_step_label' => _x( 'Next', 'Next step button label', 'product-configurator-for-woocommerce' ),
 			'add_to_cart_success__redirection' => __( 'Successfully added to cart, now redirecting...', 'product-configurator-for-woocommerce' ),

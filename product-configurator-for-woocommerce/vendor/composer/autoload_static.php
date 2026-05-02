@@ -8,7 +8,6 @@ class ComposerStaticInit610b0851c78ab26fb66c9d083e63803f
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '256558b1ddf2fa4366ea7d7602798dd1' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p5.php',
     );
 
     public static $prefixLengthsPsr4 = array (

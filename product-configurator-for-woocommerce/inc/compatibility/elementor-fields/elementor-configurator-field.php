@@ -64,7 +64,7 @@ class Elementor_Configuration_Field extends \ElementorPro\Modules\Forms\Fields\F
 				// 'type' => 'hidden',
 			]
 		);
-		echo '<input type="hidden" ' . $form->get_render_attribute_string( 'input' . $item_index ) . '>';
+		echo '<input type="hidden" ' . esc_attr( $form->get_render_attribute_string( 'input' . $item_index ) ) . '>';
 		echo '<input type="hidden" name="configurator_data_raw">';
 		echo '<input type="hidden" name="configured_product_id">';
 		if ( isset( $item['show-config-in-form'] ) && 'yes' === $item['show-config-in-form'] ) {
@@ -146,8 +146,9 @@ class Elementor_Configuration_Field extends \ElementorPro\Modules\Forms\Fields\F
 	public function process_field( $field, $record, $ajax_handler ) {
 		if ( isset( $_REQUEST['configurator_data_raw'] ) ) {
 			$id = $field['id'];
-			$record->update_field( $id, 'value', apply_filters( 'mkl_pc/elementor_field/configuration_value', $field['value'], sanitize_text_field( $_REQUEST['configurator_data_raw'] ) ) );
-			$record->update_field( $id, 'raw_value', sanitize_text_field( $_REQUEST['configurator_data_raw'] ) );
+			$configurator_data_raw = sanitize_text_field( wp_unslash( $_REQUEST['configurator_data_raw'] ) );
+			$record->update_field( $id, 'value', apply_filters( 'mkl_pc/elementor_field/configuration_value', $field['value'], $configurator_data_raw ) );
+			$record->update_field( $id, 'raw_value', $configurator_data_raw );
 		}
 	}
 
@@ -193,7 +194,7 @@ class Elementor_Configuration_Field extends \ElementorPro\Modules\Forms\Fields\F
 		jQuery( document ).ready( () => {
 
 			elementor.hooks.addFilter(
-				'elementor_pro/forms/content_template/field/<?php echo $this->get_type(); ?>',
+				'elementor_pro/forms/content_template/field/<?php echo esc_attr( $this->get_type() ); ?>',
 				function ( inputField, item, i ) {
 					const fieldId      = `form_field_${i}`;
 					const fieldClass   = `elementor-field-textual elementor-field-configuration-summary elementor-field ${item.css_classes}`;

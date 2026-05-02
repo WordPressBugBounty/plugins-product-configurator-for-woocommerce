@@ -336,7 +336,7 @@ class DB {
 						'text' => __( 'Cancel', 'product-configurator-for-woocommerce' ),
 					),
 				),
-				'description' => __( 'Define the conditions for displaying or not the choices / layers', 'mkl-pc-conditional-logic' ),
+				'description' => __( 'Define the conditions for displaying or not the choices / layers', 'product-configurator-for-woocommerce' ),
 				'order' => 101,
 			);			
 		}
@@ -906,12 +906,12 @@ class DB {
 		// Force the protocols to match if needed.
 		if ( ! isset( $image_path['basename'] ) ) return false;
 		
-		$sql = $wpdb->prepare(
-			"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s",
-			'%/'.$image_path['basename']
+		$results = $wpdb->get_results( 
+			$wpdb->prepare(
+				"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s",
+				'%/'.$image_path['basename']
+			)
 		);
-	
-		$results = $wpdb->get_results( $sql );
 		$post_id = null;
 	
 		if ( $results ) {

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 function mkl_pc_dark_theme_scripts() {
 	wp_enqueue_script( 'mkl/pc/themes/dark-mode', plugin_dir_url( __FILE__ ) . 'dark-mode.js', [ 'wp-hooks', 'jquery' ], filemtime( plugin_dir_path( __FILE__ ) . 'dark-mode.js' ), true );
 }
@@ -9,7 +12,7 @@ add_filter( 'mkl_pc_bg_image', function( $bg ) {
 }, 30 );
 
 function mkl_pc_dark_theme_add_reset_icon() {
-	echo file_get_contents( trailingslashit( MKL_PC_INCLUDE_PATH ) . 'themes-common/icons/reset.svg' );
+	echo \MKL\PC\Utils::inline_svg( trailingslashit( MKL_PC_INCLUDE_PATH ) . 'themes-common/icons/reset.svg' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG output is sanitized via Utils::inline_svg().
 }
 add_action( 'mkl_pc/reset_button/before_label', 'mkl_pc_dark_theme_add_reset_icon' );
 
