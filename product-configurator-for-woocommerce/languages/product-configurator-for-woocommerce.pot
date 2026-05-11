@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2026-05-07 15:18+0000\n"
+"POT-Creation-Date: 2026-05-11 10:32+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Configure"
 msgstr ""
 
-#: src/inc/languages.php:48, src/inc/admin/settings-page.php:723, src/inc/frontend/cart.php:263, src/inc/admin/settings/choice.php:68
+#: src/inc/languages.php:48, src/inc/admin/settings-page.php:723, src/inc/frontend/cart.php:270, src/inc/admin/settings/choice.php:68
 msgid "SKU"
 msgstr ""
 
@@ -199,7 +199,7 @@ msgstr ""
 msgid "Reset configuration"
 msgstr ""
 
-#: src/inc/languages.php:54, src/inc/admin/settings-page.php:926, src/inc/admin/settings-page.php:932, src/inc/frontend/cart.php:522, src/inc/frontend/cart.php:678
+#: src/inc/languages.php:54, src/inc/admin/settings-page.php:926, src/inc/admin/settings-page.php:932, src/inc/frontend/cart.php:528, src/inc/frontend/cart.php:737
 msgid "Edit configuration"
 msgstr ""
 
@@ -876,7 +876,7 @@ msgstr ""
 msgid "Configuration (meta label in the cart)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:980, src/inc/compatibility/yith-quote-request.php:295, src/inc/frontend/cart.php:279, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
+#: src/inc/admin/settings-page.php:980, src/inc/compatibility/yith-quote-request.php:295, src/inc/frontend/cart.php:286, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
 msgid "Configuration"
 msgstr ""
 
@@ -1017,7 +1017,7 @@ msgstr ""
 msgid "Show the configure button and hide the add to cart button"
 msgstr ""
 
-#: src/inc/frontend/cart.php:62
+#: src/inc/frontend/cart.php:66
 msgctxt "Error message when configuration data is missing on add to cart"
 msgid "Configuration data is missing, the product could not be added to the cart."
 msgstr ""
@@ -1035,90 +1035,90 @@ msgid "The global product variable is not a WC_Product instance"
 msgstr ""
 
 #. translators: %s: field name
-#: src/inc/frontend/frontend-woocommerce.php:419
+#: src/inc/frontend/frontend-woocommerce.php:421
 msgid "%s is required"
 msgstr ""
 
 #. translators: %s: choice name
-#: src/inc/frontend/frontend-woocommerce.php:421
+#: src/inc/frontend/frontend-woocommerce.php:423
 msgctxt "Screen reader text, Selected choices prefix"
 msgid "Selected: %s"
 msgstr ""
 
 #. translators: %s: choice name
-#: src/inc/frontend/frontend-woocommerce.php:423
+#: src/inc/frontend/frontend-woocommerce.php:425
 msgctxt "Screen reader text, Selected choices none"
 msgid "Selected: none"
 msgstr ""
 
 #. translators: %s: choice name
-#: src/inc/frontend/frontend-woocommerce.php:425
+#: src/inc/frontend/frontend-woocommerce.php:427
 msgctxt "Screen reader text, choice action selected"
 msgid "selected"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:426
+#: src/inc/frontend/frontend-woocommerce.php:428
 msgctxt "Screen reader text, choice action removed"
 msgid "removed"
 msgstr ""
 
 #. translators: %1$s: layer name, %2$s: action, %3$s: choice name
-#: src/inc/frontend/frontend-woocommerce.php:428
+#: src/inc/frontend/frontend-woocommerce.php:430
 msgctxt "Screen reader text, choice action announcement template. 1: layer name, 2: action, 3: choice name"
 msgid "%1$s: %2$s %3$s"
 msgstr ""
 
 #. translators: %d: number of errors
-#: src/inc/frontend/frontend-woocommerce.php:430
+#: src/inc/frontend/frontend-woocommerce.php:432
 msgctxt "Screen reader text, validation errors count"
 msgid "%d errors found."
 msgstr ""
 
 #. translators: %d: number of errors
-#: src/inc/frontend/frontend-woocommerce.php:432
+#: src/inc/frontend/frontend-woocommerce.php:434
 msgctxt "Screen reader text, focus moved to first invalid control"
 msgid "Focus moved to first error."
 msgstr ""
 
 #. translators: %d: number of errors
-#: src/inc/frontend/frontend-woocommerce.php:434
+#: src/inc/frontend/frontend-woocommerce.php:436
 msgctxt "Screen reader text, focus moved to validation summary"
 msgid "Focus moved to validation summary."
 msgstr ""
 
 #. translators: %d: number of errors
-#: src/inc/frontend/frontend-woocommerce.php:436
+#: src/inc/frontend/frontend-woocommerce.php:438
 msgctxt "Screen reader text, validation summary heading"
 msgid "Please review the following errors:"
 msgstr ""
 
 #. translators: %s: formatted total price
-#: src/inc/frontend/frontend-woocommerce.php:438
+#: src/inc/frontend/frontend-woocommerce.php:440
 msgctxt "Screen reader text, total price label template. %s: formatted total price"
 msgid "Total: %s"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:439
+#: src/inc/frontend/frontend-woocommerce.php:441
 msgctxt "Screen reader text, separator used between layer and choice/group names in validation messages"
 msgid ", "
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:440
+#: src/inc/frontend/frontend-woocommerce.php:442
 msgctxt "Aria label of the choices list"
 msgid "Select options for the product"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:441
+#: src/inc/frontend/frontend-woocommerce.php:443
 msgid "Product configurator"
 msgstr ""
 
 #. translators: %1$s: step number, %2$s: total steps, %3$s: step name
-#: src/inc/frontend/frontend-woocommerce.php:443
+#: src/inc/frontend/frontend-woocommerce.php:445
 msgctxt "Screen reader text, current step label template. %1$s: step number, %2$s: total steps, %3$s: step name"
 msgid "Current step %1$s of %2$s: %3$s"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:677
+#: src/inc/frontend/frontend-woocommerce.php:679
 msgid "SKU:"
 msgstr ""
 
@@ -1159,6 +1159,38 @@ msgstr ""
 
 #: src/inc/frontend/product.php:317
 msgid "Please select a variation to configure"
+msgstr ""
+
+#: src/inc/security/class-captcha-adapters.php:36, src/inc/security/class-captcha-adapters.php:53
+msgid "Captcha required."
+msgstr ""
+
+#: src/inc/security/class-captcha-adapters.php:39, src/inc/security/class-captcha-adapters.php:73, src/inc/security/class-captcha-adapters.php:78, src/inc/security/class-captcha-adapters.php:83
+msgid "Captcha is unavailable."
+msgstr ""
+
+#: src/inc/security/class-captcha-adapters.php:44, src/inc/security/class-captcha-adapters.php:114, src/inc/security/class-captcha-adapters.php:119, src/inc/security/class-captcha-adapters.php:129
+msgid "Captcha verification failed."
+msgstr ""
+
+#: src/inc/security/class-captcha-adapters.php:59
+msgid "Invalid captcha provider."
+msgstr ""
+
+#: src/inc/security/class-frontend-action-token.php:44, src/inc/security/class-frontend-action-token.php:77
+msgid "Invalid action."
+msgstr ""
+
+#: src/inc/security/class-frontend-action-token.php:74, src/inc/security/class-frontend-action-token.php:83, src/inc/security/class-frontend-action-token.php:87, src/inc/security/class-frontend-action-token.php:91
+msgid "This session has expired. Please try again."
+msgstr ""
+
+#: src/inc/security/class-rate-limiter.php:95
+msgid "Invalid rate limit action."
+msgstr ""
+
+#: src/inc/security/class-rate-limiter.php:107
+msgid "Too many requests. Please try again later."
 msgstr ""
 
 #: src/inc/themes-common/customizer-no-form-modal.php:35

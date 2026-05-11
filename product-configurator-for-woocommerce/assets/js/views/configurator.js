@@ -1027,8 +1027,8 @@ PC.fe.views.form = Backbone.View.extend({
 		return this.$el;
 	},
 
-	validate_configuration: function() {
-		var data = PC.fe.save_data.save();
+	validate_configuration: async function() {
+		var data = await PC.fe.save_data.getSaveDataAsync();
 		var errors = wp.hooks.applyFilters( 'PC.fe.validate_configuration', PC.fe.errors );
 		if ( errors.length ) {
 			if ( PC.fe.show_validation_errors ) {
@@ -1052,9 +1052,9 @@ PC.fe.views.form = Backbone.View.extend({
 		$( 'input[name=pc_configurator_data]' ).val( data );
 	},
 
-	add_to_cart: function( e ) {
+	add_to_cart: async function( e ) {
 
-		var data = this.validate_configuration();
+		var data = await this.validate_configuration();
 		
 		if ( ! data ) {
 			return;
@@ -1131,6 +1131,14 @@ PC.fe.views.form = Backbone.View.extend({
 					}
 				});
 
+				/**
+				 * Append extra multipart fields (add-ons). Default FormData is unchanged.
+				 *
+				 * @param {FormData} request_body Body sent to `pc_add_to_cart`.
+				 * @param {Backbone.View} form_view This form view instance.
+				 */
+				wp.hooks.doAction( 'PC.fe.add_to_cart.append_ajax_request_body', request_body, this );
+
 				/* 
 					Add to cart request
 				*/
@@ -1166,6 +1174,14 @@ PC.fe.views.form = Backbone.View.extend({
 				.catch( error => {
 					console.error( 'Configurator: Error in form submission' );
 					console.error( error );
+				} )
+				.finally( () => {
+					/**
+					 * Run after ajax add-to-cart settles (success, error, or network failure).
+					 *
+					 * @param {Backbone.View} form_view This form view instance.
+					 */
+					wp.hooks.doAction( 'PC.fe.add_to_cart.ajax_request_finally', this );
 				} );
 
 				return;
@@ -1218,9 +1234,9 @@ PC.fe.views.form = Backbone.View.extend({
 		PC.fe.modal.$el.removeClass( 'adding-to-cart' );
 	},
 	
-	add_to_quote: function( e ) {
+	add_to_quote: async function( e ) {
 
-		var data = this.validate_configuration();
+		var data = await this.validate_configuration();
 		
 		if ( ! data ) {
 			return;
@@ -1252,7 +1268,6 @@ PC.fe.views.form = Backbone.View.extend({
 	qty_change: function( e ) {
 		
 		PC.fe.currentProductData.product_info.qty = $( e.target ).val();
-		console.log( 'qty_change', PC.fe.currentProductData.product_info.qty, typeof pc_get_extra_price );
 		// If Extra price is not installed, check if price needs an update
 		if ( 'undefined' === typeof pc_get_extra_price && PC.fe.currentProductData.product_info?.price_tiers ) {
 			$( '.pc-total-price' ).html( PC.utils.formatMoney( PC.fe.get_product_price() ) );
@@ -1741,6 +1756,15 @@ PC.fe.save_data = {
 		PC.fe.layers.each( this.parse_choices, this ); 
 		this.choices = wp.hooks.applyFilters( 'PC.fe.save_data.choices', this.choices );
 		return JSON.stringify( this.choices );
+	},
+	/**
+	 * Async variant: runs "before save" promises (plugins inject via PC.fe.save_data.before_save.promises),
+	 * then calls save(). Use for add-to-cart / add-to-quote so plugins can e.g. export base64 first.
+	 */
+	getSaveDataAsync: async function( reset_errors ) {
+		var promises = wp.hooks.applyFilters( 'PC.fe.save_data.before_save.promises', [] );
+		await Promise.all( promises );
+		return this.save( reset_errors );
 	},
 	get_choices: function( reset_errors ) {
 		this.save( reset_errors );

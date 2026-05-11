@@ -304,7 +304,7 @@ class Frontend_Woocommerce {
 		wp_enqueue_style( 'mlk_pc/css/woocommerce' );
 		
 		// Register vendor scripts
-		wp_register_script( 'pixijs', MKL_PC_ASSETS_URL . 'js/vendor/pixi.min.js', [], '6.0.1', true );
+		wp_register_script( 'pixijs', MKL_PC_ASSETS_URL . 'js/vendor/pixi.min.js', [], '8.16.0', true );
 		wp_register_script( 'mkl_pc/html2canvas', MKL_PC_ASSETS_URL . 'js/vendor/html2canvas.min.js', [], '1.4.1', true );
 		wp_register_script( 'mkl_pc/touchswipe', MKL_PC_ASSETS_URL . 'js/vendor/jquery.touchSwipe.min.js', [], '1.6.18', true );
 
@@ -409,6 +409,8 @@ class Frontend_Woocommerce {
 		$args = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'image_endpoint' => get_rest_url() . 'mkl_pc/v1/merge/',
+			'frontend_action_token_url' => esc_url_raw( rest_url( 'mkl_pc/v1/frontend-action-token' ) ),
+			'rest_nonce' => is_user_logged_in() ? wp_create_nonce( 'wp_rest' ) : '',
 			'lang' => array(
 				'money_precision' => wc_get_price_decimals(),
 				'money_symbol' => get_woocommerce_currency_symbol( get_woocommerce_currency() ),

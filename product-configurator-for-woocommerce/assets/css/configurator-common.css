@@ -353,6 +353,7 @@ body.show-add-to-cart-modal.configurator_is_inline .adding-to-cart--modal {
   background: #FFF;
   border-radius: 11px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.0588235294);
+  max-width: 700px;
 }
 .adding-to-cart--modal .has-box .header {
   text-align: center;
