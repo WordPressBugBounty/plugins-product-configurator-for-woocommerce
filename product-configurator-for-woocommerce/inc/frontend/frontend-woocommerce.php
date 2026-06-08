@@ -51,6 +51,7 @@ class Frontend_Woocommerce {
 		// variation: include text when prod configurator is opened and no variation is selected
 		add_shortcode( 'mkl_configurator_button', array( $this, 'button_shortcode' ) );
 		add_shortcode( 'mkl_configurator', array( $this, 'configurator_shortcode' ) );
+		add_shortcode( 'mkl_configuration_price', array( $this, 'configuration_price_shortcode' ) );
 		add_action( 'rest_api_init', array( $this, 'register_rest_route' ) );
 		add_filter( 'mkl_product_configurator_get_front_end_data', array( $this, 'set_thumbnail_url' ), 20 );
 
@@ -272,6 +273,63 @@ class Frontend_Woocommerce {
 	}
 
 	/**
+	 * Display the configured price for a saved configuration.
+	 *
+	 * Usage: [mkl_configuration_price id="123"] or [mkl_configuration_price config_id="123" part="extra"]
+	 *
+	 * @param array  $atts    Shortcode attributes.
+	 * @param string $content Enclosed content (unused).
+	 * @return string
+	 */
+	public function configuration_price_shortcode( $atts, $content = '' ) {
+		unset( $content );
+
+		$atts = shortcode_atts(
+			array(
+				'id'           => 0,
+				'config_id'    => 0,
+				'variation_id' => 0,
+				'quantity'     => 1,
+				'part'         => 'total',
+			),
+			$atts,
+			'mkl_configuration_price'
+		);
+
+		$config_id = absint( $atts['id'] ? $atts['id'] : $atts['config_id'] );
+		if ( ! $config_id || ! function_exists( 'mkl_pc_get_configuration_price' ) ) {
+			return '';
+		}
+
+		$price_args = array();
+		if ( $atts['variation_id'] ) {
+			$price_args['variation_id'] = absint( $atts['variation_id'] );
+		}
+		if ( is_numeric( $atts['quantity'] ) && 1 !== floatval( $atts['quantity'] ) ) {
+			$price_args['quantity'] = floatval( $atts['quantity'] );
+		}
+
+		$price = mkl_pc_get_configuration_price( $config_id, $price_args );
+		if ( is_wp_error( $price ) ) {
+			return '';
+		}
+
+		$part = sanitize_key( $atts['part'] );
+		if ( ! in_array( $part, array( 'total', 'base', 'extra' ), true ) ) {
+			$part = 'total';
+		}
+
+		if ( 'total' === $part && ! empty( $price['formatted'] ) ) {
+			$output = $price['formatted'];
+		} else {
+			$amount = isset( $price[ $part ] ) ? $price[ $part ] : $price['total'];
+			$output = wc_price( $amount );
+		}
+
+		return apply_filters( 'mkl_pc_configuration_price_shortcode_output', $output, $price, $atts, $config_id );
+	}
+
+	/**
 	 * Whether the configurator should be loaded on the page
 	 *
 	 * @return boolean
@@ -470,6 +528,11 @@ class Frontend_Woocommerce {
 				'steps_use_layer_name' => ( bool ) mkl_pc( 'settings')->get( 'steps_use_layer_name', false ),
 				'steps_progress_enable_click_all' => ( bool ) mkl_pc( 'settings')->get( 'steps_progress_enable_click_all', false ),
 				'enable_configurator_ajax_add_to_cart' => ( bool ) mkl_pc( 'settings')->get( 'enable_configurator_ajax_add_to_cart', false ),
+				'reset_configurator_on_ajax_add_to_cart' => apply_filters(
+					'mkl_pc/reset_configurator_on_ajax_add_to_cart',
+					( bool ) mkl_pc( 'settings' )->get( 'reset_configurator_on_ajax_add_to_cart', false ),
+					$post ? $post->ID : 0
+				),
 				'mobile_image_breakpoint' => 660,
 				'large_image_breakpoint' => 2200,
 				'angles' => [
