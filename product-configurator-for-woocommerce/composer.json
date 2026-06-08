@@ -2,10 +2,5 @@
 	"require": {
 		"intervention/image": "^2.7"
 	},
-	"prefer-stable": true,
-	"scripts": {
-		"post-install-cmd": "@apply-intervention-patch",
-		"post-update-cmd": "@apply-intervention-patch",
-		"apply-intervention-patch": "bash -c 'patch -p1 -N -d vendor/intervention/image < patches/intervention-image-response.patch; r=$?; rm -f vendor/intervention/image/src/Intervention/Image/Response.php.rej; exit $(( r > 1 ? r : 0 ))'"
-	}
+	"prefer-stable" : true
 }

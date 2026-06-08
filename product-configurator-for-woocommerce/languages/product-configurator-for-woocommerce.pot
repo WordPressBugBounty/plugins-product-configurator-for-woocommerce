@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2026-06-08 08:44+0000\n"
+"POT-Creation-Date: 2026-06-08 10:31+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -33,68 +33,72 @@ msgstr ""
 msgid "WooCommerce Version 3+ required."
 msgstr ""
 
-#: src/inc/ajax.php:79, src/inc/ajax.php:88
+#: src/inc/ajax.php:79, src/inc/ajax.php:88, src/inc/ajax.php:95
 msgid "Error getting the configurator data:"
 msgstr ""
 
-#: src/inc/ajax.php:214
-msgid "Error saving the data:"
+#: src/inc/ajax.php:93
+msgid "You are not allowed to view this product."
 msgstr ""
 
-#: src/inc/ajax.php:214, src/inc/ajax.php:337
+#: src/inc/ajax.php:95, src/inc/ajax.php:288, src/inc/ajax.php:411
 msgid "The session seems to have expired."
 msgstr ""
 
-#: src/inc/ajax.php:218
+#: src/inc/ajax.php:288
+msgid "Error saving the data:"
+msgstr ""
+
+#: src/inc/ajax.php:292
 msgid "You are not allowed to edit this product."
 msgstr ""
 
-#: src/inc/ajax.php:222
+#: src/inc/ajax.php:296
 msgid "Expecting a data type"
 msgstr ""
 
-#: src/inc/ajax.php:229
+#: src/inc/ajax.php:303
 msgid "No data was received"
 msgstr ""
 
-#: src/inc/ajax.php:279
+#: src/inc/ajax.php:353
 msgid "You are not allowed to purge the configuration cache."
 msgstr ""
 
-#: src/inc/ajax.php:289
+#: src/inc/ajax.php:363
 msgid "You are not allowed to toggle the configuration images in the library."
 msgstr ""
 
 #. translators: %d: number of database rows affected
-#: src/inc/ajax.php:315
+#: src/inc/ajax.php:389
 msgid "%d rows were affected"
 msgstr ""
 
-#: src/inc/ajax.php:324
+#: src/inc/ajax.php:398
 msgid "You are not allowed to fix the image ids."
 msgstr ""
 
-#: src/inc/ajax.php:334
+#: src/inc/ajax.php:408
 msgid "You are not allowed to fix the image ids from the configurator."
 msgstr ""
 
-#: src/inc/ajax.php:337
+#: src/inc/ajax.php:411
 msgid "Error processing the request:"
 msgstr ""
 
-#: src/inc/ajax.php:359, src/inc/ajax.php:365
+#: src/inc/ajax.php:433, src/inc/ajax.php:439
 msgid "No data to process"
 msgstr ""
 
-#: src/inc/ajax.php:370
+#: src/inc/ajax.php:444
 msgid "Unauthorized action"
 msgstr ""
 
-#: src/inc/ajax.php:433
+#: src/inc/ajax.php:507
 msgid "You are not allowed to get the configurable products."
 msgstr ""
 
-#: src/inc/ajax.php:495, src/inc/languages.php:64, src/inc/admin/settings-page.php:1052
+#: src/inc/ajax.php:569, src/inc/languages.php:64, src/inc/admin/settings-page.php:1052
 msgid "Successfully added to cart, now redirecting..."
 msgstr ""
 
@@ -1055,90 +1059,90 @@ msgid "The global product variable is not a WC_Product instance"
 msgstr ""
 
 #. translators: %s: field name
-#: src/inc/frontend/frontend-woocommerce.php:479
+#: src/inc/frontend/frontend-woocommerce.php:480
 msgid "%s is required"
 msgstr ""
 
 #. translators: %s: choice name
-#: src/inc/frontend/frontend-woocommerce.php:481
+#: src/inc/frontend/frontend-woocommerce.php:482
 msgctxt "Screen reader text, Selected choices prefix"
 msgid "Selected: %s"
 msgstr ""
 
 #. translators: %s: choice name
-#: src/inc/frontend/frontend-woocommerce.php:483
+#: src/inc/frontend/frontend-woocommerce.php:484
 msgctxt "Screen reader text, Selected choices none"
 msgid "Selected: none"
 msgstr ""
 
 #. translators: %s: choice name
-#: src/inc/frontend/frontend-woocommerce.php:485
+#: src/inc/frontend/frontend-woocommerce.php:486
 msgctxt "Screen reader text, choice action selected"
 msgid "selected"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:486
+#: src/inc/frontend/frontend-woocommerce.php:487
 msgctxt "Screen reader text, choice action removed"
 msgid "removed"
 msgstr ""
 
 #. translators: %1$s: layer name, %2$s: action, %3$s: choice name
-#: src/inc/frontend/frontend-woocommerce.php:488
+#: src/inc/frontend/frontend-woocommerce.php:489
 msgctxt "Screen reader text, choice action announcement template. 1: layer name, 2: action, 3: choice name"
 msgid "%1$s: %2$s %3$s"
 msgstr ""
 
 #. translators: %d: number of errors
-#: src/inc/frontend/frontend-woocommerce.php:490
+#: src/inc/frontend/frontend-woocommerce.php:491
 msgctxt "Screen reader text, validation errors count"
 msgid "%d errors found."
 msgstr ""
 
 #. translators: %d: number of errors
-#: src/inc/frontend/frontend-woocommerce.php:492
+#: src/inc/frontend/frontend-woocommerce.php:493
 msgctxt "Screen reader text, focus moved to first invalid control"
 msgid "Focus moved to first error."
 msgstr ""
 
 #. translators: %d: number of errors
-#: src/inc/frontend/frontend-woocommerce.php:494
+#: src/inc/frontend/frontend-woocommerce.php:495
 msgctxt "Screen reader text, focus moved to validation summary"
 msgid "Focus moved to validation summary."
 msgstr ""
 
 #. translators: %d: number of errors
-#: src/inc/frontend/frontend-woocommerce.php:496
+#: src/inc/frontend/frontend-woocommerce.php:497
 msgctxt "Screen reader text, validation summary heading"
 msgid "Please review the following errors:"
 msgstr ""
 
 #. translators: %s: formatted total price
-#: src/inc/frontend/frontend-woocommerce.php:498
+#: src/inc/frontend/frontend-woocommerce.php:499
 msgctxt "Screen reader text, total price label template. %s: formatted total price"
 msgid "Total: %s"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:499
+#: src/inc/frontend/frontend-woocommerce.php:500
 msgctxt "Screen reader text, separator used between layer and choice/group names in validation messages"
 msgid ", "
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:500
+#: src/inc/frontend/frontend-woocommerce.php:501
 msgctxt "Aria label of the choices list"
 msgid "Select options for the product"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:501
+#: src/inc/frontend/frontend-woocommerce.php:502
 msgid "Product configurator"
 msgstr ""
 
 #. translators: %1$s: step number, %2$s: total steps, %3$s: step name
-#: src/inc/frontend/frontend-woocommerce.php:503
+#: src/inc/frontend/frontend-woocommerce.php:504
 msgctxt "Screen reader text, current step label template. %1$s: step number, %2$s: total steps, %3$s: step name"
 msgid "Current step %1$s of %2$s: %3$s"
 msgstr ""
 
-#: src/inc/frontend/frontend-woocommerce.php:742
+#: src/inc/frontend/frontend-woocommerce.php:743
 msgid "SKU:"
 msgstr ""
 
