@@ -156,6 +156,7 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
 .mkl_pc_toolbar .steps-progress--container ol.steps-progress > li.steps-progress--item a {
   font-weight: bold;
   white-space: nowrap;
+  text-decoration: none;
 }
 .mkl_pc_toolbar .steps-progress--container ol.steps-progress > li.steps-progress--item a::before {
   content: counter(steps-progress) ". ";
@@ -200,7 +201,7 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
 .mkl_pc_summary > .mkl_pc_summary_item_group.group > h5 {
   color: var(--mkl_pc_color-ll1);
   text-decoration: underline;
-  font-size: larger;
+  font-size: 1.125em;
   display: block;
   padding: 10px 0 3px 0;
 }
@@ -570,7 +571,7 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   box-shadow: 0 15px 30px rgba(63, 67, 74, 0.1);
   border-radius: 8px;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li:not(.type-step).not-a-choice, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li:not(.type-step).type-summary, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.type-step > .layer_choices > .choices-list > ul > li.layers-list-item.not-a-choice, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.type-step > .layer_choices > .choices-list > ul > li.layers-list-item.type-summary {
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li:not(.type-step).not-a-choice, .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li.type-step > .layer_choices > .choices-list > ul > li.layers-list-item.not-a-choice {
   box-shadow: none;
   border-radius: 0;
 }
@@ -599,6 +600,9 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   left: 8px;
   top: 50%;
   transform: translateY(-50%);
+}
+.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li .type-summary {
+  padding: 10px;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul > li button {
   border: none;

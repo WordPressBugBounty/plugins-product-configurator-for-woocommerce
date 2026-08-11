@@ -179,6 +179,7 @@ button.variations_button.disabled,
   color: #7a1313;
   font-size: 1rem;
   max-height: 200px;
+  overflow: auto;
 }
 .mkl_pc .mkl_pc_container .mkl-pc-validation-summary:focus {
   outline: 2px solid #7a1313;

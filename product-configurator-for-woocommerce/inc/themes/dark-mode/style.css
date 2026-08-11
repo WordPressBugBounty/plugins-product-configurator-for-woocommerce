@@ -1358,7 +1358,7 @@ body.configurator_is_inline .mkl_pc .mkl_pc_container .cancel {
 .mkl_pc_summary > .mkl_pc_summary_item_group.group > h5 {
   color: var(--mkl_pc_color-ll1);
   text-decoration: underline;
-  font-size: larger;
+  font-size: 1.125em;
   display: block;
   padding: 10px 0 3px 0;
 }
@@ -1647,6 +1647,7 @@ nav.mkl-pc--steps button.step-previous:disabled svg path {
 .mkl_pc_toolbar .steps-progress--container ol.steps-progress > li.steps-progress--item a {
   font-weight: bold;
   white-space: nowrap;
+  text-decoration: none;
 }
 .mkl_pc_toolbar .steps-progress--container ol.steps-progress > li.steps-progress--item a::before {
   content: counter(steps-progress) ". ";

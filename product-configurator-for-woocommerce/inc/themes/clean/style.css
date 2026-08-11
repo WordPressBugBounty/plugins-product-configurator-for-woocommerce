@@ -38,6 +38,7 @@ Supports: columns, color_swatches
 @media (max-width: 660px) {
   :root {
     --mkl_pc_toolbar_width: var( --mkl_pc_toolbar_width_small );
+    --mkl_pc_border-radius: 10px;
   }
 }
 @media (max-height: 500px) and (orientation: landscape) {
@@ -170,13 +171,11 @@ Supports: columns, color_swatches
   background-size: cover;
   border-bottom-left-radius: var(--mkl_pc_border-radius);
   background-color: var(--mkl_pc_color-viewer-bg);
-  transition: all 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01);
   z-index: 3;
 }
 @media (max-width: 660px) {
-  .mkl_pc.showing-choices .mkl_pc_bg {
-    --mkl_pc_toolbar_width: var( --mkl_pc_toolbar_width_small );
-    transform: translateX(calc(250px - var(--mkl_pc_toolbar_width_small)));
+  .mkl_pc .mkl_pc_container .mkl_pc_bg {
+    transition: left 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01);
   }
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer {
@@ -188,16 +187,14 @@ Supports: columns, color_swatches
   bottom: var(--mkl_pc_footer_height);
   border-bottom-left-radius: var(--mkl_pc_border-radius);
   background-color: var(--mkl_pc_color-viewer-bg);
-  transition: all 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01);
+}
+@media (max-width: 660px) {
+  .mkl_pc .mkl_pc_container .mkl_pc_viewer {
+    transition: left 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01);
+  }
 }
 .mkl_pc_bg + .mkl_pc .mkl_pc_container .mkl_pc_viewer {
   background-color: transparent;
-}
-@media (max-width: 660px) {
-  .mkl_pc.showing-choices .mkl_pc_viewer {
-    --mkl_pc_toolbar_width: var( --mkl_pc_toolbar_width_small );
-    transform: translateX(calc(250px - var(--mkl_pc_toolbar_width_small)));
-  }
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .angles-select {
   position: absolute;
@@ -289,10 +286,16 @@ Supports: columns, color_swatches
   user-select: none;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
-  transition: 0.2s all;
+  transition: opacity 0.2s ease;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.active:not(.loading) {
+  opacity: 1;
+  visibility: visible;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
   position: absolute;
@@ -300,6 +303,9 @@ Supports: columns, color_swatches
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   max-height: 100%;
+  max-width: 100%;
+  height: auto;
+  width: auto;
   -webkit-user-drag: none;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers .custom-html {
@@ -321,7 +327,7 @@ Supports: columns, color_swatches
   left: 2em;
   bottom: 2em;
   opacity: 0;
-  transition: all 0.2s;
+  transition: opacity 0.2s ease;
   border-radius: 50%;
   -webkit-animation: sk-scaleout 1s infinite ease-in-out;
   animation: sk-scaleout 1s infinite ease-in-out;
@@ -410,7 +416,7 @@ Supports: columns, color_swatches
   bottom: 0;
   left: 0;
   right: 0;
-  transition: all 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01);
+  transition: transform 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01), visibility 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01), box-shadow 0.3s cubic-bezier(0.02, 0.5, 0.14, 1.01);
   background: var(--mkl_pc_color-container-bg);
   transform: translateX(100%);
   overflow: auto;
@@ -912,12 +918,9 @@ Supports: columns, color_swatches
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layers li.active > button i {
   opacity: 1;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layers.opened {
-  transform: translateX(-100%);
-}
-@media (max-width: 660px) {
+@media (min-width: 660px) {
   .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices .layers.opened {
-    transform: translateX(100%);
+    transform: translateX(-100%);
   }
 }
 @media (max-width: 660px) {
@@ -962,8 +965,18 @@ Supports: columns, color_swatches
   display: none;
 }
 @media (max-width: 660px) {
+  .mkl_pc .mkl_pc_container .mkl_pc_toolbar {
+    bottom: var(--mkl_pc_footer_height);
+  }
   .mkl_pc.showing-choices {
     --mkl_pc_toolbar_width: 250px;
+  }
+  .mkl_pc.showing-choices .mkl_pc_toolbar {
+    z-index: 5;
+  }
+  .mkl_pc.showing-choices .mkl_pc_viewer,
+  .mkl_pc.showing-choices .mkl_pc_bg {
+    left: var(--mkl_pc_toolbar_width_small);
   }
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar input[type=text],
@@ -996,7 +1009,7 @@ Supports: columns, color_swatches
 .mkl_pc .mkl_pc_container .mkl_pc_summary > .mkl_pc_summary_item_group.group > h5 {
   color: var(--mkl_pc_color-ll1);
   text-decoration: underline;
-  font-size: larger;
+  font-size: 1.125em;
   display: block;
   padding: 10px 0 3px 0;
 }
