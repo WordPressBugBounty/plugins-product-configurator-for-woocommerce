@@ -4,7 +4,7 @@ Tags: woocommerce,customize,product addons,custom product, product builder
 Donate link: https://paypal.me/marclacro1x
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 Requires PHP: 7.4
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -17,7 +17,7 @@ Allow your customers to create configurable products with a live preview of the 
 
 Give your customers an interactive experience and eliminate the need for hundreds of product variations and images. Export image layers from Photoshop, 3D renders, or other sources, and let the user assemble their product dynamically: no need for technical skills or bulky setups
 
-==== V2 is Coming soon, with 3D viewer, global configurators and more. [Read more here](https://wc-product-configurator.com/2026/08/03/whats-new-in-product-configurator-v2/)  ====
+**V2 is Coming soon, with 3D viewer**, global configurators and more. [Read more about v2 here](https://wc-product-configurator.com/2026/08/03/whats-new-in-product-configurator-v2/)
 
 **Perfect for:**
 
@@ -173,6 +173,10 @@ We recommend using a plugin such as WP-Optimize for all-round performance improv
 
 
 == Changelog ==
+
+= 1.7.6 - 5/Oct/2026 =
+
+* SECURITY: Prevent PHP object injection via configurator data — reject non-JSON saves and do not unserialize objects on read
 
 = 1.7.5 - 11/Aug/2026 =
 
@@ -487,4 +491,4 @@ We recommend using a plugin such as WP-Optimize for all-round performance improv
 
 == Upgrade Notice ==
 
-* 1.7.5 Various fixes and improvements. See changelog for details.
+* 1.7.6 Security fix. Please update.
