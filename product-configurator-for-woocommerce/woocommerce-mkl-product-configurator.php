@@ -3,14 +3,14 @@
 /**
 * Plugin Name: Product Configurator for WooCommerce
 * Plugin URI: http://wc-product-configurator.com
-* Description: Allow customers to configure and customize their products using a live preview powered by a system of layers
+* Description: Allow customers to configure and customize their products with a live 2D or 3D preview, built from image layers or 3D models
 * Author: Marc Lacroix
 * Author URI: http://mklacroix.com
-* Version: 1.7.6
+* Version: 2.0.0
 * Requires PHP: 7.4
 * Requires Plugins: woocommerce
 * WC requires at least: 8
-* WC tested up to: 10
+* WC tested up to: 11.2
 *
 * Text Domain: product-configurator-for-woocommerce
 * Domain Path: /languages/
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-define( 'MKL_PC_VERSION', '1.7.6' );
+define( 'MKL_PC_VERSION', '2.0.0' );
 define( 'MKL_PC_PREFIX', '_mkl_pc_' );
 define( 'MKL_PC_EXTENDS', 'woocommerce' ); 
 define( 'MKL_PC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
@@ -86,7 +86,7 @@ function mkl_pc_fail_woocommerce_version() {
 
 function mkl_pc_load_plugin_textdomain() {
 	load_textdomain( 'product-configurator-for-woocommerce', WP_LANG_DIR . '/product-configurator-for-woocommerce/product-configurator-for-woocommerce' . '-' . get_locale() . '.mo' );
-	load_plugin_textdomain( 'product-configurator-for-woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	load_plugin_textdomain( 'product-configurator-for-woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' ); // phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- Bundled translations in /languages still need this for non-WordPress.org installs.
 }
 
 function mkl_pc( $what = false ) {

@@ -277,9 +277,6 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   text-align: center;
   user-select: none;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
-  transition: 0.2s all;
-}
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
   opacity: 0;
 }
@@ -972,15 +969,22 @@ body.show-add-to-cart-modal .adding-to-cart--modal {
   align-items: center;
 }
 .mkl_pc .mkl_pc_container .quantity input.qty {
+  box-sizing: border-box;
+  width: 4em;
+  height: auto;
+  margin: 0;
   background: #fff;
+  color: inherit;
   font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
   padding: 10px;
+  border: 1px solid var(--mkl_pc_color-border);
   border-radius: 8px;
+  box-shadow: none;
 }
-@media (max-width: 660px) {
-  .mkl_pc .mkl_pc_container .quantity input.qty {
-    border: 2px solid #36383a;
-  }
+.mkl_pc .mkl_pc_container .quantity input.qty:focus {
+  border-color: var(--mkl_pc_color-primary);
 }
 .mkl_pc .mkl_pc_container .quantity.buttons_added {
   display: inline-flex;
@@ -1747,4 +1751,3 @@ nav.mkl-pc--steps div {
   padding: 1em;
   border: 1px solid var(--mkl_pc_color-border);
 }
-/*# sourceMappingURL=../../../maps/inc/themes/la-pomme/style.css.map */

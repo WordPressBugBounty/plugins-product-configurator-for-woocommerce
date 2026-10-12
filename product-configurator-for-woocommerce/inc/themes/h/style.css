@@ -220,9 +220,6 @@ Tags: Horizontal
   text-align: center;
   user-select: none;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
-  transition: 0.2s all;
-}
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
   opacity: 0;
 }
@@ -1670,4 +1667,3 @@ TIPPY
 .et_divi_theme:not(.configurator_is_inline) .mkl_pc {
   z-index: 100000;
 }
-/*# sourceMappingURL=../../../maps/inc/themes/h/style.css.map */

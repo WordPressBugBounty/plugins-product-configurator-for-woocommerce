@@ -7,6 +7,21 @@ PC.options = PC.options || {};
 !( function( $, _ ) {
 
 'use strict';
+/*
+	PC.fe.views.viewer_3d is registered by the fe-3d-viewer bundle when the product is 3D.
+	This filter selects the 3D viewer when settings_3d and a model URL are present.
+*/
+( function() {
+	if ( typeof wp === 'undefined' || ! wp.hooks || ! wp.hooks.addFilter ) return;
+	wp.hooks.addFilter( 'PC.fe.viewer.main_view', 'PC.fe.3d', function( defaultView ) {
+		var data = PC.fe && PC.fe.currentProductData;
+		if ( data && data.settings_3d && PC.fe.views.viewer_3d ) {
+			return PC.fe.views.viewer_3d;
+		}
+		return defaultView;
+	} );
+} )();
+
 /**
  * Add to cart modal view
  */
@@ -64,6 +79,18 @@ PC.fe.views.add_to_cart_modal = Backbone.View.extend({
 	 */
 	show_message: function( type, messages ) {
 		this.$el.empty().append( wp.template( 'mkl-pc-atc-' + type )( { messages: messages || '' } ) );
+	},
+	/**
+	 * Open the modal on a given template, for flows other than the cart (the quote request).
+	 *
+	 * @param {string} template_id wp.template id, without the `tmpl-` prefix.
+	 * @param {Object} data        Template data.
+	 */
+	show_template: function( template_id, data ) {
+		$( document.body ).addClass( 'show-add-to-cart-modal' );
+		this.$el.empty().append( wp.template( template_id )( data || {} ) );
+		// The first action takes the focus, so a keyboard user lands on the choices it offers.
+		this.$( 'button, a.button' ).first().trigger( 'focus' );
 	}
 } )
 PC.fe.views.angles = Backbone.View.extend({ 
@@ -342,11 +369,14 @@ PC.fe.views.choice = Backbone.View.extend({
 
 
 		PC.fe.last_clicked = this;
-		wp.hooks.doAction( 'PC.fe.choice.set_choice', this.model, this )
+		// Third argument: who made the selection. See PC.fe.select_choice.
+		wp.hooks.doAction( 'PC.fe.choice.set_choice', this.model, this, { origin: 'user' } )
 	},
 	preload_image: function() {
 		// console.log('preload image');
-		this.model.trigger( 'preload-image' );
+		// Pass the model: a listener bound to the collection (the viewer's image
+		// pool) gets the arguments as given, with no model of its own to work from.
+		this.model.trigger( 'preload-image', this.model );
 		// var src = this.model.get_image();
 		// if ( ! src ) return;
 		// var img = new Image();
@@ -407,6 +437,12 @@ PC.fe.views.choice = Backbone.View.extend({
 			var next_view = $next.closest( 'li.choice' ).data( 'view' );
 			if ( next_view && next_view.model ) {
 				next_view.model.collection.selectChoice( next_view.model.id, true );
+				// Choosing with the arrow keys is a person choosing, exactly as a
+				// click is. Announce it so conditional logic (and anything else on
+				// this hook) sees it; without this, keyboard users could change the
+				// selection without the conditions that depend on it re-evaluating.
+				PC.fe.last_clicked = next_view;
+				wp.hooks.doAction( 'PC.fe.choice.set_choice', next_view.model, next_view, { origin: 'user' } );
 			}
 		}
 	}
@@ -633,13 +669,29 @@ PC.fe.views.configurator = Backbone.View.extend({
 	},
 
 	start: function( e, arg ) {
+		// Engine mode never auto-mounts. `PC.fe.start` already fired from init().
+		if ( wp.hooks.applyFilters( 'PC.fe.headless', !! PC.fe.headless ) ) {
+			return;
+		}
+
 		if ( this.toolbar ) this.toolbar.remove();
 		if ( this.viewer ) this.viewer.remove();
 		if ( this.footer ) this.footer.remove();
-		const Viewer_View = wp.hooks.applyFilters( 'PC.fe.viewer.main_view', PC.fe.views.viewer );
-		this.viewer = new Viewer_View( { parent: this } );
-		this.$main_window.append( this.viewer.render() );
-		
+		this.toolbar = null;
+		this.viewer = null;
+		this.footer = null;
+
+		// Settle the models before a single view exists: default selections, the
+		// configuration being edited, then conditional logic. Views are built from
+		// a state that is already final, which is what lets the layers list skip
+		// the layers conditional logic hides instead of rendering them and hiding
+		// them a moment later.
+		PC.fe.prepare_initial_state( this );
+
+		if ( wp.hooks.applyFilters( 'PC.fe.render_viewer', true ) ) {
+			PC.fe.mountViewer( this.$main_window );
+		}
+
 		if ( ! PC.fe.angles.length || ! PC.fe.layers.length || ! PC.fe.contents.content.length ) {
 			var message = $( '<div class="error configurator-error" />' ).text( 'The product configuration seems incomplete. Please make sure Layers, angles and content are set.' );
 			if ( ! PC.fe.config.inline ) {
@@ -653,63 +705,27 @@ PC.fe.views.configurator = Backbone.View.extend({
 		}
 
 		if ( arg == 'no-content' ) {
-			this.toolbar = new PC.fe.views.empty_viewer();
-			this.viewer.$el.append( this.toolbar.render() );
+			if ( this.viewer ) {
+				this.toolbar = new PC.fe.views.empty_viewer();
+				this.viewer.$el.append( this.toolbar.render() );
+			}
 		} else {
-			this.toolbar = new PC.fe.views.toolbar( { parent: this } );
-			this.footer = new PC.fe.views.footer( { parent: this } );
-
-			this.$main_window.append( this.toolbar.render() ); 
-			this.$main_window.append( this.footer.render() );
+			if ( wp.hooks.applyFilters( 'PC.fe.render_toolbar', true ) ) {
+				PC.fe.mountToolbar( this.$main_window );
+			}
+			if ( wp.hooks.applyFilters( 'PC.fe.render_footer', true ) ) {
+				PC.fe.mountFooter( this.$main_window );
+			}
 		}
 
 		this.refresh_main_window_accessibility();
 
-		// this.summary = new PC.fe.views.summary();
-		// this.$main_window.append( this.summary.$el );
-
-		var images = this.viewer.$el.find( 'img' ),
-			imagesLoaded = 0,
-			that = this;
-		
-		/*
-		$(PC.fe).trigger( 'start.loadingimages', that ); 
-		wp.hooks.doAction( 'PC.fe.start.loadingimages', that ); 
-		console.log('start loading images.'); 
-		this.viewer.$el.addClass('is-loading-image'); 
-		images.each(function(index, el) {
-			$(el).on('load', function( e ){
-				imagesLoaded++; 
-				if( imagesLoaded == images.length ) {
-					console.log('remove loading class images');	
-					that.viewer.$el.removeClass('is-loading-image');
-				}					
-			});
-		});
-		*/
 		$( PC.fe ).trigger( 'start', this );
 		wp.hooks.doAction( 'PC.fe.start', this ); 
 		this.open();
 	},
 	resetConfig: function() {
-		// Reset the configuration
-		PC.fe.contents.content.resetConfig();
-
-		// Maybe load the initial preset
-		if ( PC.fe.initial_preset ) {
-			PC.fe.setConfig( PC.fe.initial_preset );
-		}
-		
-		// Maybe reset the view
-		if ( 1 < PC.fe.angles.length ) {
-			PC.fe.angles.each( function( model ) {
-				model.set('active' , false); 
-			} );
-			PC.fe.angles.first().set( 'active', true ); 
-		}
-
-		// Trigger an action after reseting
-		wp.hooks.doAction( 'PC.fe.reset_configurator' );
+		PC.fe.reset_configuration();
 	},
 	refresh_main_window_accessibility: function() {
 		if ( ! this.$main_window || ! this.$main_window.length ) return;
@@ -907,6 +923,214 @@ PC.fe.views.empty_viewer = Backbone.View.extend({
 	},
 });
 
+/**
+ * Detached session/controller for engine mode. Not inserted into `body`.
+ * `PC.fe.ui` aliases `PC.fe.modal` — this is the session, not a fake window.
+ */
+PC.fe.views.stub_configurator = Backbone.View.extend({
+	tagName: 'div',
+	className: 'mkl_pc mkl_pc--headless',
+	initialize: function( options ) {
+		this.options = options || {};
+		this.product_id = options.product_id;
+		this.parent_id = options.parent_id;
+		this.viewer = null;
+		this.toolbar = null;
+		this.footer = null;
+		this.$main_window = $( '<div class="mkl_pc_container" />' );
+		this.$el.append( this.$main_window );
+
+		var data_key = 'prod_' + ( ( this.parent_id && 'async' !== PC.fe.config.data_mode ) ? this.parent_id : this.product_id );
+		if ( PC.productData && PC.productData[ data_key ] && PC.productData[ data_key ].product_info ) {
+			this.options = PC.productData[ data_key ].product_info;
+		}
+		return this;
+	},
+	open: function() {},
+	close: function() {},
+	remove: function() {
+		this.$el.remove();
+		this.stopListening();
+		return this;
+	},
+	resetConfig: function() {
+		PC.fe.reset_configuration();
+	}
+});
+
+/**
+ * THE VIEWER CONTRACT
+ * ===================
+ *
+ * A viewer is whatever `PC.fe.viewer.main_view` resolves to: the default <img>
+ * stack (PC.fe.views.viewer), the 3D viewer, or any future implementation
+ * (canvas/WebGL, one-image-per-layer, ...). Everything outside the viewer must
+ * go through this contract rather than reaching into the markup a particular
+ * viewer happens to produce - DOM structure is an implementation detail, and
+ * scraping it is what ties features to a single viewer.
+ *
+ * Required
+ * --------
+ * render() -> jQuery
+ *     Build and return the viewer's root element.
+ *
+ * Optional, but needed for the feature in brackets
+ * ------------------------------------------------
+ * capture( options ) -> Promise<Blob|null>   [PDF, cart image, Save your design]
+ *     Render the CURRENT configuration to a PNG blob, without disturbing what
+ *     the user sees. Resolve null when capture is not possible, so callers can
+ *     fall back rather than silently shipping a blank image. Options:
+ *       { width, height, maxDimension }
+ *     Implementations must decide what to draw from the MODELS (choice
+ *     `active`, and `cshow` via PC.conditionalLogic.item_is_hidden), never from
+ *     CSS classes such as `.active` / `.cshow-hidden` - those exist only in the
+ *     default viewer's markup.
+ *
+ * captureScreenshot( options ) -> dataURL|null
+ *     Legacy synchronous form, implemented by the 3D viewer. Supported by
+ *     PC.fe.capture_viewer_image() for back-compat; new viewers should
+ *     implement capture() instead.
+ *
+ * Notes
+ * -----
+ * - Multiple-choice layers can have several choices active at once, so a
+ *   capture must iterate every active choice, not one per layer.
+ * - Conditional logic sets `cshow` on the models; a viewer is responsible for
+ *   reflecting that itself, rather than relying on an external toggle of its
+ *   elements.
+ */
+
+/**
+ * Capture the current configuration as a PNG blob, through the active viewer.
+ *
+ * This is the single entry point for anything that needs a picture of the
+ * configuration (cart image, PDF, saved-design preview). It resolves null when
+ * the viewer cannot produce one, leaving the decision to fall back - or to
+ * surface an error - with the caller.
+ *
+ * @param {Object} [options] Passed through to the viewer: { width, height, maxDimension }.
+ * @return {Promise<Blob|null>}
+ */
+PC.fe.capture_viewer_image = function( options ) {
+	options = options || {};
+	var viewer = PC.fe.modal && PC.fe.modal.viewer ? PC.fe.modal.viewer : null;
+
+	/**
+	 * Filter the viewer used for the capture, e.g. to capture something other
+	 * than the currently mounted viewer.
+	 *
+	 * @param {Backbone.View|null} viewer
+	 * @param {Object} options
+	 */
+	viewer = wp.hooks.applyFilters( 'PC.fe.capture.viewer', viewer, options );
+
+	if ( ! viewer ) return Promise.resolve( null );
+
+	// A capture that fails asynchronously must resolve null as well: callers await
+	// this before the add to cart, and a rejection there stops the request itself.
+	// fetch() of a data URL, for one, is refused under a CSP whose connect-src
+	// does not allow data:.
+	var on_failure = function( method ) {
+		return function( err ) {
+			console.log( 'Product configurator: viewer ' + method + ' failed.', err );
+			return null;
+		};
+	};
+
+	// Preferred: the viewer knows how to draw itself.
+	if ( 'function' === typeof viewer.capture ) {
+		try {
+			return Promise.resolve( viewer.capture( options ) ).catch( on_failure( 'capture()' ) );
+		} catch ( err ) {
+			return Promise.resolve( on_failure( 'capture()' )( err ) );
+		}
+	}
+
+	// Back-compat: the 3D viewer returns a data URL synchronously.
+	if ( 'function' === typeof viewer.captureScreenshot ) {
+		try {
+			var data_url = viewer.captureScreenshot( options );
+			if ( ! data_url ) return Promise.resolve( null );
+			return fetch( data_url ).then( function( res ) { return res.blob(); } ).catch( on_failure( 'captureScreenshot()' ) );
+		} catch ( err ) {
+			return Promise.resolve( on_failure( 'captureScreenshot()' )( err ) );
+		}
+	}
+
+	return Promise.resolve( null );
+};
+
+/**
+ * Construct the viewer and optionally append it to `el`.
+ * Uses filter `PC.fe.viewer.main_view` so 3D (and other) viewers still swap in.
+ *
+ * @param {Element|jQuery} [el]
+ * @return {Backbone.View|null}
+ */
+PC.fe.mountViewer = function( el ) {
+	var modal = PC.fe.modal;
+	if ( ! modal ) {
+		return null;
+	}
+	if ( modal.viewer ) {
+		modal.viewer.remove();
+		modal.viewer = null;
+	}
+	var Viewer_View = wp.hooks.applyFilters( 'PC.fe.viewer.main_view', PC.fe.views.viewer );
+	modal.viewer = new Viewer_View( { parent: modal } );
+	var $rendered = modal.viewer.render();
+	if ( el ) {
+		$( el ).append( $rendered );
+	}
+	return modal.viewer;
+};
+
+/**
+ * Construct the toolbar and optionally append it to `el`.
+ *
+ * @param {Element|jQuery} [el]
+ * @return {Backbone.View|null}
+ */
+PC.fe.mountToolbar = function( el ) {
+	var modal = PC.fe.modal;
+	if ( ! modal ) {
+		return null;
+	}
+	if ( modal.toolbar ) {
+		modal.toolbar.remove();
+		modal.toolbar = null;
+	}
+	modal.toolbar = new PC.fe.views.toolbar( { parent: modal } );
+	var $rendered = modal.toolbar.render();
+	if ( el ) {
+		$( el ).append( $rendered );
+	}
+	return modal.toolbar;
+};
+
+/**
+ * Construct the footer and optionally append it to `el`.
+ *
+ * @param {Element|jQuery} [el]
+ * @return {Backbone.View|null}
+ */
+PC.fe.mountFooter = function( el ) {
+	var modal = PC.fe.modal;
+	if ( ! modal ) {
+		return null;
+	}
+	if ( modal.footer ) {
+		modal.footer.remove();
+		modal.footer = null;
+	}
+	modal.footer = new PC.fe.views.footer( { parent: modal } );
+	var $rendered = modal.footer.render();
+	if ( el ) {
+		$( el ).append( $rendered );
+	}
+	return modal.footer;
+};
+
 /*
 	PC.fe.views.footer 
 */
@@ -960,8 +1184,7 @@ PC.fe.views.form = Backbone.View.extend({
 	},
 	events: {
 		'click .configurator-add-to-cart': 'add_to_cart',
-		'click .add-to-quote': 'add_to_quote',
-		'change input.qty': 'qty_change'
+		'click .add-to-quote': 'add_to_quote'
 	},
 	render: function() {
 		if ( ! PC.fe.config.cart_item_key ) {
@@ -998,21 +1221,23 @@ PC.fe.views.form = Backbone.View.extend({
 			this.$( '.configurator-add-to-cart' ).remove();
 		}
 		
-		if ( ! this.$cart.find( '.afrfqbt_single_page' ).length && ! $( '.add-request-quote-button' ).length ) {
-			this.$( '.add-to-quote' ).remove();
+		// The YITH button is printed only for a product YITH would quote, and sends its own request, so it
+		// does not depend on YITH's markup being on the page. The other quote plugins still do.
+		if ( ! this.$cart.find( '.afrfqbt_single_page' ).length ) {
+			this.$( '.add-to-quote' ).not( '.yith-raq' ).remove();
 		}
 		if ( ! this.$cart.find( '.afrfqbt_single_page' ).length ) {
-			this.$( '.add-to-quote' ).html( this.$cart.find( '.afrfqbt_single_page' ).html() );
+			this.$( '.add-to-quote' ).not( '.yith-raq' ).html( this.$cart.find( '.afrfqbt_single_page' ).html() );
 		}
-		if ( $( '.add-request-quote-button' ).length && PC_config.config.ywraq_hide_add_to_cart ) {
+		if ( this.$( '.yith-raq.add-to-quote' ).length && PC_config.config.ywraq_hide_add_to_cart ) {
 			this.$( '.configurator-add-to-cart' ).remove();
 		}
 
 		if ( this.$( 'input.qty' ).length ) {
-			// Get qty with the Cart's input
-			if ( this.$( 'input.qty' ) != this.$cart.find( '.qty' ) ) {
-				this.$( 'input.qty' ).val( this.$cart.find( '.qty' ).val() );
-			}
+			// A view of PC.fe.get_qty(): it reports edits and redraws itself when
+			// the quantity changes anywhere else, so it no longer has to be kept
+			// in step with the product form's input by copying values across.
+			PC.fe.bind_qty_input( this.$( 'input.qty' ) );
 			// Set min value
 			if ( 'undefined' != typeof PC.fe.currentProductData.product_info.qty_min_value ) {
 				this.$( 'input.qty' ).prop( 'min', PC.fe.currentProductData.product_info.qty_min_value );
@@ -1131,6 +1356,10 @@ PC.fe.views.form = Backbone.View.extend({
 					}
 				});
 
+				// Cart image: ask the viewer for a picture of the configuration.
+				var dataUrl = await this.capture_item_image();
+				if ( dataUrl ) request_body.append( 'pc_3d_screenshot', dataUrl );
+
 				/**
 				 * Append extra multipart fields (add-ons). Default FormData is unchanged.
 				 *
@@ -1221,11 +1450,7 @@ PC.fe.views.form = Backbone.View.extend({
 		$( 'input[name=pc_configurator_data]' ).val( '' );
 
 		var default_qty = PC.fe.currentProductData?.product_info?.qty_min_value || 1;
-		$( 'form.cart input[name=quantity], .mkl_pc .form input[name=quantity]' ).val( default_qty );
-		if ( PC.fe.currentProductData?.product_info ) {
-			PC.fe.currentProductData.product_info.qty = default_qty;
-		}
-		wp.hooks.doAction( 'PC.fe.qty_changed', default_qty );
+		PC.fe.set_qty( default_qty );
 		wp.hooks.doAction( 'PC.fe.reset_after_ajax_add_to_cart', this );
 	},
 
@@ -1275,32 +1500,196 @@ PC.fe.views.form = Backbone.View.extend({
 			return;
 		}
 
+		// YITH: our own request, see add_to_yith_quote().
+		if ( $( e.currentTarget ).is( '.yith-raq' ) ) {
+			return this.add_to_yith_quote( data, $( e.currentTarget ) );
+		}
+
+		// The other quote plugins post the product form themselves, so the picture of the configuration
+		// has to travel as a form field - there is no request body of ours to append it to.
+		var dataUrl = await this.capture_item_image();
+		if ( dataUrl ) this.set_quote_screenshot_field( dataUrl );
+
 		// Woocommerce Add To Quote plugin
 		if ( $( '.afrfqbt_single_page' ).length ) {
 			$( '.afrfqbt_single_page' ).trigger( 'click' );
 			if ( PC.fe.config.close_configurator_on_add_to_cart && ! PC.fe.inline ) PC.fe.modal.close();
 		}
-
-		if ( $( e.currentTarget ).is( '.yith-raq' ) ) {
-			$( '.add-request-quote-button' ).trigger( 'click' );
-			if ( ! PC.fe.inline ) PC.fe.modal.close();
-			if ( PC_config.config.ywraq_hide_add_to_cart ) {
-				if ( 'button' === PC.fe.trigger_el[0].type ) $( PC.fe.trigger_el[0] ).remove();
-			}
-		}
 	},
-	qty_change: function( e ) {
-		
-		PC.fe.currentProductData.product_info.qty = $( e.target ).val();
-		// If Extra price is not installed, check if price needs an update
-		if ( 'undefined' === typeof pc_get_extra_price && PC.fe.currentProductData.product_info?.price_tiers ) {
-			$( '.pc-total-price' ).html( PC.utils.formatMoney( PC.fe.get_product_price() ) );
-			// Display regular price
-			if ( PC.fe.currentProductData.product_info.regular_price && PC.fe.currentProductData.product_info.is_on_sale && $( '.pc-total--regular-price' ).length ) {
-				$( '.pc-total--regular-price' ).html( PC.utils.formatMoney( ( parseFloat( PC.fe.currentProductData.product_info.regular_price ) ) ) );
-			}
+
+	/**
+	 * Add the configuration to the YITH quote list through pc_add_to_quote.
+	 *
+	 * Posts the configurator's form like the ajax add to cart does, so variation attributes and
+	 * add-on fields come along, but needs nothing of YITH on the page. The configurator stays open
+	 * until the answer is back, so a refusal is shown where the shopper can act on it.
+	 *
+	 * @param {string} data    Configuration JSON.
+	 * @param {jQuery} $button The button clicked.
+	 */
+	add_to_yith_quote: async function( data, $button ) {
+		if ( $button.hasClass( 'adding-to-quote' ) ) return;
+		$button.addClass( 'adding-to-quote' ).prop( 'disabled', true );
+
+		if ( ! PC.fe.add_to_cart_modal ) PC.fe.add_to_cart_modal = new PC.fe.views.add_to_cart_modal();
+		PC.fe.add_to_cart_modal.show_template( 'mkl-pc-atq-adding' );
+
+		var request_body = this.$cart && this.$cart.length ? new FormData( this.$cart[0] ) : new FormData();
+		// Nothing here is an add to cart.
+		request_body.delete( 'add-to-cart' );
+		request_body.delete( 'pc_3d_screenshot' );
+		request_body.set( 'product_id', PC.fe.active_product );
+		request_body.set( 'pc_configurator_data', data );
+		if ( 'function' === typeof PC.fe.get_qty ) request_body.set( 'quantity', PC.fe.get_qty() );
+
+		var dataUrl = await this.capture_item_image();
+		if ( dataUrl ) request_body.append( 'pc_3d_screenshot', dataUrl );
+
+		/**
+		 * Append extra multipart fields to the quote request.
+		 *
+		 * @param {FormData}      request_body Body sent to `pc_add_to_quote`.
+		 * @param {Backbone.View} form_view    This form view instance.
+		 */
+		wp.hooks.doAction( 'PC.fe.add_to_quote.append_ajax_request_body', request_body, this );
+
+		var response;
+		try {
+			var raw = await fetch( PC_config.ajaxurl + '?action=pc_add_to_quote', {
+				method: 'POST',
+				credentials: 'same-origin',
+				body: request_body
+			} );
+			response = await raw.json();
+		} catch ( error ) {
+			console.error( 'Configurator: Error adding to the quote' );
+			console.error( error );
+			response = { result: 'error', message: '' };
 		}
-		wp.hooks.doAction( 'PC.fe.qty_changed', PC.fe.currentProductData.product_info.qty );
+
+		$button.removeClass( 'adding-to-quote' ).prop( 'disabled', false );
+
+		if ( ! response || 'error' === response.result || ! response.result ) {
+			/**
+			 * The configuration could not be added to the quote list.
+			 *
+			 * @param {Object}        response Server answer: result, message.
+			 * @param {Backbone.View} form_view This form view instance.
+			 */
+			wp.hooks.doAction( 'PC.fe.add_to_quote.failed', response, this );
+			$( document.body ).trigger( 'pc_not_added_to_quote', [ response ] );
+			this.show_quote_error( response && response.message );
+			return;
+		}
+
+		/**
+		 * The configuration is in the quote list.
+		 *
+		 * @param {Object}        response Server answer: result (added|updated), message, item_key, list_url, count, redirect.
+		 * @param {Backbone.View} form_view This form view instance.
+		 */
+		wp.hooks.doAction( 'PC.fe.add_to_quote.added', response, this );
+		$( document.body ).trigger( 'pc_added_to_quote', [ response ] );
+
+		// YITH's quote list widgets, when the page has them.
+		if ( $.fn.ywraq_refresh_widget ) {
+			var $widgets = $( '.widget_ywraq_list_quote, .widget_ywraq_mini_list_quote' );
+			if ( $widgets.length ) $widgets.ywraq_refresh_widget();
+		}
+
+		if ( PC_config.config.ywraq_hide_add_to_cart && PC.fe.trigger_el && PC.fe.trigger_el[0] && 'button' === PC.fe.trigger_el[0].type ) {
+			$( PC.fe.trigger_el[0] ).remove();
+		}
+
+		if ( response.redirect && response.list_url ) {
+			PC.fe.add_to_cart_modal.show_template( 'mkl-pc-atq-redirect', response );
+			window.location.href = response.list_url;
+			return;
+		}
+
+		this.show_quote_count( $button, response.count );
+
+		// The configurator stays open: the confirmation offers to keep configuring or to go to the list.
+		PC.fe.add_to_cart_modal.show_template( 'mkl-pc-atq-added', response );
+	},
+
+	/**
+	 * Show how many items the quote request holds, on the quote button.
+	 *
+	 * @param {jQuery} $button The quote button.
+	 * @param {number} count   Items in the list.
+	 */
+	show_quote_count: function( $button, count ) {
+		count = parseInt( count, 10 );
+		var $badge = $button.find( '.pc-quote-count' );
+		if ( ! count ) {
+			$badge.remove();
+			return;
+		}
+		if ( ! $badge.length ) {
+			$badge = $( '<span class="pc-quote-count"></span>' ).appendTo( $button );
+		}
+		var labels = PC_config.config.ywraq_count_label || {};
+		var label = ( ( 1 === count ? labels.one : labels.other ) || '%s' ).replace( '%s', count );
+		$badge.text( count ).attr( 'title', label );
+		$button.addClass( 'has-quote-items' ).attr( 'aria-description', label );
+	},
+
+	/**
+	 * Show a quote refusal in the configurator, in the add to cart modal.
+	 *
+	 * @param {string} message HTML message from the server.
+	 */
+	show_quote_error: function( message ) {
+		if ( ! PC.fe.add_to_cart_modal ) PC.fe.add_to_cart_modal = new PC.fe.views.add_to_cart_modal();
+		PC.fe.add_to_cart_modal.show_template( 'mkl-pc-atc-not-added', { messages: message || PC_config.config.ywraq_error_message || '' } );
+	},
+
+	/**
+	 * The picture that goes with a cart or quote item: a capture of the viewer, for 3D only.
+	 *
+	 * Goes through PC.fe.capture_viewer_image so any viewer that implements the capture contract
+	 * works here, not just the 3D one.
+	 *
+	 * @return {Promise<string|null>} PNG data URL, or null.
+	 */
+	capture_item_image: async function() {
+		if ( ! PC.fe.config.show_image_in_cart || ! PC.fe.currentProductData || ! PC.fe.currentProductData.product_info || PC.fe.currentProductData.product_info.configurator_type !== '3d' ) {
+			return null;
+		}
+		var size = PC.fe.config.cart_screenshot_size || { width: 800, height: 800 };
+		var blob = await PC.fe.capture_viewer_image( { view: 'current', width: size.width, height: size.height } );
+		if ( ! blob ) return null;
+		return new Promise( function( resolve ) {
+			var reader = new FileReader();
+			reader.onloadend = function() { resolve( reader.result ); };
+			reader.onerror = function() { resolve( null ); };
+			reader.readAsDataURL( blob );
+		} );
+	},
+	/**
+	 * Carry the viewer's picture in the product form, for quote plugins that serialize it.
+	 *
+	 * The field is only added once there is something to send, so a form without a
+	 * configuration never posts an empty one.
+	 *
+	 * @param {string} data_url PNG data URL.
+	 */
+	set_quote_screenshot_field: function( data_url ) {
+		if ( ! this.$cart || ! this.$cart.length ) return;
+		var $field = this.$cart.find( 'input[name=pc_3d_screenshot]' );
+		if ( ! $field.length ) {
+			$field = $( '<input type="hidden" name="pc_3d_screenshot">' ).appendTo( this.$cart );
+		}
+		$field.val( data_url );
+	},
+	/**
+	 * Kept for third-party code that calls it directly. The input itself is
+	 * bound through PC.fe.bind_qty_input, and refreshing the displayed price now
+	 * happens on PC.fe.qty_changed, so it runs whichever input was edited.
+	 */
+	qty_change: function( e ) {
+		PC.fe.set_qty( $( e.target ).val(), { source: e.target } );
 	}
 } );
 
@@ -1701,8 +2090,17 @@ PC.fe.views.layers_list = Backbone.View.extend({
 	className: 'layers',
 	initialize: function( options ) {
 		this.options = options || {}; 
+		this.items = [];
+		// Layer id -> rendered view, and layer id -> position in the sorted
+		// collection. See insert() for why the position has to be remembered.
+		this.views = {};
+		this.order_index = {};
+		this.has_deferred_layers = false;
 		this.render();
 		this.listenTo( PC.fe.layers, 'change active', this.activate );
+		// A layer whose render was skipped has to be built the first time
+		// conditional logic reveals it.
+		this.listenTo( PC.fe.layers, 'change:cshow', this.build_revealed_layers );
 	},
 	events: {
 	}, 
@@ -1714,15 +2112,125 @@ PC.fe.views.layers_list = Backbone.View.extend({
 		this.add_all( PC.fe.layers );
 		return this.$el;
 	},
+
+	/**
+	 * Whether layers that conditional logic hides should be left unrendered until
+	 * they are first shown.
+	 *
+	 * On large configurations most layers are hidden when the configurator opens,
+	 * so building their markup only to hide it immediately afterwards is the
+	 * single biggest cost of opening. This is only correct because the first
+	 * conditions run happens before any view is built - see
+	 * PC.fe.prepare_initial_state().
+	 *
+	 * Off unless something turns it on: the conditional logic add-on sets
+	 * `defer_hidden_layers` from its own setting, which is on for new stores and
+	 * off for existing ones - a store may have styling that counts on every layer
+	 * being in the page (sibling combinators, :nth-child), or a customisation that
+	 * expects 'PC.fe.layers_list_item.init' to fire for every layer as the
+	 * configurator opens.
+	 *
+	 * Force it either way with:
+	 *   wp.hooks.addFilter( 'PC.fe.defer_hidden_layers', 'my-theme', function() { return true; } );
+	 *
+	 * @return {Boolean}
+	 */
+	defer_hidden_layers: function() {
+		var enabled = !! PC_config.config.defer_hidden_layers;
+		return !! wp.hooks.applyFilters( 'PC.fe.defer_hidden_layers', enabled, this );
+	},
+
+	/**
+	 * Whether conditional logic currently hides this layer, on its own account or
+	 * through an ancestor. Read from the models, so the answer does not depend on
+	 * markup that may not exist yet.
+	 *
+	 * @param {Backbone.Model} model
+	 * @return {Boolean}
+	 */
+	is_hidden_by_conditions: function( model ) {
+		if ( false === model.get( 'cshow' ) ) return true;
+		if ( PC.conditionalLogic && PC.conditionalLogic.parent_is_hidden ) {
+			return !! PC.conditionalLogic.parent_is_hidden( model );
+		}
+		return false;
+	},
+
 	add_all: function( collection ) { 
 		this.$el.empty();
 		this.items = [];
+		this.views = {};
+		this.order_index = {};
+		this.has_deferred_layers = false;
 		collection.orderBy = 'order';
 		collection.sort();
 		if ( PC_config.config.use_steps ) PC.fe.steps.setup_steps();
-		collection.each( this.add_one, this );
+
+		// Remember where each layer sits in the sorted collection. Other views
+		// re-sort the same collection (the viewer orders it by image_order), so a
+		// layer built later cannot ask the collection where it belongs: it asks
+		// this instead.
+		collection.each( function( model, index ) {
+			this.order_index[ model.id ] = index;
+		}, this );
+
+		var defer = this.defer_hidden_layers();
+		collection.each( function( model ) {
+			if ( defer && this.is_hidden_by_conditions( model ) ) {
+				this.has_deferred_layers = true;
+				return;
+			}
+			this.add_one( model );
+		}, this );
+
 		wp.hooks.doAction( 'PC.fe.layers_list.layers.added', this );
 	},
+
+	/**
+	 * Build the layers that were skipped and are now visible.
+	 *
+	 * Revealing a group also reveals its children, whose own `cshow` never
+	 * changed, so this walks every layer rather than reacting to the one model
+	 * that changed. Layers are walked in list order so a group is always built
+	 * before the children that go inside it.
+	 */
+	build_revealed_layers: function() {
+		if ( ! this.has_deferred_layers ) return;
+
+		var that = this;
+		var pending = _.sortBy( PC.fe.layers.filter( function( model ) {
+			return ! that.views[ model.id ];
+		} ), function( model ) {
+			var index = that.order_index[ model.id ];
+			return ( 'undefined' === typeof index ) ? Number.MAX_VALUE : index;
+		} );
+
+		var built = [];
+		var still_deferred = false;
+
+		_.each( pending, function( model ) {
+			if ( that.is_hidden_by_conditions( model ) ) {
+				still_deferred = true;
+				return;
+			}
+			var view = that.add_one( model );
+			if ( view ) built.push( view );
+		} );
+
+		this.has_deferred_layers = still_deferred;
+
+		if ( built.length ) {
+			/**
+			 * Layers that were not rendered when the configurator opened have just
+			 * been added to the list.
+			 *
+			 * @param {PC.fe.views.layers_list} list
+			 * @param {Array} views The layer views that were just built.
+			 */
+			wp.hooks.doAction( 'PC.fe.layers_list.layers.added.deferred', this, built );
+		}
+	},
+
 	add_one: function( model ) {
 		var new_layer;
 
@@ -1739,22 +2247,81 @@ PC.fe.views.layers_list = Backbone.View.extend({
 			}
 		}
 
-		if ( ! new_layer ) return;
+		if ( ! new_layer ) return false;
 
-		var parent_id = model.get( 'parent' );
-		var parent = parent_id ? model.collection.get( model.get( 'parent' ) ) : false;
-		if ( parent && 'group' == parent.get( 'type' ) && this.options.parent.$( 'ul[data-layer-id=' + model.get( 'parent' ) + ']' ).length ) {
-			this.options.parent.$( 'ul[data-layer-id=' + model.get( 'parent' ) + ']' ).append( new_layer.render() ); 
-		} else {
-			this.$el.append( new_layer.render() );
-		}
+		this.insert( model, new_layer );
 
 		// add to a new collection to be used to render the viewer
 		this.items.push( new_layer );
+		this.views[ model.id ] = new_layer;
+
+		return new_layer;
 	},
+
+	/**
+	 * The list a layer's item belongs in: the nested list of its group parent when
+	 * it has one, the main list otherwise.
+	 *
+	 * @param {Backbone.Model} model
+	 * @return {jQuery}
+	 */
+	get_container: function( model ) {
+		var parent_id = model.get( 'parent' );
+		var parent = parent_id ? model.collection.get( parent_id ) : false;
+		if ( parent && 'group' == parent.get( 'type' ) ) {
+			var $group_list = this.options.parent.$( 'ul[data-layer-id=' + parent_id + ']' );
+			if ( $group_list.length ) return $group_list;
+		}
+		return this.$el;
+	},
+
+	/**
+	 * Put a layer where it belongs in the list rather than at the end.
+	 *
+	 * add_all() walks the collection in order, so appending would be enough for
+	 * the opening pass - but a deferred layer is built whenever conditional logic
+	 * reveals it, long after the layers around it. Its place comes from the order
+	 * recorded in add_all(), resolved against the siblings that are actually
+	 * present: the item goes before the first sibling that comes after it, and at
+	 * the end when there is none.
+	 *
+	 * @param {Backbone.Model} model
+	 * @param {Backbone.View} view
+	 */
+	insert: function( model, view ) {
+		var $container = this.get_container( model );
+
+		view.render();
+		// Every item carries its layer id, whatever view rendered it, so the next
+		// one can find its place among them.
+		view.$el.attr( 'data-layer', model.id );
+
+		var index = this.order_index[ model.id ];
+		if ( 'undefined' !== typeof index ) {
+			var that = this;
+			var $before = null;
+
+			$container.children( '[data-layer]' ).each( function() {
+				var sibling_index = that.order_index[ $( this ).attr( 'data-layer' ) ];
+				if ( 'undefined' === typeof sibling_index ) return;
+				if ( sibling_index > index ) {
+					$before = $( this );
+					return false;
+				}
+			} );
+
+			if ( $before ) {
+				$before.before( view.$el );
+				return;
+			}
+		}
+
+		$container.append( view.$el );
+	},
+
 	activate: function( model ) {
 		if ( model.get( 'active' ) == false ) {
-			if ( model.collection.findWhere( { 'active': true } ) ) {
+			if ( model.collection.findWhere( { 'active': true } ) ) {
 				this.$el.addClass( 'opened' );
 				wp.hooks.doAction( 'PC.fe.layers_list.open', this, model );
 			} else {
@@ -1768,6 +2335,7 @@ PC.fe.views.layers_list = Backbone.View.extend({
 	},
 
 });
+
 PC.fe.validation = PC.fe.validation || {};
 PC.fe.validation.errors = PC.fe.validation.errors || [];
 PC.fe.errors = PC.fe.validation.errors;
@@ -1778,6 +2346,13 @@ PC.fe.save_data = {
 		if ( false !== reset_errors ) this.reset_errors();
 		this.choices = [];
 		PC.fe.layers.each( this.parse_choices, this ); 
+		// The saved names are in the language the customer configured in. Record it, so the
+		// order can be displayed in another language (eg. the admin's) from the product data.
+		if ( PC.fe.lang ) {
+			_.each( this.choices, function( choice ) {
+				if ( choice && 'object' === typeof choice && ! choice.lang ) choice.lang = PC.fe.lang;
+			} );
+		}
 		this.choices = wp.hooks.applyFilters( 'PC.fe.save_data.choices', this.choices );
 		return JSON.stringify( this.choices );
 	},
@@ -1892,7 +2467,31 @@ PC.fe.save_data = {
 		}.bind( this ) );
 		return selected;
 	},
-	// get choices for one layer 
+	/**
+	 * The angle the cart image is built from: the active one when "Use the active angle to generate
+	 * the image in the cart" is on, otherwise the one set to be used in the cart, or the first.
+	 *
+	 * @return {Backbone.Model|undefined}
+	 */
+	get_cart_angle: function() {
+		if ( PC.fe.config.angles.save_current ) {
+			var angle = PC.fe.angles.findWhere( 'active', true );
+		} else {
+			var angle = PC.fe.angles.findWhere( 'use_in_cart', true );
+		}
+		return angle || PC.fe.angles.first();
+	},
+	/**
+	 * The ID of the angle saved with the configuration. Every layer of the cart image must come from
+	 * it, so add-ons rendering their own layer image (e.g. Text overlay) should use this too.
+	 *
+	 * @return {Number|undefined}
+	 */
+	get_cart_angle_id: function() {
+		var angle = PC.fe.save_data.get_cart_angle();
+		return wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.angle_id', angle ? angle.id : undefined );
+	},
+	// get choices for one layer
 	parse_choices: function( model ) {
 		var is_required = parseInt( model.get( 'required' ) );
 		var default_selection = model.get( 'default_selection' ) || 'select_first';
@@ -1903,17 +2502,15 @@ PC.fe.save_data = {
 
 		if ( 'form' == type || 'group' == type ) is_required = false;
 
-		if ( PC.fe.config.angles.save_current ) {
-			var angle = PC.fe.angles.findWhere( 'active', true );
-		} else {
-			var angle = PC.fe.angles.findWhere( 'use_in_cart', true );
-		}
-		if ( ! angle ) {
-			angle = PC.fe.angles.first();
-		}
-
 		var model_data = wp.hooks.applyFilters( 'PC.fe.configurator.layer_data', model.attributes );
-		var angle_id = wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.angle_id', angle.id );
+		var angle_id = PC.fe.save_data.get_cart_angle_id();
+		// Save where the layer sits in the merged image, so the stacking order of a saved
+		// configuration survives the layers being reordered later. `image_order` is only set on
+		// the layers that are composited out of the layer order.
+		var image_order = parseInt( model_data.image_order, 10 );
+		if ( isNaN( image_order ) ) image_order = parseInt( model_data.order, 10 );
+		if ( isNaN( image_order ) ) image_order = 0;
+		image_order = wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.image_order', image_order, model );
 
 		if ( 'group' == type ) {
 			if ( ! this.count_selected_choices_in_group( model.id ) ) return;
@@ -1925,6 +2522,7 @@ PC.fe.save_data = {
 						layer_id: model.id,
 						choice_id: 0,
 						angle_id: angle_id,
+						image_order: image_order,
 						layer_name: model_data.name,
 						image: 0,
 						name: '',
@@ -1976,12 +2574,13 @@ PC.fe.save_data = {
 						} );
 					}
 
-					var img_id = choice.get_image( 'image', 'id' );
+					var img_id = choice.get_image( 'image', 'id', angle_id );
 					var choice_data = {
 						is_choice: true,
 						layer_id: model.id,
 						choice_id: choice.id,
 						angle_id: angle_id,
+						image_order: image_order,
 						layer_name: model_data.name,
 						image: img_id,
 						name: choice.get_name(),
@@ -2002,12 +2601,13 @@ PC.fe.save_data = {
 				var is_active = choice.get( 'active' );
 				if ( is_active || ( 'simple' != model.get( 'type' ) && 'multiple' != model.get( 'type' ) && 'form' != model.get( 'type' ) ) ) {
 					if ( false === choice.get( 'cshow' ) ) return;
-					var img_id = choice.get_image('image', 'id'); 
+					var img_id = choice.get_image( 'image', 'id', angle_id ); 
 					const choice_data = {
 						is_choice: true,
 						layer_id: model.id, 
 						choice_id: choice.id, 
 						angle_id: angle_id,
+						image_order: image_order,
 						image: img_id,
 						layer_name: model_data.name,
 						name: choice.get_name(),
@@ -2036,7 +2636,7 @@ PC.fe.save_data = {
 		} else {
 			// Not a choice
 			var choice = choices.first();
-			var img_id = choice.get_image('image', 'id');
+			var img_id = choice.get_image( 'image', 'id', angle_id );
 			if ( wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.add_choice', true, choice ) ) this.choices.push(
 				wp.hooks.applyFilters(
 					'PC.fe.save_data.parse_choices.added_choice',
@@ -2045,6 +2645,7 @@ PC.fe.save_data = {
 						layer_id: model.id,
 						choice_id: choice.id,
 						angle_id: angle_id,
+						image_order: image_order,
 						image: img_id,
 						name: choice.get_name(),
 					}
@@ -2177,13 +2778,16 @@ PC.fe.steps = {
 
 		this.get_steps();
 
-		PC.fe.modal.$el.addClass( 'has-steps' );
+		if ( PC.fe.modal && PC.fe.modal.$el ) {
+			PC.fe.modal.$el.addClass( 'has-steps' );
+		}
 
 		// add buttons
 		if ( this.initialized ) return;
 
 		wp.hooks.addAction( 'PC.fe.start', 'mkl/product_configurator/steps', function( modal ) {
 			if  ( ! PC.fe.use_steps || ! this.steps ) return;
+			if ( ! modal || ! modal.footer || ! modal.toolbar ) return;
 			this.current_step = this.get_steps()[0];
 			this.current_step.set( 'active', true );
 			this.previous_button = new this.view_prev();
@@ -2214,7 +2818,7 @@ PC.fe.steps = {
 		this.initialized = true;
 	},
 	update_live_region: function() {
-		if ( ! this.current_step ) return;
+		if ( ! this.current_step || ! this.$live ) return;
 		const current_step = this.get_index( this.current_step );
 		const total_steps = PC.fe.steps.steps.length;
 		const step_number = current_step + 1;
@@ -2224,9 +2828,11 @@ PC.fe.steps = {
 	},
 	clean_existing_steps: function() {
 		if ( this.steps ) this.steps = null;
-		PC.fe.modal.$el.removeClass( 'has-steps' );
-		PC.fe.modal.$el.removeClass( 'last-step' );
-		PC.fe.modal.$el.removeClass( 'first-step' );
+		if ( PC.fe.modal && PC.fe.modal.$el ) {
+			PC.fe.modal.$el.removeClass( 'has-steps' );
+			PC.fe.modal.$el.removeClass( 'last-step' );
+			PC.fe.modal.$el.removeClass( 'first-step' );
+		}
 		if ( this.previous_button ) {
 			this.$nav.remove();
 			this.$nav = null;
@@ -2300,15 +2906,16 @@ PC.fe.steps = {
 			current_index = ind;
 		}
 
-		PC.fe.modal.$el.toggleClass( 'last-step', !! ( current_index == steps.length - 1 ) );
+		if ( PC.fe.modal && PC.fe.modal.$el ) {
+			PC.fe.modal.$el.toggleClass( 'last-step', !! ( current_index == steps.length - 1 ) );
+			PC.fe.modal.$el.toggleClass( 'first-step', 0 == current_index );
 
-		PC.fe.modal.$el.toggleClass( 'first-step', 0 == current_index );
-		
-		if ( PC_config.config.open_first_layer && PC.fe.modal.$el.is( '.float, .wsb' ) ) {
-			setTimeout( function() {
-				var $first = PC.fe.modal.$( '.type-step.active button.layer-item:visible' ).first();
-				if ( ! $first.parent().is( '.display-mode-dropdown' ) ) $first.trigger( 'click' );
-			}, 50 );
+			if ( PC_config.config.open_first_layer && PC.fe.modal.$el.is( '.float, .wsb' ) ) {
+				setTimeout( function() {
+					var $first = PC.fe.modal.$( '.type-step.active button.layer-item:visible' ).first();
+					if ( ! $first.parent().is( '.display-mode-dropdown' ) ) $first.trigger( 'click' );
+				}, 50 );
+			}
 		}
 
 		this.update_live_region();
@@ -2590,6 +3197,13 @@ PC.fe.views.viewer_static_layer = Backbone.View.extend({
 	},
 	render: function() {
 		var img = this.model.get_image();
+		var width = PC.fe.modal.$el.outerWidth();
+		if ( width && PC.fe.config.mobile_image_breakpoint && width < PC.fe.config.mobile_image_breakpoint && this.model.get_image( 'image', 'url_mobile' ) ) {
+			img = this.model.get_image( 'image', 'url_mobile' );
+		}
+		if ( width && PC.fe.config.large_image_breakpoint && width >= PC.fe.config.large_image_breakpoint && this.model.get_image( 'image', 'url_large' ) ) {
+			img = this.model.get_image( 'image', 'url_large' );
+		}
 		// Default to a transparent image
 		if ( ! img ) img = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
@@ -2677,6 +3291,8 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 		if ( is_active ) {
 			if ( ! this.is_loaded ) {
 				this.parent.imagesLoading ++;
+				// Only a counted image may decrement the counter again - see img_loaded().
+				this.counted = true;
 				this.parent.$el.addClass('is-loading-image');
 				this.$el.addClass( 'loading' );
 				this.el.src = img
@@ -2726,17 +3342,105 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 	},
 	img_loaded: function( e ) {
 		this.$el.removeClass( 'loading' );
-		if (this.empty_img == this.$el.prop('src')) return;
+		// Whatever the outcome, anything waiting on this image now has its answer.
+		this.settle();
+		// An active choice with nothing to show at this angle is still handed a
+		// src - the transparent placeholder - and this is the only load it will
+		// ever report. It stays "not loaded", so a later angle gets it its real
+		// image, but it does have to be counted off: it was counted when the
+		// placeholder was set, and the viewer would otherwise be loading for good.
+		if (this.empty_img == this.$el.prop('src')) return this.release();
 		this.is_loaded = true;
 
 		if ( 'load' == e.type ) wp.hooks.doAction( 'PC.fe.viewer.layer.preload.complete', this );
+
+		this.release();
+	},
+	/**
+	 * Count this image off the viewer's tally of images being loaded.
+	 *
+	 * Only images that were counted when their src was set may count down again.
+	 * An inactive image also gets a src, but was never added to imagesLoading:
+	 * decrementing for it drove the counter below zero, so it never came back to
+	 * 0 and the viewer kept its `is-loading-image` class.
+	 */
+	release: function() {
+		if ( ! this.counted ) return;
+		this.counted = false;
 
 		this.parent.imagesLoading --;
 		if( this.parent.imagesLoading == 0 ) {
 			this.parent.$el.removeClass('is-loading-image');
 			wp.hooks.doAction( 'PC.fe.viewer.layers.preload.complete', this );
 		}
+	},
+	/**
+	 * Release a load that will never complete.
+	 *
+	 * Images are created and destroyed as the selection changes when the viewer
+	 * only renders what it shows, so one can be removed while still loading.
+	 */
+	remove: function() {
+		this.is_removed = true;
+		// An image removed before it loaded is never going to appear: release
+		// anything that was waiting for it, or the wait only ends on its timeout.
+		this.settle();
+		if ( this.counted && this.parent ) {
+			this.counted = false;
+			this.parent.imagesLoading --;
+			if ( 0 >= this.parent.imagesLoading ) {
+				this.parent.imagesLoading = 0;
+				this.parent.$el.removeClass( 'is-loading-image' );
+			}
+		}
+		return Backbone.View.prototype.remove.apply( this, arguments );
+	},
+	/**
+	 * Call back once this image has finished loading - or once it is settled that
+	 * it never will (it failed, or it was removed while still on its way).
+	 *
+	 * This is how the image being replaced knows when it may leave the screen;
+	 * see viewer_layer_pool.wait_for().
+	 *
+	 * @param {Function} callback Receives this view.
+	 */
+	on_settled: function( callback ) {
+		if ( this.is_loaded || this.is_removed ) return callback( this );
+		this.settle_callbacks = this.settle_callbacks || [];
+		this.settle_callbacks.push( callback );
+	},
 
+	settle: function() {
+		if ( ! this.settle_callbacks ) return;
+		var callbacks = this.settle_callbacks;
+		this.settle_callbacks = null;
+		_.each( callbacks, function( callback ) {
+			callback( this );
+		}, this );
+	},
+
+	/**
+	 * Keep showing this image after its choice has been deselected.
+	 *
+	 * The view stops following its model - the model is inactive now, and
+	 * rendering that would blank the image, which is the very thing the caller is
+	 * holding it for - and it is put back in the state it was in when it was the
+	 * selected choice.
+	 *
+	 * That last part is not belt and braces: a model's own listeners run before
+	 * the ones its collection proxies, so this view has already reacted to the
+	 * deselection and dropped its `active` class by the time the pool gets to
+	 * call this. Nothing has been painted in between - it is all one turn - so
+	 * putting the class back leaves no trace, and the image is never taken off
+	 * the screen. It keeps the picture it has until remove() is called.
+	 */
+	retire: function() {
+		this.is_retired = true;
+		this.stopListening();
+		// It is on its way out, so it is no longer a landmark for insert_image():
+		// where it sits is decided by the image that replaces it.
+		this.$el.removeAttr( 'data-mkl-sorted' );
+		this.$el.removeClass( 'loading' ).addClass( 'active retired' );
 	},
 	toggle_current_layer_class: function( layer, new_val ) {
 		if ( layer.id !== this.model.get( 'layerId' ) ) return;
@@ -2806,6 +3510,16 @@ PC.fe.views.viewer_layer_html = Backbone.View.extend({
 		this.conditional_display();
 		// this.render();
 	},
+	/**
+	 * Keep this HTML on screen until the image it belongs with leaves.
+	 * See viewer_layer.retire().
+	 */
+	retire: function() {
+		this.is_retired = true;
+		this.stopListening();
+		this.$el.removeAttr( 'data-mkl-sorted' );
+		this.$el.addClass( 'active retired' ).show();
+	},
 	toggle_current_layer_class: function( layer, new_val ) {
 		if ( layer.id !== this.model.get( 'layerId' ) ) return;
 		this.$el.toggleClass( 'current_layer', layer.id == this.model.get( 'layerId' ) && new_val );
@@ -2814,6 +3528,328 @@ PC.fe.views.viewer_layer_html = Backbone.View.extend({
 		var model_cshow = false !== this.model.get( 'cshow' );
 		var layer_cshow = false !== this.layer.get( 'cshow' );
 		this.$el.toggle( this.model.get( 'active' ) && model_cshow && layer_cshow );
+	}
+});
+
+/**
+	PC.fe.views.viewer_layer_pool
+	-> The images of ONE layer in the viewer.
+
+	The viewer's default is an <img> per choice, shown and hidden with a class. On
+	a large configuration that means thousands of images in the page to show a
+	couple of hundred, and every one of them re-renders when the angle changes.
+
+	This keeps only the images the layer actually shows - one for a simple layer,
+	one per selection for a multiple choice layer, none while the layer is hidden
+	or has nothing selected - and creates them as the selection changes.
+
+	It owns no element of its own: the images stay direct children of
+	.mkl_pc_layers, exactly where they are today, so stylesheets written against
+	them keep working. Its own `el` is never inserted anywhere.
+*/
+PC.fe.views.viewer_layer_pool = Backbone.View.extend({
+	initialize: function( options ) {
+		this.options = options || {};
+		this.parent = options.parent;
+		this.layer = options.model;
+		this.choices = PC.fe.getLayerContent( this.layer.id );
+		this.views = {};
+		this.html_views = {};
+		this.preloaded = {};
+		// Images that are no longer selected but are still on screen, waiting for
+		// what replaces them - see hold() and sweep().
+		this.held = [];
+		this.incoming = [];
+		this.waits = [];
+		this.sweep_scheduled = false;
+
+		if ( ! this.choices ) return this;
+
+		this.listenTo( this.choices, 'change:active', this.sync );
+		this.listenTo( this.choices, 'change:cshow', this.sync );
+		this.listenTo( this.choices, 'preload-image', this.preload );
+		// Any layer's visibility can hide this one through a group ancestor, so
+		// this listens to the collection rather than to this layer alone.
+		this.listenTo( PC.fe.layers, 'change:cshow', this.sync );
+
+		this.sync();
+
+		return this;
+	},
+
+	/**
+	 * The choices that need an image in the viewer right now.
+	 *
+	 * @return {Array} choice models
+	 */
+	get_visible_choices: function() {
+		if ( this.parent.is_hidden_by_conditions_layer( this.layer ) ) return [];
+
+		var that = this;
+		return this.choices.filter( function( choice ) {
+			if ( ! choice.get( 'active' ) ) return false;
+			if ( choice.get( 'is_group' ) ) return false;
+			if ( that.parent.is_hidden_by_conditions( choice ) ) return false;
+			return choice.has_image() || wp.hooks.applyFilters( 'PC.fe.viewer.item.render.empty.images', false, choice );
+		} );
+	},
+
+	/**
+	 * Bring the images in line with what the layer currently shows.
+	 *
+	 * Adding happens here and now; removing is decided at the end of the turn, by
+	 * sweep(). A choice change reaches this in two steps - the old choice goes
+	 * inactive, then the new one goes active - and acting on the first would empty
+	 * the layer before the second says what to put in its place.
+	 */
+	sync: function() {
+		var wanted = {};
+		_.each( this.get_visible_choices(), function( choice ) {
+			wanted[ choice.id ] = choice;
+		} );
+
+		_.each( _.keys( this.views ), function( id ) {
+			if ( wanted[ id ] ) return;
+			this.hold( id );
+		}, this );
+
+		_.each( wanted, function( choice, id ) {
+			if ( this.views[ id ] ) return;
+			this.incoming.push( this.add_view( choice ) );
+		}, this );
+
+		this.schedule_sweep();
+	},
+
+	/**
+	 * Take an image out of the layer, but leave it on the screen.
+	 *
+	 * It has to stop following its model right now, in this pass: the choice is
+	 * already inactive, and the view's own listener has already run and taken the
+	 * image out of sight - retire() puts it back. From here on it is a picture
+	 * with nothing behind it, held by sweep() until its replacement takes over.
+	 *
+	 * @param {String|Number} id Choice id.
+	 */
+	hold: function( id ) {
+		var view = this.views[ id ];
+		var html_view = this.html_views[ id ];
+		delete this.views[ id ];
+		delete this.html_views[ id ];
+		if ( ! view ) {
+			if ( html_view ) html_view.remove();
+			return;
+		}
+		if ( this.parent.layer_views ) delete this.parent.layer_views[ this.parent.view_key( view.model ) ];
+
+		/**
+		 * Whether an image stays up until the one replacing it has loaded.
+		 *
+		 * @param {Boolean} hold
+		 * @param {Backbone.View} view
+		 */
+		var keep = wp.hooks.applyFilters( 'PC.fe.viewer.hold_previous_image', true, view, this );
+
+		// Nothing to hold on to: a view that is not one of ours to freeze, or an
+		// image that never made it to the screen in the first place.
+		if ( ! keep || ! view.is_loaded || ! view.retire ) {
+			view.remove();
+			if ( html_view ) html_view.remove();
+			return;
+		}
+
+		view.retire();
+		this.held.push( view );
+		if ( html_view && html_view.retire ) {
+			html_view.retire();
+			this.held.push( html_view );
+		} else if ( html_view ) {
+			html_view.remove();
+		}
+	},
+
+	/**
+	 * Decide what leaves the screen, once the whole selection change has been
+	 * seen. Runs before the browser paints, so a layer that is simply going away
+	 * does not linger for a frame.
+	 */
+	schedule_sweep: function() {
+		if ( this.sweep_scheduled ) return;
+		this.sweep_scheduled = true;
+		var that = this;
+		var run = function() { that.sweep(); };
+		if ( 'undefined' !== typeof Promise ) Promise.resolve().then( run );
+		else _.defer( run );
+	},
+
+	/**
+	 * Send the images that were held on their way.
+	 *
+	 * They leave at once if nothing is on its way in - a choice deselected, a
+	 * layer hidden by conditional logic. Otherwise they stay up until the images
+	 * added in the same change have loaded.
+	 */
+	sweep: function() {
+		this.sweep_scheduled = false;
+
+		var that = this;
+		var incoming = _.filter( this.incoming, function( view ) {
+			// Still ours, and still not on screen: those are the ones worth waiting
+			// for. One that loaded within the turn is already showing.
+			return view && ! view.is_loaded && that.views[ view.model.id ] === view;
+		} );
+		this.incoming = [];
+
+		var held = this.held;
+		this.held = [];
+		if ( ! held.length ) return;
+
+		if ( ! incoming.length ) return this.drop( held );
+
+		this.wait_for( incoming, held );
+	},
+
+	/**
+	 * Hold `held` on screen until `incoming` has loaded.
+	 *
+	 * The images being loaded are transparent until they are ready - every theme
+	 * hides `img.loading` - so what the customer sees for the length of the
+	 * request is the picture they had, rather than the background.
+	 *
+	 * @param {Array} incoming Views still loading.
+	 * @param {Array} held     Views to remove once they have.
+	 */
+	wait_for: function( incoming, held ) {
+		var that = this;
+		var wait = { held: held, pending: incoming.length, done: false, timer: null };
+		this.waits.push( wait );
+
+		// Underneath the images that replace them, so the new picture fades in over
+		// the old one instead of over the background.
+		_.each( held, function( view ) {
+			incoming[ 0 ].$el.before( view.$el );
+		} );
+
+		// However the loading turns out, these images do leave: a request that
+		// never completes must not strand a deselected choice on screen.
+		wait.timer = setTimeout( function() {
+			that.end_wait( wait );
+		}, wp.hooks.applyFilters( 'PC.fe.viewer.swap_timeout', 5000, this ) );
+
+		var settled = function( view ) {
+			if ( 0 < --wait.pending ) return;
+			// Let the new image finish fading in before taking the old one away.
+			setTimeout( function() { that.end_wait( wait ); }, that.fade_duration( view ) );
+		};
+
+		_.each( incoming, function( view ) {
+			if ( view.on_settled ) return view.on_settled( settled );
+			settled( view );
+		} );
+	},
+
+	end_wait: function( wait ) {
+		if ( wait.done ) return;
+		wait.done = true;
+		if ( wait.timer ) clearTimeout( wait.timer );
+		this.waits = _.without( this.waits, wait );
+		this.drop( wait.held );
+	},
+
+	drop: function( views ) {
+		_.each( views, function( view ) {
+			view.remove();
+		} );
+	},
+
+	/**
+	 * How long the stylesheet takes to fade an image in, in milliseconds.
+	 *
+	 * Read off the element rather than assumed: every theme fades the viewer's
+	 * images, but how long for is the theme's - or the store's - business.
+	 *
+	 * @param {Backbone.View} view
+	 * @return {Number}
+	 */
+	fade_duration: function( view ) {
+		if ( ! view || ! view.el || ! window.getComputedStyle ) return 0;
+		var declared = window.getComputedStyle( view.el ).transitionDuration || '';
+		var longest = 0;
+		_.each( declared.split( ',' ), function( part ) {
+			part = part.replace( /\s/g, '' );
+			var value = parseFloat( part );
+			if ( isNaN( value ) ) return;
+			longest = Math.max( longest, -1 === part.indexOf( 'ms' ) ? value * 1000 : value );
+		} );
+		return longest;
+	},
+
+	add_view: function( choice ) {
+		var View = wp.hooks.applyFilters( 'PC.fe.viewer.item.view', PC.fe.views.viewer_layer, choice, this.parent );
+		var view = new View( { model: choice, parent: this.parent } );
+
+		this.views[ choice.id ] = view;
+		// Keep the viewer's indexes up to date so capture() can find the drawable.
+		this.parent.layers[ choice.id ] = view;
+		this.parent.layer_views[ this.parent.view_key( choice ) ] = view;
+
+		this.parent.insert_image( view.$el, this.parent.sort_key( choice ) );
+		wp.hooks.doAction( 'PC.fe.viewer.item.added', view, this.parent );
+
+		if ( choice.get( 'custom_html' ) ) {
+			var html_view = new PC.fe.views.viewer_layer_html( { model: choice, layer: view, parent: this.parent } );
+			this.html_views[ choice.id ] = html_view;
+			this.parent.insert_image( html_view.$el, this.parent.sort_key( choice, 1 ) );
+			wp.hooks.doAction( 'PC.fe.viewer.html_item.added', html_view, this.parent );
+		}
+
+		return view;
+	},
+
+	remove_view: function( id ) {
+		if ( this.views[ id ] ) {
+			var key = this.parent.view_key( this.views[ id ].model );
+			this.views[ id ].remove();
+			delete this.views[ id ];
+			if ( this.parent.layer_views ) delete this.parent.layer_views[ key ];
+		}
+		if ( this.html_views[ id ] ) {
+			this.html_views[ id ].remove();
+			delete this.html_views[ id ];
+		}
+	},
+
+	/**
+	 * Warm the browser cache for a choice the customer is hovering.
+	 *
+	 * There is no waiting <img> to point at an unselected choice any more, so the
+	 * request is made off-DOM: same effect on the cache, nothing added to the page.
+	 *
+	 * @param {Backbone.Model} choice
+	 */
+	preload: function( choice ) {
+		if ( ! choice || ! choice.get_image ) return;
+		if ( this.views[ choice.id ] ) return;
+
+		var url = choice.get_image();
+		if ( ! url || this.preloaded[ url ] ) return;
+
+		this.preloaded[ url ] = true;
+		var img = new Image();
+		img.src = url;
+	},
+
+	remove: function() {
+		_.each( this.waits.slice(), function( wait ) {
+			this.end_wait( wait );
+		}, this );
+		this.drop( this.held );
+		this.held = [];
+		this.incoming = [];
+		_.each( _.keys( this.views ), function( id ) {
+			this.remove_view( id );
+		}, this );
+		return Backbone.View.prototype.remove.apply( this, arguments );
 	}
 });
 
@@ -2853,11 +3889,17 @@ PC.fe.views.viewer = Backbone.View.extend({
 				return;
 			}
 
-			this.$layers = this.$el.find( '.mkl_pc_layers' ); 
+			this.$layers = this.$el.find( '.mkl_pc_layers' );
 			this.layers = [];
+			// Choice ids are only unique WITHIN a layer, so this.layers (keyed by
+			// choice id) silently overwrites views across layers. Keep a correctly
+			// keyed index for anything that needs to find a view reliably.
+			this.layer_views = {};
+			this.pools = {};
+			this.order_index = {};
 
-			this.add_layers();
 			this.add_loader();
+			this.add_layers();
 	
 
 		} else {
@@ -2871,7 +3913,41 @@ PC.fe.views.viewer = Backbone.View.extend({
 	},
 
 	add_loader: function() {
-		this.$layers.append( $( '<div class="images-loading" />' ) );
+		this.$loader = $( '<div class="images-loading" />' );
+		this.$layers.append( this.$loader );
+	},
+
+	/**
+	 * Whether the viewer should render only the images it shows.
+	 *
+	 * Off unless the store turns it on: it removes the <img> of every unselected
+	 * choice, and a stylesheet or customisation may count on those being in the
+	 * page (`img:not(.active)`, sibling combinators, counting children). On for
+	 * new stores, off for existing ones.
+	 *
+	 * Force it either way with:
+	 *   wp.hooks.addFilter( 'PC.fe.viewer.active_images_only', 'my-theme', function() { return true; } );
+	 *
+	 * @return {Boolean}
+	 */
+	active_images_only: function() {
+		return !! wp.hooks.applyFilters( 'PC.fe.viewer.active_images_only', !! PC.fe.config.viewer_active_images_only, this );
+	},
+
+	/**
+	 * Whether this layer's images are managed as a pool.
+	 *
+	 * Only layer types that show what is selected. Anything else draws itself and
+	 * decides its own visibility - a text overlay renders a canvas per choice -
+	 * so those keep an element per choice, as before.
+	 *
+	 * @param {Backbone.Model} layer
+	 * @return {Boolean}
+	 */
+	layer_is_pooled: function( layer ) {
+		var type = layer.get( 'type' ) || 'simple';
+		var pooled = -1 !== [ 'simple', 'multiple' ].indexOf( type );
+		return !! wp.hooks.applyFilters( 'PC.fe.viewer.layer_is_pooled', pooled, layer, this );
 	},
 
 	add_layers: function() {
@@ -2880,8 +3956,77 @@ PC.fe.views.viewer = Backbone.View.extend({
 			PC.fe.layers.orderBy = 'image_order';
 			PC.fe.layers.sort();
 		}
+
+		// Remember where each layer's images belong in the stack. An image can be
+		// created long after this first pass - when its choice is selected, or when
+		// conditional logic reveals its layer - and by then the collection may have
+		// been re-sorted by another view (the layers list orders it by `order`), so
+		// position is recorded here rather than looked up later.
+		this.order_index = {};
+		PC.fe.layers.each( function( layer, index ) {
+			this.order_index[ layer.id ] = index;
+		}, this );
+
 		PC.fe.layers.each( this.add_choices, this );
 	}, 
+
+	/**
+	 * Where an element belongs among the viewer's layers: the layer's position in
+	 * image order, then the choice's position within the layer, then 0 for the
+	 * image itself and 1 for the custom HTML that follows it.
+	 *
+	 * @param {Backbone.Model} choice
+	 * @param {Number} [tail]
+	 * @return {Array}
+	 */
+	sort_key: function( choice, tail ) {
+		var layer_id = choice.get( 'layerId' );
+		var content = PC.fe.getLayerContent( layer_id );
+		var layer_position = ( this.order_index && 'undefined' !== typeof this.order_index[ layer_id ] ) ? this.order_index[ layer_id ] : PC.fe.layers.length;
+		return [ layer_position, content ? content.indexOf( choice ) : 0, tail || 0 ];
+	},
+
+	compare_sort: function( a, b ) {
+		for ( var i = 0; i < Math.max( a.length, b.length ); i++ ) {
+			var x = a[ i ] || 0;
+			var y = b[ i ] || 0;
+			if ( x !== y ) return x < y ? -1 : 1;
+		}
+		return 0;
+	},
+
+	/**
+	 * Put an element where it belongs in the stack, rather than at the end.
+	 *
+	 * The first pass runs in image order, so appending would do - but an image can
+	 * be created much later, when its choice is selected or when conditional logic
+	 * reveals its layer, and it still has to sit at the right depth.
+	 *
+	 * @param {jQuery} $el
+	 * @param {Array} sort From sort_key().
+	 */
+	insert_image: function( $el, sort ) {
+		$el.data( 'mkl_sort', sort ).attr( 'data-mkl-sorted', '1' );
+
+		var $before = null;
+		var that = this;
+		this.$layers.children( '[data-mkl-sorted]' ).each( function() {
+			var other = $( this ).data( 'mkl_sort' );
+			if ( ! other ) return;
+			if ( 0 < that.compare_sort( other, sort ) ) {
+				$before = $( this );
+				return false;
+			}
+		} );
+
+		if ( $before ) {
+			$before.before( $el );
+		} else if ( this.$loader && this.$loader.length ) {
+			this.$loader.before( $el );
+		} else {
+			this.$layers.append( $el );
+		}
+	},
 
 	add_choices: function( model ) {
 		var choices = PC.fe.getLayerContent( model.id );
@@ -2891,7 +4036,14 @@ PC.fe.views.viewer = Backbone.View.extend({
 		if ( model.get( 'not_a_choice') ) {
 			var choice = choices.first();
 			var layer = new PC.fe.views.viewer_static_layer( { model: choice, parent: this } );
-			this.$layers.append( layer.$el );
+			// Keep the view so capture() can ask it for its drawable, like any other layer.
+			if ( choice ) {
+				this.layers[ choice.id ] = layer;
+				this.layer_views[ this.view_key( choice ) ] = layer;
+				this.insert_image( layer.$el, this.sort_key( choice ) );
+			} else {
+				this.$layers.append( layer.$el );
+			}
 			if ( choice.get( 'custom_html' ) ) {
 				var content;
 				try {
@@ -2900,8 +4052,10 @@ PC.fe.views.viewer = Backbone.View.extend({
 					content = $( '<div class="mkl-custom-html--container" />' );
 					content.html( choice.get( 'custom_html' ) )
 				}
-				this.$layers.append( content );
+				this.insert_image( content, this.sort_key( choice, 1 ) );
 			}
+		} else if ( this.active_images_only() && this.layer_is_pooled( model ) ) {
+			this.pools[ model.id ] = new PC.fe.views.viewer_layer_pool( { model: model, parent: this } );
 		} else {
 			choices.each( this.add_single_choice, this );
 		}
@@ -2910,8 +4064,8 @@ PC.fe.views.viewer = Backbone.View.extend({
 	add_single_choice: function( model ) {
 		if ( model.has_image() || wp.hooks.applyFilters( 'PC.fe.viewer.item.render.empty.images', false, model ) ) {
 			var View = wp.hooks.applyFilters( 'PC.fe.viewer.item.view', PC.fe.views.viewer_layer, model, this );
-			var layer = new View( { model: model, parent: this } ); 
-			this.$layers.append( layer.$el );
+			var layer = new View( { model: model, parent: this } );
+			this.insert_image( layer.$el, this.sort_key( model ) );
 		} else {
 			layer = false;
 		}
@@ -2919,10 +4073,224 @@ PC.fe.views.viewer = Backbone.View.extend({
 		wp.hooks.doAction( 'PC.fe.viewer.item.added', layer, this );
 		if ( model.get( 'custom_html' ) ) {
 			var html_layer = new PC.fe.views.viewer_layer_html( { model: model, layer: layer, parent: this } );
-			this.$layers.append( html_layer.$el );
+			this.insert_image( html_layer.$el, this.sort_key( model, 1 ) );
 			wp.hooks.doAction( 'PC.fe.viewer.html_item.added', html_layer, this );
 		}
 		this.layers[ model.id ] = layer;
+		this.layer_views[ this.view_key( model ) ] = layer;
+	},
+
+	/**
+	 * Index key for a choice's layer view. Choice ids repeat across layers, so
+	 * the layer id has to be part of the key.
+	 */
+	view_key: function( choice ) {
+		return choice.get( 'layerId' ) + ':' + choice.id;
+	},
+
+	/**
+	 * Whether a model is hidden by conditional logic.
+	 *
+	 * Reads `cshow` off the models rather than looking for the `cshow-hidden`
+	 * class, so the answer is the same with or without a rendered DOM.
+	 */
+	is_hidden_by_conditions: function( choice ) {
+		if ( PC.conditionalLogic && PC.conditionalLogic.item_is_hidden ) {
+			return !! PC.conditionalLogic.item_is_hidden( choice );
+		}
+		// Conditional logic is not installed: fall back to the plain flags.
+		if ( false === choice.get( 'cshow' ) ) return true;
+		var layer = PC.fe.layers.get( choice.get( 'layerId' ) );
+		return !! ( layer && false === layer.get( 'cshow' ) );
+	},
+
+	/**
+	 * The choice models that make up the current picture, bottom layer first.
+	 *
+	 * Mirrors what add_layers()/add_choices() put on screen, but derived purely
+	 * from the models: layers in image_order, every ACTIVE choice of each
+	 * (multiple-choice layers can have several), minus anything conditional
+	 * logic has hidden. Static (`not_a_choice`) layers are always drawn, as
+	 * viewer_static_layer does.
+	 *
+	 * @return {Array} choice models
+	 */
+	get_capture_models: function() {
+		var models = [];
+		var that = this;
+		var ordered = PC.fe.layers.sortBy( function( layer ) {
+			return parseInt( layer.get( 'image_order' ) ) || 0;
+		} );
+
+		_.each( ordered, function( layer ) {
+			var choices = PC.fe.getLayerContent( layer.id );
+			if ( ! choices ) return;
+			if ( that.is_hidden_by_conditions_layer( layer ) ) return;
+
+			if ( layer.get( 'not_a_choice' ) ) {
+				var first = choices.first();
+				if ( first ) models.push( first );
+				return;
+			}
+
+			choices.each( function( choice ) {
+				if ( ! choice.get( 'active' ) ) return;
+				if ( choice.get( 'is_group' ) ) return;
+				if ( that.is_hidden_by_conditions( choice ) ) return;
+				models.push( choice );
+			} );
+		} );
+
+		/**
+		 * Filter the models composited into a captured image.
+		 *
+		 * @param {Array} models Choice models, bottom layer first.
+		 * @param {Backbone.View} viewer
+		 */
+		return wp.hooks.applyFilters( 'PC.fe.viewer.capture.models', models, this );
+	},
+
+	/**
+	 * The thing to draw for one choice: whatever the layer view that owns it
+	 * offers, so implementations that are not a plain <img> (the text overlay
+	 * renders a canvas) come through too.
+	 *
+	 * Returns:
+	 *   HTMLImageElement | HTMLCanvasElement - draw this
+	 *   'none'                               - nothing to draw, and that is fine
+	 *   null                                 - cannot represent this layer
+	 *
+	 * @param {Backbone.Model} choice
+	 * @return {HTMLElement|string|null}
+	 */
+	get_capture_source: function( choice ) {
+		var view = this.layer_views ? this.layer_views[ this.view_key( choice ) ] : null;
+
+		// A view may describe its own drawable (the contract's extension point).
+		if ( view && 'function' === typeof view.get_capture_source ) {
+			return view.get_capture_source();
+		}
+
+		if ( view && view.el ) {
+			if ( 'IMG' === view.el.tagName ) {
+				// Only usable once decoded; an empty placeholder means "nothing here".
+				if ( ! view.el.getAttribute( 'src' ) || 0 === view.el.getAttribute( 'src' ).indexOf( 'data:image/gif' ) ) return 'none';
+				return view.el.complete && view.el.naturalWidth ? view.el : null;
+			}
+			var canvas = view.el.querySelector ? view.el.querySelector( 'canvas' ) : null;
+			if ( canvas ) return canvas;
+		}
+
+		// No view (not rendered, or the choice carries no image at all).
+		if ( ! choice.has_image() ) return 'none';
+
+		return null;
+	},
+
+	is_hidden_by_conditions_layer: function( layer ) {
+		if ( false === layer.get( 'cshow' ) ) return true;
+		if ( PC.conditionalLogic && PC.conditionalLogic.parent_is_hidden ) {
+			return !! PC.conditionalLogic.parent_is_hidden( layer );
+		}
+		return false;
+	},
+
+	/**
+	 * Capture the current configuration to a PNG blob (see the viewer contract
+	 * in configurator.js).
+	 *
+	 * WHAT to draw comes from the models (active choices, minus anything
+	 * conditional logic hid); HOW to draw each one comes from the layer view that
+	 * owns it, so a text overlay's canvas composites alongside plain images. No
+	 * CSS class is consulted, so this does not depend on the markup a particular
+	 * viewer happens to emit.
+	 *
+	 * Resolves null - never a partial picture - when a visible layer cannot be
+	 * represented or the canvas is tainted by a cross-origin image, so callers
+	 * fall back knowingly instead of shipping a wrong image.
+	 *
+	 * @param {Object} [options] { width, height, maxDimension }
+	 * @return {Promise<Blob|null>}
+	 */
+	capture: function( options ) {
+		options = options || {};
+		var that = this;
+		var models = this.get_capture_models();
+		if ( ! models.length ) return Promise.resolve( null );
+
+		var max_dimension = options.maxDimension || wp.hooks.applyFilters( 'PC.fe.pdf.max_dimension', 1200 );
+
+		var sources = [];
+		for ( var i = 0; i < models.length; i++ ) {
+			var source = that.get_capture_source( models[ i ] );
+			if ( null === source ) {
+				// A layer we can see but cannot draw: refuse rather than drop it.
+				console.log(
+					'Product configurator: cannot capture the layer "' +
+					( models[ i ].get( 'name' ) || models[ i ].id ) +
+					'", falling back to another capture method.'
+				);
+				return Promise.resolve( null );
+			}
+			if ( 'none' !== source ) sources.push( source );
+		}
+
+		if ( ! sources.length ) return Promise.resolve( null );
+
+		var width = 0, height = 0;
+		_.each( sources, function( el ) {
+			width = Math.max( width, el.naturalWidth || el.width || 0 );
+			height = Math.max( height, el.naturalHeight || el.height || 0 );
+		} );
+		if ( ! width || ! height ) return Promise.resolve( null );
+
+		if ( options.width && options.height ) {
+			width = options.width;
+			height = options.height;
+		} else if ( width > max_dimension || height > max_dimension ) {
+			var ratio = height / width;
+			if ( height > width ) {
+				height = max_dimension;
+				width = height / ratio;
+			} else {
+				width = max_dimension;
+				height = width * ratio;
+			}
+		}
+
+		var canvas = document.createElement( 'canvas' );
+		canvas.width = Math.round( width );
+		canvas.height = Math.round( height );
+		var ctx = canvas.getContext( '2d' );
+
+		try {
+			_.each( sources, function( el ) {
+				ctx.drawImage( el, 0, 0, canvas.width, canvas.height );
+			} );
+		} catch ( err ) {
+			console.log( 'Product configurator: could not compose the captured image.', err );
+			return Promise.resolve( null );
+		}
+
+		/**
+		 * Draw on top of the composited layers (watermark, background...).
+		 *
+		 * @param {CanvasRenderingContext2D} ctx
+		 * @param {HTMLCanvasElement} canvas
+		 * @param {Backbone.View} viewer
+		 */
+		wp.hooks.doAction( 'PC.fe.viewer.capture.canvas', ctx, canvas, this );
+
+		return new Promise( function( resolve ) {
+			try {
+				canvas.toBlob( function( blob ) { resolve( blob || null ); }, 'image/png' );
+			} catch ( err ) {
+				// Tainted canvas: a layer image is on another domain that does not
+				// send Access-Control-Allow-Origin.
+				console.log( 'Product configurator: the captured canvas could not be exported (cross-origin image).', err );
+				resolve( null );
+			}
+		} );
 	}
 });
 } ) ( jQuery, PC._us || window._ );

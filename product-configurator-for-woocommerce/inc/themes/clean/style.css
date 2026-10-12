@@ -285,9 +285,6 @@ Supports: columns, color_swatches
   text-align: center;
   user-select: none;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
-  transition: opacity 0.2s ease;
-}
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
   opacity: 0;
   visibility: hidden;
@@ -1792,4 +1789,3 @@ nav.mkl-pc--steps {
 .et_divi_theme:not(.configurator_is_inline) .mkl_pc {
   z-index: 100000;
 }
-/*# sourceMappingURL=../../../maps/inc/themes/clean/style.css.map */

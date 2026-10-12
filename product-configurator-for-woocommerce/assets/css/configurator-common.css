@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* General reset */
 .mkl_pc * {
   box-sizing: border-box;
@@ -282,28 +283,41 @@ button.variations_button.disabled,
   animation-delay: 0.4s;
 }
 
+@keyframes mkl_pc_loader_spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .mkl_pc .mkl-loader {
   display: none;
   position: absolute;
   top: 50%;
   left: 50%;
-  text-align: center;
+  z-index: 20;
   transform: translate(-50%, -50%);
+  text-align: center;
+  color: #3a3a3a;
+  pointer-events: none;
 }
-.mkl_pc .mkl-loader .header {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #FFF;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.62);
-}
+.mkl_pc .mkl-loader .mkl-loader__spinner,
 .mkl_pc .mkl-loader .spinner {
-  width: 40px;
-  height: 40px;
-  margin: 30px auto;
-  background-color: #FFF;
-  border-radius: 100%;
-  -webkit-animation: sk-scaleout 1s infinite ease-in-out;
-  animation: sk-scaleout 1s infinite ease-in-out;
+  width: 22px;
+  height: 22px;
+  margin: 0 auto 0.75em;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  background: transparent;
+  opacity: 0.55;
+  animation: mkl_pc_loader_spin 0.7s linear infinite;
+}
+.mkl_pc .mkl-loader .mkl-loader__header,
+.mkl_pc .mkl-loader .header {
+  font-size: 0.875em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: inherit;
+  text-shadow: none;
 }
 .mkl_pc.loading .overlay {
   position: absolute;
@@ -311,21 +325,30 @@ button.variations_button.disabled,
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(107, 106, 106, 0.631372549);
-  backdrop-filter: blur(6px);
+  z-index: 15;
+  background: rgba(246, 246, 246, 0.72);
+  backdrop-filter: blur(2px);
 }
 .mkl_pc.loading .mkl-loader {
   display: block;
 }
 .mkl_pc.loading .mkl_pc_container {
-  transform: translateY(-30px);
-  opacity: 0;
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 .mkl-configurator-inline .mkl_pc.loading .overlay {
   display: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .mkl_pc .mkl-loader .mkl-loader__spinner,
+  .mkl_pc .mkl-loader .spinner {
+    animation: none;
+    opacity: 0.7;
+    border-right-color: currentColor;
+  }
+}
 .adding-to-cart--modal {
   display: none;
 }
@@ -464,4 +487,472 @@ body.show-add-to-cart-modal.configurator_is_inline .adding-to-cart--modal {
   stroke-dasharray: 52;
   animation: anim-tick 0.75s;
 }
-/*# sourceMappingURL=../../maps/assets/css/configurator-common.css.map */
+
+.adding-to-cart--modal .adding-to-quote--added .header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.adding-to-cart--modal .adding-to-quote--added .messages:not(:empty) {
+  padding-bottom: 0;
+}
+
+.adding-to-quote--item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding-bottom: 28px;
+}
+
+.adding-to-quote--image {
+  flex: 0 0 auto;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #f4f4f4;
+}
+
+.adding-to-quote--details:only-child {
+  text-align: center;
+}
+
+.adding-to-quote--name {
+  font-weight: 600;
+  padding-bottom: 6px;
+}
+
+@media (max-width: 600px) {
+  .adding-to-cart--modal .has-box {
+    padding: 28px 20px;
+    margin: 0 16px;
+  }
+  .adding-to-cart--modal .has-box .header {
+    font-size: 22px;
+    padding-bottom: 20px;
+  }
+  .adding-to-quote--item {
+    flex-direction: column;
+    text-align: center;
+  }
+  .adding-to-cart--adding-cta .or {
+    display: block;
+    padding: 8px 0;
+  }
+}
+.add-to-quote.adding-to-quote {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.add-to-quote.has-quote-items {
+  position: relative;
+  overflow: visible;
+}
+
+.add-to-quote .pc-quote-count {
+  position: absolute;
+  top: -0.6em;
+  right: 0.4em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.7em;
+  height: 1.7em;
+  padding: 0 0.45em;
+  box-sizing: border-box;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  background: #fff;
+  color: #1e1e1e;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.mkl_pc_3d_canvas_container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  /*
+   * The renderer sizes the drawing buffer only (setSize with updateStyle off)
+   * and leaves the box to CSS, so the canvas fills the container on the same
+   * frame as the reflow. Inline pixel sizes written from the resize handler ran
+   * a frame behind the layout and left a visible gap along the growing edge.
+   * These three declarations are load-bearing, not cosmetic: without them the
+   * canvas falls back to its attribute size, which is pixel-ratio scaled.
+   */
+}
+.mkl_pc_3d_canvas_container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Opt-in full-bleed under the toolbar (settings_3d.extend_under_toolbar).
+ * Adds .mkl_pc_viewer--extend-under-toolbar. Themes stretch the viewer (desktop)
+ * and set focus insets for the toolbar side so the camera keeps framing the product:
+ *   --mkl_pc_viewer_focus_inset_left
+ *   --mkl_pc_viewer_focus_inset_right
+ *   --mkl_pc_viewer_focus_inset_top
+ *   --mkl_pc_viewer_focus_inset_bottom
+ * Values: px or % of the canvas axis. Unset sides default to 0.
+ * On mobile, leave insets unset / 0 so layout stays as designed.
+ */
+@keyframes mkl_pc_3d_loader_spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.mkl_pc_3d_loader {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5em;
+  box-sizing: border-box;
+  background: rgba(246, 246, 246, 0.72);
+  color: #3a3a3a;
+  font-size: 0.875em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+.mkl_pc_3d_loader.has-poster {
+  background: transparent;
+  color: #fff;
+}
+.mkl_pc_3d_loader.is-hiding {
+  opacity: 0;
+}
+
+.mkl_pc_3d_loader__poster {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.mkl_pc_3d_loader__poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.18) 45%, rgba(0, 0, 0, 0.12) 100%);
+}
+
+.mkl_pc_3d_loader__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85em;
+}
+
+.mkl_pc_3d_loader__spinner {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  opacity: 0.55;
+  animation: mkl_pc_3d_loader_spin 0.7s linear infinite;
+}
+
+.mkl_pc_3d_loader__text {
+  position: relative;
+  overflow: hidden;
+  height: 1.4em;
+  min-width: 8em;
+}
+
+.mkl_pc_3d_loader__text-track {
+  position: relative;
+  height: 100%;
+}
+
+.mkl_pc_3d_loader__text-item {
+  display: block;
+  white-space: nowrap;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  transform: translateY(0);
+  opacity: 1;
+}
+.mkl_pc_3d_loader__text-item.is-entering {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(110%);
+  opacity: 0;
+}
+.mkl_pc_3d_loader__text-item.is-leaving {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(-110%);
+  opacity: 0;
+}
+.mkl_pc_3d_loader__text-item.is-active {
+  position: relative;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mkl_pc_3d_loader__progress {
+  width: 100%;
+  max-width: 12em;
+  height: 2px;
+  margin-top: 0.75em;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(127, 127, 127, 0.25);
+}
+
+.mkl_pc_3d_canvas_container canvas:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+.mkl_pc_3d_poster_fallback {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mkl_pc_3d_loader--context-lost .mkl_pc_3d_loader__spinner {
+  display: none;
+}
+
+.mkl_pc_3d_loader__retry {
+  margin-top: 1em;
+  padding: 0.5em 1.2em;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+}
+.mkl_pc_3d_loader__retry:hover, .mkl_pc_3d_loader__retry:focus-visible {
+  opacity: 0.75;
+}
+
+.mkl_pc_3d_loader__progress-bar {
+  width: calc(var(--mkl_pc_3d_loader_progress, 0) * 100%);
+  height: 100%;
+  background: currentColor;
+  transition: width 0.2s linear;
+}
+
+/*
+ * Orbit affordance.
+ *
+ * A still render and a model that turns look the same until something moves, so
+ * this says the gesture out loud once and then quiets down: the pointer sweeps
+ * back and forth across the orbit ring, after which the label fades away and
+ * the puck shrinks to a dim resting disc that stays until the customer grabs
+ * the model. Loud enough to be read, small enough to leave the product alone.
+ *
+ * Nothing here takes pointer events. The drag that dismisses the hint has to
+ * reach the canvas underneath and orbit the model — an affordance that eats the
+ * interaction it just asked for is worse than no affordance at all.
+ *
+ * How long it stays loud is the two variables below, and nothing else. The
+ * moment the hint goes quiet is derived from them rather than written out
+ * again, because writing it out again is how it drifts: the loop count was
+ * lowered once while the settle delay kept the old figure, and the hint spent
+ * the difference sitting motionless before it shrank.
+ *
+ * `hint_settles_at` is also when premium hotspots fade in — the viewer reports
+ * the end of the settle animation as `hint:settled`, so retuning here moves
+ * them with it. See _wait_for_orbit_hint in the 3D premium add-on.
+ */
+@keyframes mkl_pc_3d_hint_in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes mkl_pc_3d_hint_sweep {
+  0%, 6% {
+    transform: translateX(0);
+  }
+  28% {
+    transform: translateX(-11px);
+  }
+  72% {
+    transform: translateX(11px);
+  }
+  94%, 100% {
+    transform: translateX(0);
+  }
+}
+@keyframes mkl_pc_3d_hint_settle {
+  to {
+    opacity: 0.6;
+    transform: scale(0.72);
+  }
+}
+@keyframes mkl_pc_3d_hint_label_out {
+  to {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+.mkl_pc_3d_hint {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  pointer-events: none;
+  color: #fff;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.mkl_pc_3d_hint.is-hiding {
+  opacity: 0;
+}
+
+.mkl_pc_3d_hint__puck {
+  position: relative;
+  box-sizing: border-box;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: rgba(18, 18, 20, 0.42);
+  box-shadow: 0 3px 16px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(7px) saturate(1.1);
+  -webkit-backdrop-filter: blur(7px) saturate(1.1);
+  animation: mkl_pc_3d_hint_in 0.45s 0.1s ease both, mkl_pc_3d_hint_settle 0.6s 4.8s ease forwards;
+}
+
+.mkl_pc_3d_hint__orbit {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  display: block;
+  width: 42px;
+  height: 22px;
+  margin-left: -21px;
+  opacity: 0.85;
+}
+
+.mkl_pc_3d_hint__glyph {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  display: block;
+  width: 21px;
+  height: 21px;
+  margin-left: -10.5px;
+  animation: mkl_pc_3d_hint_sweep 2.4s ease-in-out 2 both;
+}
+
+.mkl_pc_3d_hint__orbit svg,
+.mkl_pc_3d_hint__glyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mkl_pc_3d_hint__label {
+  margin: 0;
+  padding: 0.35em 0.85em;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  background: rgba(18, 18, 20, 0.42);
+  box-shadow: 0 3px 16px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  font-size: 0.8125em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  text-align: center;
+  animation: mkl_pc_3d_hint_in 0.45s 0.2s ease both, mkl_pc_3d_hint_label_out 0.5s 4.8s ease forwards;
+}
+
+@supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+  .mkl_pc_3d_hint__puck,
+  .mkl_pc_3d_hint__label {
+    background: rgba(18, 18, 20, 0.68);
+  }
+}
+/*
+ * Full-bleed viewer: keep what the customer reads with the product.
+ *
+ * With extend_under_toolbar the canvas stretches under the toolbar, but the
+ * camera goes on framing the product in the clear area beside it — that is what
+ * apply_camera_view_offset does with these same four custom properties. Any
+ * overlay centred on the raw canvas therefore drifts away from the product it
+ * belongs to; on Float's desktop layout it lands half behind the menu.
+ *
+ * Reading the same properties keeps the two in step by construction, and CSS
+ * resolves their percentages against the same axes parse_css_length does —
+ * left/right against width, top/bottom against height — so a themed % inset
+ * means the same thing to the overlay as it does to the camera.
+ */
+.mkl_pc_viewer--extend-under-toolbar .mkl_pc_3d_hint {
+  inset: var(--mkl_pc_viewer_focus_inset_top, 0) var(--mkl_pc_viewer_focus_inset_right, 0) var(--mkl_pc_viewer_focus_inset_bottom, 0) var(--mkl_pc_viewer_focus_inset_left, 0);
+}
+.mkl_pc_viewer--extend-under-toolbar .mkl_pc_3d_loader__content {
+  position: absolute;
+  inset: var(--mkl_pc_viewer_focus_inset_top, 0) var(--mkl_pc_viewer_focus_inset_right, 0) var(--mkl_pc_viewer_focus_inset_bottom, 0) var(--mkl_pc_viewer_focus_inset_left, 0);
+  box-sizing: border-box;
+  padding: 1.5em;
+}
+
+.mkl_pc_viewer--orbitable .mkl_pc_3d_canvas_container canvas {
+  cursor: grab;
+}
+.mkl_pc_viewer--orbitable .mkl_pc_3d_canvas_container canvas:active {
+  cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mkl_pc_3d_loader {
+    transition: none;
+  }
+  .mkl_pc_3d_loader__spinner {
+    animation: none;
+    opacity: 0.7;
+    border-right-color: currentColor;
+  }
+  .mkl_pc_3d_loader__text-item {
+    transition: none;
+  }
+  .mkl_pc_3d_hint {
+    transition: none;
+  }
+  .mkl_pc_3d_hint__puck,
+  .mkl_pc_3d_hint__glyph,
+  .mkl_pc_3d_hint__label {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

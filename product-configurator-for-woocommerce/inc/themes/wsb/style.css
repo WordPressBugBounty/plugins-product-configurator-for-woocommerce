@@ -387,9 +387,6 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   text-align: center;
   user-select: none;
 }
-.mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img {
-  transition: 0.2s all;
-}
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img:not(.active), .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers img.loading {
   opacity: 0;
 }
@@ -402,7 +399,6 @@ nav.mkl-pc--steps button.step-previous, nav.mkl-pc--steps button.step-previous s
   -webkit-user-drag: none;
 }
 .mkl_pc .mkl_pc_container .mkl_pc_viewer .mkl_pc_layers svg {
-  transition: 0.2s all;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -1770,12 +1766,6 @@ body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choic
   padding: 1rem;
 }
 
-.theme-twentytwentyfive .mkl_pc .mkl_pc_container .form input.qty {
-  font-size: 1rem;
-  padding: 1rem;
-  line-height: inherit;
-}
-
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar .mkl-pc-validation-summary {
   margin: 0;
   border-radius: 0;
@@ -1802,4 +1792,63 @@ body.keyboard-navigation .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choic
     overflow-x: hidden;
   }
 }
-/*# sourceMappingURL=../../../maps/inc/themes/wsb/style.css.map */
+.mkl_pc .mkl_pc_container .pc_configurator_form {
+  gap: 6px;
+}
+.mkl_pc .mkl_pc_container .pc_configurator_form button.configurator-add-to-cart,
+.mkl_pc .mkl_pc_container .pc_configurator_form button.add-to-quote {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 1.25em;
+  border: none;
+  border-radius: 4px;
+  background: var(--mkl_pc_color-primary);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: none;
+  letter-spacing: normal;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.mkl_pc .mkl_pc_container .pc_configurator_form button.configurator-add-to-cart:hover, .mkl_pc .mkl_pc_container .pc_configurator_form button.configurator-add-to-cart:focus,
+.mkl_pc .mkl_pc_container .pc_configurator_form button.add-to-quote:hover,
+.mkl_pc .mkl_pc_container .pc_configurator_form button.add-to-quote:focus {
+  background: var(--mkl_pc_color-primary_hover);
+  color: #fff;
+}
+.mkl_pc .mkl_pc_container .pc_configurator_form button.configurator-add-to-cart:focus-visible,
+.mkl_pc .mkl_pc_container .pc_configurator_form button.add-to-quote:focus-visible {
+  outline: 2px solid var(--mkl_pc_color-primary);
+  outline-offset: 2px;
+}
+.mkl_pc .mkl_pc_container .pc_configurator_form button.configurator-add-to-cart:disabled,
+.mkl_pc .mkl_pc_container .pc_configurator_form button.add-to-quote:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.mkl_pc .mkl_pc_container .pc_configurator_form .quantity {
+  display: inline-flex;
+  align-items: center;
+}
+.mkl_pc .mkl_pc_container .pc_configurator_form .quantity input.qty {
+  box-sizing: border-box;
+  width: 4em;
+  height: 44px;
+  margin: 0;
+  padding: 0 0.5em;
+  border: 1px solid #d3d3d3;
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  text-align: center;
+  box-shadow: none;
+}
