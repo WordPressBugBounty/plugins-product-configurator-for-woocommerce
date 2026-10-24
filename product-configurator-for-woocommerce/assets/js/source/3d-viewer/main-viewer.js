@@ -45,9 +45,9 @@ import {
 	orbit_hint_done,
 } from './orbit-hint.js';
 import { start_animation_loop } from './3d-animation-loop.js';
-import { angle_fits_target, fit_angle_camera, framing_shift_to_pixels } from './3d-camera-fit.js';
+import { angle_fits_target, angle_model_pivot, fit_angle_camera, framing_shift_to_pixels, set_orbit_fitted_distance } from './3d-camera-fit.js';
 import { angle_turn_direction, plan_orbit_move } from './3d-camera-move.js';
-import { hideObjectsByName, getHiddenObjectNamesList, getObjectTargetPosition, getBoundingBoxFromObjectIds, findObject, findObjectByCompositeId, findObjectsByCompositeId, getAnchorCopies, createLightFromSettings, applyLightCookie, removeLightsFromScene, loadEnvMap, registerSceneMaterials, setSceneEnvironment, blurEnvironmentTexture, getEnvironmentKey, ShadowCatcher, invalidateBakedShadows, createShadowLight, aimShadowLight, applyShadowFlagsToObject, applyShadowSettingsToLight, applyRendererShadowSettings, refreshSceneShadows, supportsLightShadows, resolveShadowMode, SHADOW_MODES, shadowGroundExtent , isObjectDisplayLayer, objectDisplayLayerVisibility } from './3d-scene-utils.js';
+import { hideObjectsByName, getHiddenObjectNamesList, getObjectTargetPosition, getBoundingBoxFromObjectIds, findObject, findObjectByCompositeId, findObjectsByCompositeId, getAnchorCopies, createLightFromSettings, applyLightCookie, removeLightsFromScene, loadEnvMap, registerSceneMaterials, setSceneEnvironment, blurEnvironmentTexture, getEnvironmentKey, ShadowCatcher, invalidateBakedShadows, createShadowLight, aimShadowLight, applyShadowFlagsToObject, applyShadowSettingsToLight, applyRendererShadowSettings, refreshSceneShadows, supportsLightShadows, resolveShadowMode, SHADOW_MODES, shadowGroundExtent , isObjectDisplayLayer, objectDisplayLayerVisibility, getClipSphere, fitCameraClipRange } from './3d-scene-utils.js';
 import { warn_gltf_load_error } from './3d-gltf-load-error.js';
 import { create_anchor_placement, model_attachment_point, compare_priority, normalize_anchor_ids, read_follow_flag } from './3d-anchor-placement.js';
 import { clone as cloneWithSkeletons } from 'three/examples/jsm/utils/SkeletonUtils.js';
@@ -410,6 +410,8 @@ export default Backbone.View.extend({
 	 * @param {number} [opts.duration=850] - Milliseconds
 	 * @param {'cw'|'ccw'|'shortest'} [opts.turn] - Which way round, seen from above
 	 * @param {{x: number, y: number}} [opts.shift] - Framing lens shift to ease into
+	 * @param {number} [opts.fittedDistance] - Distance the destination was fitted at, 0 when it
+	 *        was not fitted; see set_orbit_fitted_distance. Left out, the zoom-out limit stays.
 	 *
 	 * Once the customer grabs the model (or already holds it when the move
 	 * starts), the move stops driving the turn, tilt and distance, which are
@@ -435,7 +437,9 @@ export default Backbone.View.extend({
 		}
 		this._cameraMove = null;
 
+		const fitted = opts.fittedDistance;
 		if ( immediate || duration === 0 ) {
+			if ( fitted !== undefined ) set_orbit_fitted_distance( controls, fitted );
 			if ( position ) camera.position.copy( position );
 			if ( target ) controls.target.copy( target );
 			if ( opts.shift ) this._setFramingShift( opts.shift.x, opts.shift.y );
@@ -453,6 +457,12 @@ export default Backbone.View.extend({
 		const endShift = opts.shift || startShift;
 		const startTs = performance.now();
 		const easeInOutCubic = ( x ) => ( x < 0.5 ? 4 * x * x * x : 1 - Math.pow( -2 * x + 2, 3 ) / 2 );
+		// Every frame goes through controls.update(), which clamps the distance:
+		// leaving a far fitted angle for a nearer one, the limit holds the start
+		// distance until the move lands, or the camera would jump in first.
+		if ( fitted !== undefined ) {
+			set_orbit_fitted_distance( controls, Math.max( fitted, camera.position.distanceTo( controls.target ) ) );
+		}
 		const state = { handedOver: this._cameraHeld };
 		const plannedPos = new THREE.Vector3();
 		const plannedTarget = new THREE.Vector3();
@@ -484,6 +494,7 @@ export default Backbone.View.extend({
 			} else {
 				t._cameraAnimId = null;
 				if ( this._cameraMove === state ) this._cameraMove = null;
+				if ( fitted !== undefined ) set_orbit_fitted_distance( controls, fitted );
 			}
 		};
 		t._cameraAnimId = requestAnimationFrame( step );
@@ -563,7 +574,8 @@ export default Backbone.View.extend({
 	/**
 	 * An angle's camera position as set, and its orbit target resolved against
 	 * the scene: the centre of its visible focus objects, else of its target
-	 * object, else the stored target point.
+	 * object, else of its target model when it is fitted, else the stored
+	 * target point.
 	 *
 	 * @param {Backbone.Model} angle
 	 * @returns {{ position: THREE.Vector3|null, target: THREE.Vector3|null }}
@@ -582,12 +594,13 @@ export default Backbone.View.extend({
 		}
 		if ( ! useFocusIds || ! tgt ) {
 			const targetObjectId = angle.get( 'camera_target_object_id' );
-			if ( targetObjectId && t.model_root ) {
-				const obj = findObject( t.model_root, String( targetObjectId ).trim() );
-				if ( obj ) {
-					const targetPos = getObjectTargetPosition( obj, new THREE.Vector3() );
-					tgt = { x: targetPos.x, y: targetPos.y, z: targetPos.z };
-				}
+			const obj = targetObjectId && t.model_root ? findObject( t.model_root, String( targetObjectId ).trim() ) : null;
+			if ( obj ) {
+				const targetPos = getObjectTargetPosition( obj, new THREE.Vector3() );
+				tgt = { x: targetPos.x, y: targetPos.y, z: targetPos.z };
+			} else if ( ! useFocusIds && t.model_root ) {
+				const modelPivot = angle_model_pivot( t.model_root, angle );
+				if ( modelPivot ) tgt = { x: modelPivot.x, y: modelPivot.y, z: modelPivot.z };
 			}
 		}
 		const isVec = ( v ) => v && typeof v.x === 'number' && typeof v.y === 'number' && typeof v.z === 'number';
@@ -641,6 +654,10 @@ export default Backbone.View.extend({
 		// An angle without a fit drops the previous angle's shift.
 		const shift = fit ? fit.shift : { x: 0, y: 0 };
 		const move = Object.assign( {}, opts, { shift } );
+		// A fitted view may stand past the zoom-out limit, which then gives way.
+		// A reframe of a view the customer has taken over keeps the limit it has.
+		if ( fit && ! this._framingTouched ) move.fittedDistance = fit.distance;
+		else if ( ! reframe ) move.fittedDistance = 0;
 		if ( ! reframe ) {
 			// Going to another angle is a longer trip than a reframe, and the
 			// destination decides which way round the camera goes.
@@ -1283,6 +1300,7 @@ export default Backbone.View.extend({
 				if ( this._shadowsEnabled ) this._refreshShadows();
 				this.invalidate_fake_shadow();
 				this._refreshPostprocessingSceneScale();
+				this._invalidateClipSphere();
 				this._requestAngleReframe();
 				this._requestRender();
 			},
@@ -1831,6 +1849,8 @@ export default Backbone.View.extend({
 		this._emitRuntimeEvent( 'frame', { deltaSeconds } );
 
 		this._quality.frame( () => {
+			// Before every pass that reads the depth range, the effect chain included.
+			this._fitCameraClipRange( t.camera );
 			// No mode check here: update() has already told the instance whether it is
 			// the active shadow, and render() is a no-op when it is not.
 			if ( t.fake_shadow ) {
@@ -1847,6 +1867,25 @@ export default Backbone.View.extend({
 	},
 
 
+
+	/**
+	 * Fit a camera's near/far planes to the model, so models clip the same in any
+	 * unit. See fitCameraClipRange.
+	 *
+	 * @param {THREE.PerspectiveCamera} camera
+	 */
+	_fitCameraClipRange( camera ) {
+		const t = this._three;
+		if ( ! t || ! t.model_root ) return;
+		// Measured on first use after the bounds change, not on every frame.
+		if ( ! t.clip_sphere ) t.clip_sphere = getClipSphere( t.model_root );
+		fitCameraClipRange( camera, t.clip_sphere );
+	},
+
+	/** The model's bounds changed: measure them again before the next fit. */
+	_invalidateClipSphere() {
+		if ( this._three ) this._three.clip_sphere = null;
+	},
 
 	_startRenderLoop() {
 		const t = this._three;
@@ -2009,6 +2048,7 @@ export default Backbone.View.extend({
 					// AO radius and the SSR reflective-mesh list were sized against
 					// whatever was in the scene before this model existed.
 					this._refreshPostprocessingSceneScale();
+					this._invalidateClipSphere();
 					this._emitRuntimeAction( 'PC.fe.viewer.object3d.loaded', [ this, idStr, sceneToAdd, sceneModel.get( 'animations' ) || [], this._runtimeApi ] );
 					this._emitRuntimeEvent( 'object3d:loaded', { object3dId: idStr, scene: sceneToAdd, animations: sceneModel.get( 'animations' ) || [] } );
 					resolve( sceneToAdd );
@@ -2326,6 +2366,15 @@ export default Backbone.View.extend({
 			setShotOffset( cameraForShot );
 		}
 
+		// The shot may stand somewhere other than the live view, so its depth range
+		// is fitted where it stands. A camera authored into the model keeps its own
+		// unless the effect chain has posed the live camera there.
+		const savedNear = baseCamera.near;
+		const savedFar = baseCamera.far;
+		if ( usePostprocessing || shotIsOurs ) {
+			this._fitCameraClipRange( usePostprocessing ? baseCamera : cameraForShot );
+		}
+
 		// Jitter for the capture is expressed against the output size rather than the
 		// container: the toolbar offset has just been cleared and the aspect reset to
 		// the requested dimensions, so half a unit here is half an output pixel.
@@ -2397,6 +2446,13 @@ export default Backbone.View.extend({
 			baseCamera.position.copy( savedPosition );
 			baseCamera.quaternion.copy( savedQuaternion );
 			if ( savedFov != null ) baseCamera.fov = savedFov;
+		}
+		// Idle frames refine the picture without refitting, so the live camera
+		// cannot be left with the shot's range.
+		if ( baseCamera.near !== savedNear || baseCamera.far !== savedFar ) {
+			baseCamera.near = savedNear;
+			baseCamera.far = savedFar;
+			baseCamera.updateProjectionMatrix();
 		}
 		if ( needAspectRestore ) {
 			baseCamera.aspect = savedAspect;

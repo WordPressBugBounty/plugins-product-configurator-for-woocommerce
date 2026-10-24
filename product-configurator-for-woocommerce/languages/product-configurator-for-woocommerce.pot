@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2026-10-12 08:53+0000\n"
+"POT-Creation-Date: 2026-10-24 09:53+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "You are not allowed to view this product."
 msgstr ""
 
-#: src/inc/ajax.php:113, src/inc/ajax.php:108, src/inc/ajax.php:390, src/inc/ajax.php:595, src/inc/ajax.php:676, src/inc/ajax.php:771, src/inc/admin/data-migration/class-plugin.php:121, src/inc/admin/data-migration/class-plugin.php:149
+#: src/inc/ajax.php:113, src/inc/ajax.php:108, src/inc/ajax.php:390, src/inc/ajax.php:595, src/inc/ajax.php:676, src/inc/ajax.php:771, src/inc/admin/data-migration/class-plugin.php:125, src/inc/admin/data-migration/class-plugin.php:153
 msgid "The session seems to have expired."
 msgstr ""
 
@@ -53,7 +53,7 @@ msgstr ""
 msgid "Error saving the data:"
 msgstr ""
 
-#: src/inc/ajax.php:394, src/inc/ajax.php:598, src/inc/admin/data-migration/class-plugin.php:124, src/inc/admin/data-migration/class-plugin.php:152
+#: src/inc/ajax.php:394, src/inc/ajax.php:598, src/inc/admin/data-migration/class-plugin.php:128, src/inc/admin/data-migration/class-plugin.php:156
 msgid "You are not allowed to edit this product."
 msgstr ""
 
@@ -85,11 +85,11 @@ msgstr ""
 msgid "The data could not be stored, so nothing was changed. Please try again."
 msgstr ""
 
-#: src/inc/ajax.php:587, src/inc/global-configurators/class-admin-ui.php:333, src/inc/global-configurators/class-admin-ui.php:397, src/inc/global-configurators/class-admin-ui.php:437, src/inc/global-configurators/class-admin-ui.php:469, src/inc/global-configurators/class-admin-ui.php:494, src/inc/global-configurators/class-admin-ui.php:526, src/inc/admin/data-migration/class-plugin.php:113, src/inc/admin/data-migration/class-plugin.php:141
+#: src/inc/ajax.php:587, src/inc/global-configurators/class-admin-ui.php:333, src/inc/global-configurators/class-admin-ui.php:397, src/inc/global-configurators/class-admin-ui.php:437, src/inc/global-configurators/class-admin-ui.php:469, src/inc/global-configurators/class-admin-ui.php:494, src/inc/global-configurators/class-admin-ui.php:526, src/inc/admin/data-migration/class-plugin.php:117, src/inc/admin/data-migration/class-plugin.php:145
 msgid "Missing parameters."
 msgstr ""
 
-#: src/inc/ajax.php:592, src/inc/base/configuration.php:1059, src/inc/global-configurators/class-admin-ui.php:506, src/inc/global-configurators/class-data-copier.php:196, src/inc/admin/data-migration/class-legacy-blob-storage.php:97, src/inc/admin/data-migration/class-plugin.php:118, src/inc/admin/data-migration/class-plugin.php:146
+#: src/inc/ajax.php:592, src/inc/base/configuration.php:1059, src/inc/global-configurators/class-admin-ui.php:506, src/inc/global-configurators/class-data-copier.php:196, src/inc/admin/data-migration/class-legacy-blob-storage.php:97, src/inc/admin/data-migration/class-plugin.php:122, src/inc/admin/data-migration/class-plugin.php:150
 msgid "Invalid product."
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 msgid "You are not allowed to get the configurable products."
 msgstr ""
 
-#: src/inc/ajax.php:945, src/inc/languages.php:64, src/inc/admin/settings-page.php:1110
+#: src/inc/ajax.php:945, src/inc/languages.php:64, src/inc/admin/settings-page.php:1109
 msgid "Successfully added to cart, now redirecting..."
 msgstr ""
 
@@ -198,7 +198,7 @@ msgstr ""
 msgid "3D Objects"
 msgstr ""
 
-#: src/inc/class-editor-menu.php:168, src/inc/class-editor-menu.php:186, src/inc/admin/settings-page.php:1542, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:17, src/inc/admin/views/html-product-configurator-templates.php:664, src/inc/admin/views/html-product-configurator-templates.php:822, src/inc/admin/views/html-product-configurator-templates.php:913, src/inc/admin/views/html-product-configurator-templates.php:1012, src/inc/admin/views/html-product-configurator-templates.php:1027, src/inc/admin/views/html-product-configurator-templates.php:1043, src/inc/admin/views/html-product-configurator-templates.php:1269, src/inc/frontend/views/html-product-configurator-templates.php:122
+#: src/inc/class-editor-menu.php:168, src/inc/class-editor-menu.php:186, src/inc/admin/settings-page.php:1541, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:17, src/inc/admin/views/html-product-configurator-templates.php:664, src/inc/admin/views/html-product-configurator-templates.php:822, src/inc/admin/views/html-product-configurator-templates.php:913, src/inc/admin/views/html-product-configurator-templates.php:1012, src/inc/admin/views/html-product-configurator-templates.php:1027, src/inc/admin/views/html-product-configurator-templates.php:1043, src/inc/admin/views/html-product-configurator-templates.php:1269, src/inc/frontend/views/html-product-configurator-templates.php:122
 msgid "Cancel"
 msgstr ""
 
@@ -279,7 +279,7 @@ msgstr ""
 msgid "Configure"
 msgstr ""
 
-#: src/inc/languages.php:48, src/inc/admin/settings-page.php:739, src/inc/frontend/cart.php:720, src/inc/admin/settings/choice.php:69
+#: src/inc/languages.php:48, src/inc/admin/settings-page.php:738, src/inc/frontend/cart.php:720, src/inc/admin/settings/choice.php:69
 msgid "SKU"
 msgstr ""
 
@@ -296,15 +296,15 @@ msgstr ""
 msgid "Select at least %i items in %s"
 msgstr ""
 
-#: src/inc/languages.php:53, src/inc/admin/settings-page.php:984, src/inc/admin/settings-page.php:990
+#: src/inc/languages.php:53, src/inc/admin/settings-page.php:983, src/inc/admin/settings-page.php:989
 msgid "Reset configuration"
 msgstr ""
 
-#: src/inc/languages.php:54, src/inc/admin/settings-page.php:996, src/inc/admin/settings-page.php:1002, src/inc/frontend/cart.php:986, src/inc/frontend/cart.php:1307
+#: src/inc/languages.php:54, src/inc/admin/settings-page.php:995, src/inc/admin/settings-page.php:1001, src/inc/frontend/cart.php:986, src/inc/frontend/cart.php:1307
 msgid "Edit configuration"
 msgstr ""
 
-#: src/inc/languages.php:55, src/inc/admin/settings-page.php:1008, src/inc/admin/settings-page.php:1014
+#: src/inc/languages.php:55, src/inc/admin/settings-page.php:1007, src/inc/admin/settings-page.php:1013
 msgid "Edit item in cart"
 msgstr ""
 
@@ -313,11 +313,11 @@ msgctxt "Label displayed in the cart / order"
 msgid "Configuration"
 msgstr ""
 
-#: src/inc/languages.php:57, src/inc/admin/settings-page.php:1062, src/inc/frontend/frontend-woocommerce.php:306
+#: src/inc/languages.php:57, src/inc/admin/settings-page.php:1061, src/inc/frontend/frontend-woocommerce.php:306
 msgid "Loading the configurator..."
 msgstr ""
 
-#: src/inc/languages.php:58, src/inc/admin/settings-page.php:1020, src/inc/admin/settings-page.php:1026
+#: src/inc/languages.php:58, src/inc/admin/settings-page.php:1019, src/inc/admin/settings-page.php:1025
 msgid "Download configuration image"
 msgstr ""
 
@@ -334,12 +334,12 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/inc/languages.php:62, src/inc/admin/settings-page.php:1086, src/inc/frontend/views/parts/toolbar.php:27
+#: src/inc/languages.php:62, src/inc/admin/settings-page.php:1085, src/inc/frontend/views/parts/toolbar.php:27
 msgctxt "Previous step button label"
 msgid "Previous"
 msgstr ""
 
-#: src/inc/languages.php:63, src/inc/admin/settings-page.php:1098, src/inc/frontend/views/parts/toolbar.php:41
+#: src/inc/languages.php:63, src/inc/admin/settings-page.php:1097, src/inc/frontend/views/parts/toolbar.php:41
 msgctxt "Next step button label"
 msgid "Next"
 msgstr ""
@@ -424,43 +424,43 @@ msgstr ""
 msgid "Custom background image"
 msgstr ""
 
-#: src/inc/admin/order.php:65, src/inc/admin/settings-page.php:1032, src/inc/admin/settings-page.php:1038
+#: src/inc/admin/order.php:107, src/inc/admin/settings-page.php:1031, src/inc/admin/settings-page.php:1037
 msgid "View configuration"
 msgstr ""
 
-#: src/inc/admin/product-3d.php:113
+#: src/inc/admin/product-3d.php:128
 msgid "AR / Quick Look"
 msgstr ""
 
-#: src/inc/admin/product-3d.php:135
+#: src/inc/admin/product-3d.php:150
 msgid "Postprocessing"
 msgstr ""
 
-#: src/inc/admin/product-3d.php:372
+#: src/inc/admin/product-3d.php:437
 msgid "This ZIP was not uploaded for a 3D model. Upload it again from this window to use it."
 msgstr ""
 
-#: src/inc/admin/product-3d.php:374
+#: src/inc/admin/product-3d.php:439
 msgid "No .glb or .gltf file was found in this ZIP."
 msgstr ""
 
-#: src/inc/admin/product-3d.php:377
+#: src/inc/admin/product-3d.php:442
 msgid "This ZIP is too large to be used as a 3D model."
 msgstr ""
 
-#: src/inc/admin/product-3d.php:379
+#: src/inc/admin/product-3d.php:444
 msgid "This ZIP contains too many files to be used as a 3D model."
 msgstr ""
 
-#: src/inc/admin/product-3d.php:381
+#: src/inc/admin/product-3d.php:446
 msgid "This ZIP contains a file type a 3D model cannot use, such as a script, so it was not extracted."
 msgstr ""
 
-#: src/inc/admin/product-3d.php:384
+#: src/inc/admin/product-3d.php:449
 msgid "This ZIP contains unsafe file paths, so it was not extracted."
 msgstr ""
 
-#: src/inc/admin/product-3d.php:386
+#: src/inc/admin/product-3d.php:451
 msgid "This ZIP could not be extracted."
 msgstr ""
 
@@ -500,7 +500,7 @@ msgstr ""
 msgid "Enable this option if variation is configurable"
 msgstr ""
 
-#: src/inc/admin/product.php:101, src/inc/admin/product.php:662, src/inc/admin/views/html-product-configurator-templates.php:156
+#: src/inc/admin/product.php:101, src/inc/admin/product.php:681, src/inc/admin/views/html-product-configurator-templates.php:156
 msgid "Configurator"
 msgstr ""
 
@@ -508,7 +508,7 @@ msgstr ""
 msgid "Select if you want this product to be configurable"
 msgstr ""
 
-#: src/inc/admin/product.php:152, src/inc/admin/product.php:693
+#: src/inc/admin/product.php:152, src/inc/admin/product.php:712
 msgid "Configurator type"
 msgstr ""
 
@@ -528,7 +528,7 @@ msgstr ""
 msgid "You are configuring"
 msgstr ""
 
-#: src/inc/admin/product.php:187, src/inc/admin/product.php:915, src/inc/admin/settings-page.php:1481
+#: src/inc/admin/product.php:187, src/inc/admin/product.php:934, src/inc/admin/settings-page.php:1480
 msgid "Documentation"
 msgstr ""
 
@@ -853,43 +853,43 @@ msgstr ""
 msgid "All settings"
 msgstr ""
 
-#: src/inc/admin/product.php:528, src/inc/admin/settings/object3d.php:144
+#: src/inc/admin/product.php:528, src/inc/admin/settings/object3d.php:146
 msgid "Intensity"
 msgstr ""
 
-#: src/inc/admin/product.php:529, src/inc/admin/settings/choice.php:238, src/inc/admin/settings/object3d.php:136
+#: src/inc/admin/product.php:529, src/inc/admin/settings/choice.php:238, src/inc/admin/settings/object3d.php:138
 msgid "Color"
 msgstr ""
 
-#: src/inc/admin/product.php:530, src/inc/admin/settings/object3d.php:152
+#: src/inc/admin/product.php:530, src/inc/admin/settings/object3d.php:154
 msgid "Cast shadows"
 msgstr ""
 
-#: src/inc/admin/product.php:531, src/inc/admin/settings/object3d.php:128
+#: src/inc/admin/product.php:531, src/inc/admin/settings/object3d.php:130
 msgid "Position"
 msgstr ""
 
-#: src/inc/admin/product.php:533, src/inc/admin/settings/object3d.php:379, src/inc/admin/views/html-product-configurator-templates.php:281
+#: src/inc/admin/product.php:533, src/inc/admin/settings/object3d.php:381, src/inc/admin/views/html-product-configurator-templates.php:281
 msgid "Ambient"
 msgstr ""
 
-#: src/inc/admin/product.php:534, src/inc/admin/settings/object3d.php:380, src/inc/admin/views/html-product-configurator-templates.php:282
+#: src/inc/admin/product.php:534, src/inc/admin/settings/object3d.php:382, src/inc/admin/views/html-product-configurator-templates.php:282
 msgid "Directional"
 msgstr ""
 
-#: src/inc/admin/product.php:535, src/inc/admin/settings/object3d.php:381, src/inc/admin/views/html-product-configurator-templates.php:283
+#: src/inc/admin/product.php:535, src/inc/admin/settings/object3d.php:383, src/inc/admin/views/html-product-configurator-templates.php:283
 msgid "Point"
 msgstr ""
 
-#: src/inc/admin/product.php:536, src/inc/admin/settings/object3d.php:382, src/inc/admin/views/html-product-configurator-templates.php:284
+#: src/inc/admin/product.php:536, src/inc/admin/settings/object3d.php:384, src/inc/admin/views/html-product-configurator-templates.php:284
 msgid "Spot"
 msgstr ""
 
-#: src/inc/admin/product.php:537, src/inc/admin/settings/object3d.php:383, src/inc/admin/views/html-product-configurator-templates.php:285
+#: src/inc/admin/product.php:537, src/inc/admin/settings/object3d.php:385, src/inc/admin/views/html-product-configurator-templates.php:285
 msgid "Rect Area"
 msgstr ""
 
-#: src/inc/admin/product.php:538, src/inc/admin/settings/object3d.php:384, src/inc/admin/views/html-product-configurator-templates.php:286
+#: src/inc/admin/product.php:538, src/inc/admin/settings/object3d.php:386, src/inc/admin/views/html-product-configurator-templates.php:286
 msgid "Hemisphere"
 msgstr ""
 
@@ -1040,50 +1040,114 @@ msgstr ""
 msgid "No 3D model is set on this choice or its layer."
 msgstr ""
 
-#: src/inc/admin/product.php:681
+#: src/inc/admin/product.php:597
+msgid "Visible objects"
+msgstr ""
+
+#: src/inc/admin/product.php:598
+msgid "— Saved camera target —"
+msgstr ""
+
+#: src/inc/admin/product.php:599, src/inc/admin/settings/angle.php:95
+msgid "Fit the target in view"
+msgstr ""
+
+#: src/inc/admin/product.php:600
+msgid "Camera position as set"
+msgstr ""
+
+#: src/inc/admin/product.php:601
+msgid "Saves the direction only: the distance adapts to each screen."
+msgstr ""
+
+#: src/inc/admin/product.php:602
+msgid "Saves the camera position as it is."
+msgstr ""
+
+#: src/inc/admin/product.php:603, src/inc/admin/settings/angle.php:89
+msgid "Framing"
+msgstr ""
+
+#: src/inc/admin/product.php:604
+msgid "Camera target"
+msgstr ""
+
+#: src/inc/admin/product.php:605
+msgid "Saved camera target"
+msgstr ""
+
+#. translators: %s: 3D model name
+#: src/inc/admin/product.php:607
+msgid "Model: %s"
+msgstr ""
+
+#. translators: %s: object name in the 3D model
+#: src/inc/admin/product.php:609
+msgid "Object: %s"
+msgstr ""
+
+#. translators: %s: comma-separated object names
+#: src/inc/admin/product.php:611
+msgid "Focus: %s"
+msgstr ""
+
+#. translators: %d: number of objects
+#: src/inc/admin/product.php:613
+msgid "Focus: %d objects"
+msgstr ""
+
+#: src/inc/admin/product.php:614
+msgid "Saved view"
+msgstr ""
+
+#: src/inc/admin/product.php:615
+msgid "Moved, not saved"
+msgstr ""
+
+#: src/inc/admin/product.php:700
 msgid "Save the post once to enable the configurator editor."
 msgstr ""
 
-#: src/inc/admin/product.php:694
+#: src/inc/admin/product.php:713
 msgid "Applies to every product currently using this global configurator."
 msgstr ""
 
-#: src/inc/admin/product.php:698
+#: src/inc/admin/product.php:717
 msgid "Configurator type changed. Please update this global configurator to reload the correct editor."
 msgstr ""
 
-#: src/inc/admin/product.php:738, src/inc/admin/settings/layer.php:396
+#: src/inc/admin/product.php:757, src/inc/admin/settings/layer.php:396
 msgid "Layer"
 msgstr ""
 
-#: src/inc/admin/product.php:757
+#: src/inc/admin/product.php:776
 msgid "Save the post once to enable the layer editor."
 msgstr ""
 
 #. translators: %d: number of choices the layer holds.
-#: src/inc/admin/product.php:767
+#: src/inc/admin/product.php:786
 msgid "This layer holds %d choice."
 msgid_plural "This layer holds %d choices."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/inc/admin/product.php:772
+#: src/inc/admin/product.php:791
 msgid "Editing it here changes it for every product that uses this layer."
 msgstr ""
 
-#: src/inc/admin/product.php:773
+#: src/inc/admin/product.php:792
 msgid "Edit the layer"
 msgstr ""
 
-#: src/inc/admin/product.php:835
+#: src/inc/admin/product.php:854
 msgid "Start product's configurator"
 msgstr ""
 
-#: src/inc/admin/product.php:852
+#: src/inc/admin/product.php:871
 msgid "Edit configurator layers"
 msgstr ""
 
-#: src/inc/admin/product.php:914
+#: src/inc/admin/product.php:933
 msgid "Getting started"
 msgstr ""
 
@@ -1199,7 +1263,7 @@ msgstr ""
 msgid "Configure button label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:223, src/inc/admin/settings-page.php:990, src/inc/admin/settings-page.php:1002, src/inc/admin/settings-page.php:1014, src/inc/admin/settings-page.php:1026, src/inc/admin/settings-page.php:1038, src/inc/admin/settings-page.php:1050, src/inc/admin/settings-page.php:1062, src/inc/admin/settings-page.php:1074, src/inc/admin/settings-page.php:1086, src/inc/admin/settings-page.php:1098, src/inc/admin/settings-page.php:1110
+#: src/inc/admin/settings-page.php:223, src/inc/admin/settings-page.php:989, src/inc/admin/settings-page.php:1001, src/inc/admin/settings-page.php:1013, src/inc/admin/settings-page.php:1025, src/inc/admin/settings-page.php:1037, src/inc/admin/settings-page.php:1049, src/inc/admin/settings-page.php:1061, src/inc/admin/settings-page.php:1073, src/inc/admin/settings-page.php:1085, src/inc/admin/settings-page.php:1097, src/inc/admin/settings-page.php:1109
 msgid "Default:"
 msgstr ""
 
@@ -1371,328 +1435,324 @@ msgstr ""
 msgid "One meta per layer (easier to extract, no thumbnails)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:574
-msgid "Both: a single meta for display, plus one meta per layer"
-msgstr ""
-
-#: src/inc/admin/settings-page.php:578
+#: src/inc/admin/settings-page.php:577
 msgid "How the configuration is stored on the order line item. One meta per layer is easier for exports, invoices and ERP integrations to read, but it cannot display the choice thumbnails. Only affects new orders. The \"One meta per layer\" option also splits the choices in the classic cart and checkout, to match the cart blocks."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:584
+#: src/inc/admin/settings-page.php:583
 msgid "Angle display options"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:596
+#: src/inc/admin/settings-page.php:595
 msgid "Show angle/view image"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:607
+#: src/inc/admin/settings-page.php:606
 msgid "Show angle/view name"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:618
+#: src/inc/admin/settings-page.php:617
 msgid "Use the active angle to generate the image in the cart"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:629
+#: src/inc/admin/settings-page.php:628
 msgid "The user can swipe right or left to change view"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:640
+#: src/inc/admin/settings-page.php:639
 msgid "Image generation options"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:653
+#: src/inc/admin/settings-page.php:652
 msgid "Configuration image generation"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:670
+#: src/inc/admin/settings-page.php:669
 msgid "Show configuration image in cart and checkout"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:681
+#: src/inc/admin/settings-page.php:680
 msgid "Image size in the cart / checkout / order"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:695
+#: src/inc/admin/settings-page.php:694
 msgid "Image mode"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:702
+#: src/inc/admin/settings-page.php:701
 msgid "Save images to disk"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:703
+#: src/inc/admin/settings-page.php:702
 msgid "Save images to disk and add them to the media library"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:704
+#: src/inc/admin/settings-page.php:703
 msgid "Generate images on the fly"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:707
+#: src/inc/admin/settings-page.php:706
 msgid "(each configuration is generated once and kept as a file - not added to the media library)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:708
+#: src/inc/admin/settings-page.php:707
 msgid "(one media library entry per configuration - use it if another plugin needs the images in the library, such as a media offload or CDN plugin)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:709
+#: src/inc/admin/settings-page.php:708
 msgid "(save disk space, but uses more server resource)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:716
+#: src/inc/admin/settings-page.php:715
 msgid "Add product image to the checkout"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:727
+#: src/inc/admin/settings-page.php:726
 msgid "Add product image to the email"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:751
+#: src/inc/admin/settings-page.php:750
 msgid "SKU mode"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:757
+#: src/inc/admin/settings-page.php:756
 msgid "Each choice can have its own SKU"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:758
+#: src/inc/admin/settings-page.php:757
 msgid "Generate a single SKU by compounding the SKU set in each selected choice"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:767
+#: src/inc/admin/settings-page.php:766
 msgid "SKU devider (character used between the parts when compounding the SKU)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:779
+#: src/inc/admin/settings-page.php:778
 msgid "SKU label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:791
+#: src/inc/admin/settings-page.php:790
 msgid "Show SKU in the cart and checkout"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:802
+#: src/inc/admin/settings-page.php:801
 msgid "Miscellaneous"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:814
+#: src/inc/admin/settings-page.php:813
 msgid "Allow adding the product to cart without configuring"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:825
+#: src/inc/admin/settings-page.php:824
 msgid "Enable Ajax Add to cart in the configurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:836
+#: src/inc/admin/settings-page.php:835
 msgid "Reset the configuration and quantity after adding to cart (Ajax)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:842
+#: src/inc/admin/settings-page.php:841
 msgid "Only applies when Ajax add to cart is enabled in the configurator."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:848
+#: src/inc/admin/settings-page.php:847
 msgid "Timeout when saving the configuration in the admin"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:863
+#: src/inc/admin/settings-page.php:862
 msgid "Use steps if possible"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:869
+#: src/inc/admin/settings-page.php:868
 msgid "Check the documentation on how to use the steps feature"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:874
+#: src/inc/admin/settings-page.php:873
 msgid "Use layer names for previous and next button labels"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:884
+#: src/inc/admin/settings-page.php:883
 msgid "Make all steps clickable in the breadcrumb instead of the completed ones"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:900
+#: src/inc/admin/settings-page.php:899
 msgid "Performance"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:902
+#: src/inc/admin/settings-page.php:901
 msgid "How the configurator data is cached and delivered to the browser. The defaults suit most stores; these options mainly matter for large configurations (many layers and choices), or when a CDN or page cache sits in front of the site."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:907
+#: src/inc/admin/settings-page.php:906
 msgid "Can be usefull when using CDNs such as CloudFlare"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:909
+#: src/inc/admin/settings-page.php:908
 msgid "It is also useful when linking products for stock management"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:911
+#: src/inc/admin/settings-page.php:910
 msgid "When disabled, the configuration is rebuilt from the database on every request instead of being served as a static file. This is noticeably slower on large configurations."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:914
+#: src/inc/admin/settings-page.php:913
 msgid "Disable caching of configurations"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:926
+#: src/inc/admin/settings-page.php:925
 msgid "Load configurator data asynchronously"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:932
+#: src/inc/admin/settings-page.php:931
 msgid "The configuration is fetched when the visitor opens the configurator, instead of being loaded with the page. This keeps the product page lighter, which is useful for large configurations. The data is still served from the cached configuration file (unless caching is disabled above)."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:938
+#: src/inc/admin/settings-page.php:937
 msgid "Only render the images the configurator is showing"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:944
+#: src/inc/admin/settings-page.php:943
 msgid "The viewer normally holds an image for every choice and shows one of them. With this on it holds one image per layer instead - one per selection on multiple choice layers - and swaps it as the customer chooses. On large configurations this is most of the markup, and most of the work done when changing angle. Leave this off if a stylesheet targets the images of unselected choices."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:950
+#: src/inc/admin/settings-page.php:949
 msgid "Clear cached configurations when a page cache is cleared"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:956
+#: src/inc/admin/settings-page.php:955
 msgid "Applies to WP Rocket, LiteSpeed Cache and WP-Optimize. On by default. Turning it off is usually safe and faster: a cached configuration is already rebuilt whenever the product is saved, so clearing a page cache does not make it out of date. Leaving it on means every configurable product has to be rebuilt the next time someone views it, all at the moment the page cache is cold - on a store with many configurable products that is a lot of work at once. Keep it on if something outside the product changes the configuration data."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:962
+#: src/inc/admin/settings-page.php:961
 msgid "Disable GZIP compression of the configuration data (only affects the ajax request)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:977
+#: src/inc/admin/settings-page.php:976
 msgid "Other labels"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1044
+#: src/inc/admin/settings-page.php:1043
 msgid "Configuration (meta label in the cart)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1050, src/inc/compatibility/yith-quote-request.php:847, src/inc/frontend/cart.php:762, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
+#: src/inc/admin/settings-page.php:1049, src/inc/compatibility/yith-quote-request.php:847, src/inc/frontend/cart.php:762, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
 msgid "Configuration"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1056
+#: src/inc/admin/settings-page.php:1055
 msgid "Loading message (displayed when the configurator is loading, in inline mode)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1068
+#: src/inc/admin/settings-page.php:1067
 msgid "Angle switch label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1074
+#: src/inc/admin/settings-page.php:1073
 msgid "Change angle"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1080
+#: src/inc/admin/settings-page.php:1079
 msgid "Previous step label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1092
+#: src/inc/admin/settings-page.php:1091
 msgid "Next step label"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1104
+#: src/inc/admin/settings-page.php:1103
 msgid "Redirection message after Successfully adding to the cart"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1117
+#: src/inc/admin/settings-page.php:1116
 msgid "3D viewer"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1119
+#: src/inc/admin/settings-page.php:1118
 msgid "Options for the frontend 3D configurator. Enable only the compression formats your 3D models use to keep the page lighter."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1126
+#: src/inc/admin/settings-page.php:1125
 msgid "Enable Draco compression support"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1132
+#: src/inc/admin/settings-page.php:1131
 msgid "Load DRACOLoader so that GLB/GLTF models using KHR_draco_mesh_compression can be displayed (e.g. from Blender or glTF Pipeline)."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1138
+#: src/inc/admin/settings-page.php:1137
 msgid "Enable Meshopt compression support"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1144
+#: src/inc/admin/settings-page.php:1143
 msgid "Load the Meshopt decoder so that models using EXT_meshopt_compression can be displayed."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1150
+#: src/inc/admin/settings-page.php:1149
 msgid "Enable KTX2 texture support"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1156
+#: src/inc/admin/settings-page.php:1155
 msgid "Load the Basis Universal transcoder so that models using KHR_texture_basisu (.ktx2 textures) can be displayed. Supercompressed textures stay compressed on the GPU, so they cut both download size and video memory — usually a bigger saving on a textured product than mesh compression."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1171
+#: src/inc/admin/settings-page.php:1170
 msgid "Disable TranslatePress Dynamic translation for the condigurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1177
+#: src/inc/admin/settings-page.php:1176
 msgid "Activate this setting if you wish to translate the configuration data from within the configurator"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1288
+#: src/inc/admin/settings-page.php:1287
 msgid "Edit the theme settings in the customizer"
 msgstr ""
 
 #. translators: %s is the name of the select field
-#: src/inc/admin/settings-page.php:1353
+#: src/inc/admin/settings-page.php:1352
 msgid "Options are missing for the this select field: %s"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1432
+#: src/inc/admin/settings-page.php:1431
 msgid "Get the official Product Configurator themes"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1433
+#: src/inc/admin/settings-page.php:1432
 msgid "Beautiful design, integrated live configuring interface, widgetized homepage, flexible, lightweight and much more..."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1458
+#: src/inc/admin/settings-page.php:1457
 msgid "installed"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1479
+#: src/inc/admin/settings-page.php:1478
 msgid "Get the addon now"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1516
+#: src/inc/admin/settings-page.php:1515
 msgid "Theme preview"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1518, src/inc/admin/settings-page.php:1552, src/inc/admin/settings-page.php:1565
+#: src/inc/admin/settings-page.php:1517, src/inc/admin/settings-page.php:1551, src/inc/admin/settings-page.php:1564
 msgid "No preview"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1524, src/inc/global-configurators/class-admin-ui.php:138
+#: src/inc/admin/settings-page.php:1523, src/inc/global-configurators/class-admin-ui.php:138
 msgid "Change"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1527
+#: src/inc/admin/settings-page.php:1526
 msgid "No theme is in use."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1528
+#: src/inc/admin/settings-page.php:1527
 msgid "Select a theme"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1536
+#: src/inc/admin/settings-page.php:1535
 msgid "Select a theme to preview it."
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1541
+#: src/inc/admin/settings-page.php:1540
 msgid "Select the theme"
 msgstr ""
 
@@ -1995,12 +2055,12 @@ msgctxt "Label for the download configuration image link"
 msgid "Download configuration image"
 msgstr ""
 
-#: src/inc/frontend/order.php:118, src/inc/frontend/order.php:497
+#: src/inc/frontend/order.php:120, src/inc/frontend/order.php:496
 msgctxt "Label for the configuration meta data"
 msgid "Configuration"
 msgstr ""
 
-#: src/inc/frontend/order.php:129
+#: src/inc/frontend/order.php:128
 msgctxt "Label for the SKU meta data"
 msgid "SKU"
 msgstr ""
@@ -2605,87 +2665,87 @@ msgstr ""
 msgid "Restoring is only possible when legacy storage data is still present (for example after a failed migration)."
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:91
+#: src/inc/admin/data-migration/class-plugin.php:95
 msgid "Data migration required"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:92
+#: src/inc/admin/data-migration/class-plugin.php:96
 msgid "Configuration storage will be migrated to the new format the next time you save."
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:97
+#: src/inc/admin/data-migration/class-plugin.php:101
 msgid "Legacy storage data is still present alongside the new format. You can delete it after you have verified everything, or restore it from the current configuration."
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:99
+#: src/inc/admin/data-migration/class-plugin.php:103
 msgid "Delete legacy data"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:100
+#: src/inc/admin/data-migration/class-plugin.php:104
 msgid "Restore legacy data"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:203
+#: src/inc/admin/data-migration/class-plugin.php:207
 msgid "Delete the legacy copy of layers and content? Chunked storage will not be removed."
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:204
+#: src/inc/admin/data-migration/class-plugin.php:208
 msgid "This will permanently remove the new (chunked) storage for this product: all per-layer and per-content chunk metas, the layers index, and the migration flags. The editor will use your existing legacy blobs only. This is intended when a migration failed and legacy data is still intact. Continue?"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:205
+#: src/inc/admin/data-migration/class-plugin.php:209
 msgid "Could not update legacy storage."
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:207
+#: src/inc/admin/data-migration/class-plugin.php:211
 msgid "Migrating layers…"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:208
+#: src/inc/admin/data-migration/class-plugin.php:212
 msgid "Migrating content…"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:209
+#: src/inc/admin/data-migration/class-plugin.php:213
 msgid "Finalizing storage migration…"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:210, src/inc/admin/data-migration/class-plugin.php:218
+#: src/inc/admin/data-migration/class-plugin.php:214, src/inc/admin/data-migration/class-plugin.php:222
 msgid "Saving configuration…"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:211
+#: src/inc/admin/data-migration/class-plugin.php:215
 msgid "Migration complete"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:212
+#: src/inc/admin/data-migration/class-plugin.php:216
 msgid "A copy of your data may still exist in the previous (legacy) format until you delete it from the home tab. If a migration went wrong while that copy still exists, you can use “Restore legacy data” there to remove chunked storage and load the legacy copy again."
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:213, src/inc/admin/data-migration/class-plugin.php:220
+#: src/inc/admin/data-migration/class-plugin.php:217, src/inc/admin/data-migration/class-plugin.php:224
 msgid "OK"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:215
+#: src/inc/admin/data-migration/class-plugin.php:219
 msgid "Saving layers…"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:216
+#: src/inc/admin/data-migration/class-plugin.php:220
 msgid "Saving content…"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:217
+#: src/inc/admin/data-migration/class-plugin.php:221
 msgid "Finishing storage update…"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:219
+#: src/inc/admin/data-migration/class-plugin.php:223
 msgid "Save complete"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:222
+#: src/inc/admin/data-migration/class-plugin.php:226
 msgid "Creating global layer…"
 msgstr ""
 
-#: src/inc/admin/data-migration/class-plugin.php:223
+#: src/inc/admin/data-migration/class-plugin.php:227
 msgid "Saving global layer…"
 msgstr ""
 
@@ -2709,7 +2769,7 @@ msgstr ""
 msgid "Euler/vector3 field requires setting (id)."
 msgstr ""
 
-#: src/inc/admin/settings/abstract.php:361, src/inc/admin/settings/object3d.php:244, src/inc/admin/views/3d-settings-sections/display.php:20
+#: src/inc/admin/settings/abstract.php:361, src/inc/admin/settings/object3d.php:246, src/inc/admin/views/3d-settings-sections/display.php:20
 msgid "Select image"
 msgstr ""
 
@@ -2717,7 +2777,7 @@ msgstr ""
 msgid "Select file"
 msgstr ""
 
-#: src/inc/admin/settings/abstract.php:363, src/inc/admin/settings/abstract.php:572, src/inc/admin/settings/object3d.php:105, src/inc/admin/settings/object3d.php:245, src/inc/admin/settings/object3d.php:268, src/inc/admin/settings/object3d.php:279, src/inc/admin/settings/object3d.php:290, src/inc/admin/settings/object3d.php:301, src/inc/admin/settings/object3d.php:312, src/inc/admin/settings/object3d.php:323, src/inc/admin/settings/object3d.php:334, src/inc/admin/views/3d-settings-sections/display.php:14
+#: src/inc/admin/settings/abstract.php:363, src/inc/admin/settings/abstract.php:572, src/inc/admin/settings/object3d.php:105, src/inc/admin/settings/object3d.php:247, src/inc/admin/settings/object3d.php:270, src/inc/admin/settings/object3d.php:281, src/inc/admin/settings/object3d.php:292, src/inc/admin/settings/object3d.php:303, src/inc/admin/settings/object3d.php:314, src/inc/admin/settings/object3d.php:325, src/inc/admin/settings/object3d.php:336, src/inc/admin/views/3d-settings-sections/display.php:14
 msgid "Remove"
 msgstr ""
 
@@ -2741,7 +2801,7 @@ msgstr ""
 msgid "Select a 3D object from the 3D Objects tab."
 msgstr ""
 
-#: src/inc/admin/settings/abstract.php:495, src/inc/admin/settings/abstract.php:581, src/inc/admin/settings/angle.php:82, src/inc/admin/settings/choice.php:190, src/inc/admin/settings/layer.php:305, src/inc/admin/settings/object3d.php:411, src/inc/admin/settings/object3d.php:412, src/inc/admin/views/html-product-configurator-templates.php:1366, src/inc/admin/views/html-product-configurator-templates.php:1373
+#: src/inc/admin/settings/abstract.php:495, src/inc/admin/settings/abstract.php:581, src/inc/admin/settings/angle.php:82, src/inc/admin/settings/choice.php:190, src/inc/admin/settings/layer.php:305, src/inc/admin/settings/object3d.php:413, src/inc/admin/settings/object3d.php:414, src/inc/admin/views/html-product-configurator-templates.php:1366, src/inc/admin/views/html-product-configurator-templates.php:1373
 msgid "Select from list"
 msgstr ""
 
@@ -2811,14 +2871,6 @@ msgstr ""
 
 #: src/inc/admin/settings/angle.php:80
 msgid "None selected"
-msgstr ""
-
-#: src/inc/admin/settings/angle.php:89
-msgid "Framing"
-msgstr ""
-
-#: src/inc/admin/settings/angle.php:95
-msgid "Fit the target in view"
 msgstr ""
 
 #: src/inc/admin/settings/angle.php:99
@@ -3253,99 +3305,99 @@ msgstr ""
 msgid "Select new model"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:108
+#: src/inc/admin/settings/object3d.php:110
 msgid "Loading"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:113
+#: src/inc/admin/settings/object3d.php:115
 msgid "Eager"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:114
+#: src/inc/admin/settings/object3d.php:116
 msgid "Lazy"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:120
+#: src/inc/admin/settings/object3d.php:122
 msgid "Light type"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:159
+#: src/inc/admin/settings/object3d.php:161
 msgid "Target (object)"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:167
+#: src/inc/admin/settings/object3d.php:169
 msgid "Target position"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:174
+#: src/inc/admin/settings/object3d.php:176
 msgid "Angle (rad)"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:182
+#: src/inc/admin/settings/object3d.php:184
 msgid "Penumbra"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:190
+#: src/inc/admin/settings/object3d.php:192
 msgid "Distance"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:198
+#: src/inc/admin/settings/object3d.php:200
 msgid "Decay"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:206
+#: src/inc/admin/settings/object3d.php:208
 msgid "Width"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:214
+#: src/inc/admin/settings/object3d.php:216
 msgid "Height"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:222
+#: src/inc/admin/settings/object3d.php:224
 msgid "Rotation (deg)"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:229
+#: src/inc/admin/settings/object3d.php:231
 msgid "Ground color"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:237
+#: src/inc/admin/settings/object3d.php:239
 msgid "Cookie (projection image)"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:249
+#: src/inc/admin/settings/object3d.php:251
 msgid "Environment type"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:255
+#: src/inc/admin/settings/object3d.php:257
 msgid "HDRi (HDR / EXR)"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:256
+#: src/inc/admin/settings/object3d.php:258
 msgid "Cubemap (6 faces)"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:260
+#: src/inc/admin/settings/object3d.php:262
 msgid "HDR/EXR file"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:267
+#: src/inc/admin/settings/object3d.php:269
 msgid "Select HDR/EXR"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:278, src/inc/admin/settings/object3d.php:289, src/inc/admin/settings/object3d.php:300, src/inc/admin/settings/object3d.php:311, src/inc/admin/settings/object3d.php:322, src/inc/admin/settings/object3d.php:333, src/inc/admin/views/html-product-configurator-templates.php:1359
+#: src/inc/admin/settings/object3d.php:280, src/inc/admin/settings/object3d.php:291, src/inc/admin/settings/object3d.php:302, src/inc/admin/settings/object3d.php:313, src/inc/admin/settings/object3d.php:324, src/inc/admin/settings/object3d.php:335, src/inc/admin/views/html-product-configurator-templates.php:1359
 msgid "Select"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:350
+#: src/inc/admin/settings/object3d.php:352
 msgid "3D Object"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:356
+#: src/inc/admin/settings/object3d.php:358
 msgid "Light settings"
 msgstr ""
 
-#: src/inc/admin/settings/object3d.php:363
+#: src/inc/admin/settings/object3d.php:365
 msgid "Environment settings"
 msgstr ""
 
@@ -4215,71 +4267,75 @@ msgstr ""
 msgid "Angle"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:12
-msgid "Set current view to selected angle"
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:14
+msgid "Save current view"
 msgstr ""
 
 #: src/inc/admin/views/3d-settings-sections/camera-positions.php:15
+msgid "Back to saved view"
+msgstr ""
+
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:19
 msgid "Import cameras from GLTF"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:16
-msgid "Add new angles from cameras defined in the main 3D file."
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:20
+msgid "Adds a view for each camera found in the loaded 3D models."
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:21
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:25
 msgid "Rotation limits"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:22
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:26
 msgid "Restrict how far the shopper can orbit the camera around the product."
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:24
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:28
 msgid "Min vertical angle"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:29
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:33
 msgid "Max vertical angle"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:33
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:37
 msgid "0° looks straight down, 180° looks straight up. Keep both close to 90° to lock the camera to a level view."
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:35
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:39
 msgid "Min horizontal angle"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:40
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:44
 msgid "Max horizontal angle"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:44
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:48
 msgid "Degrees around the product. Leave at -180 / 180 for a full turn."
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:47
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:51
 msgid "Zoom limits"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:51
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:55
 msgid "Restrict how far the shopper can zoom in and out"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:55
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:59
 msgid "Closest zoom"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:56, src/inc/admin/views/3d-settings-sections/camera-positions.php:61
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:60, src/inc/admin/views/3d-settings-sections/camera-positions.php:65
 msgid "Set from current view"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:60
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:64
 msgid "Farthest zoom"
 msgstr ""
 
-#: src/inc/admin/views/3d-settings-sections/camera-positions.php:64
+#: src/inc/admin/views/3d-settings-sections/camera-positions.php:68
 msgid "Move the preview to the closest or farthest view you want to allow, then click the matching button."
 msgstr ""
 

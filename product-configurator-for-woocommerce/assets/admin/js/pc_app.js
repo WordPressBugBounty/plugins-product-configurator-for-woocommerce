@@ -182,6 +182,11 @@ if ( ! PC.threeD.openModelMediaFrame ) {
 }
 
 // 3D Objects upload actions (used by Object3D settings fields). Store only { attachment_id, url } at gltf.
+//
+// The "3D file" field uses this rather than the generic pc_file_select: the model frame
+// lists only models and ZIPs, refuses a ZIP with no model in it, and sends the
+// configurator_assets upload context. The light import offer is not here: the 3D object
+// form makes it on change:gltf, whichever way the model was set.
 if ( ! PC.actions.edit_object3d_upload ) {
 	PC.actions.edit_object3d_upload = function ( $el, context ) {
 		if ( ! context || ! context.model || ! PC.threeD.openModelMediaFrame ) return;
@@ -190,10 +195,9 @@ if ( ! PC.actions.edit_object3d_upload ) {
 		PC.threeD.openModelMediaFrame( {
 			selectedId: selectedId,
 			onSelect: function ( attachment ) {
-				const url = attachment.gltf_url || attachment.url || '';
 				context.model.set( 'gltf', {
 					attachment_id: attachment.id,
-					url: url,
+					url: attachment.gltf_url || attachment.url || '',
 				} );
 				if ( window.PC && window.PC.app && window.PC.app.is_modified ) {
 					window.PC.app.is_modified[ 'objects3d' ] = true;
@@ -201,43 +205,9 @@ if ( ! PC.actions.edit_object3d_upload ) {
 						window.PC.app.syncSidebarSaveButtonState();
 					}
 				}
-				if ( context.$el && $el && $el.data ) {
-					const setting = $el.data( 'setting' ) || 'gltf';
-					context.$el.find( '[data-setting="' + setting + '"]' ).val( attachment.id );
-				}
-				// If GLTF contains lights, offer to import them as objects3d of type Light
-				if ( url && window.PC.threeD && window.PC.threeD.store && typeof window.PC.threeD.store.get === 'function' && window.PC.threeD.getLightsFromSceneForImport ) {
-					window.PC.threeD.store.get( url, function ( err, data ) {
-						if ( err || ! data || ! data.gltf || ! data.gltf.scene ) return;
-						const lights = window.PC.threeD.getLightsFromSceneForImport( data.gltf.scene );
-						if ( ! lights.length ) return;
-						const n = lights.length;
-						const msg = ( typeof PC_lang !== 'undefined' && PC_lang.import_lights_from_gltf )
-							? PC_lang.import_lights_from_gltf.replace( '%d', String( n ) )
-							: 'This model contains ' + n + ' light(s). Import them as 3D Objects?';
-						if ( ! window.confirm( msg ) ) return;
-						const col = context.model && context.model.collection;
-						if ( ! col || ! col.create_object ) return;
-						lights.forEach( function ( light ) {
-							const attrs = col.create_object( {
-								object_type: 'light',
-								name: light.name,
-								light_position: light.position,
-								light_type: light.type,
-								light_color: light.color,
-								light_intensity: light.intensity,
-								cast_shadows: light.cast_shadows === true,
-								light_target: light.target,		
-							} );
-							col.add( attrs );
-						} );
-						if ( window.PC.app && window.PC.app.is_modified ) {
-							window.PC.app.is_modified.objects3d = true;
-							if ( window.PC.app.syncSidebarSaveButtonState ) {
-								window.PC.app.syncSidebarSaveButtonState();
-							}
-						}
-					} );
+				// Show the new file name and the "Select new model" label.
+				if ( context.render ) {
+					context.render();
 				}
 			},
 		} );
@@ -449,6 +419,54 @@ PC.toJSON = function( item ) {
 				this.syncSidebarSaveButtonState();
 			}
 		},
+		/**
+		 * Change flags that belong to one product's editor: the components get_collection() reads
+		 * from the product. Layers, angles and 3D data are one structure shared by every variation,
+		 * so their flags stay shared.
+		 */
+		product_change_keys: [ 'content', 'conditions' ],
+		/**
+		 * Keep a closing editor's unsaved choices on its product. The flags are shared by every
+		 * editor (one per variation), so without this the next variation opened already dirty, and
+		 * a save there sent the first variation's pending layer ids against its own choices.
+		 *
+		 * @param {Backbone.Model} product
+		 */
+		stash_product_changes: function( product ) {
+			if ( ! product ) return;
+			var app = this;
+			var flags = {};
+			_.each( this.product_change_keys, function( key ) {
+				flags[ key ] = !! app.is_modified[ key ];
+			} );
+			product.pending_changes = {
+				is_modified: flags,
+				modified_content_layer_ids: this.modified_content_layer_ids,
+				modified_choices: this.modified_choices,
+				// The storage state is per variation too, but admin_data holds the last one loaded:
+				// reopened after another variation, this editor decided its migration from that one.
+				pc_storage: this.admin_data ? this.admin_data.get( 'pc_storage' ) : null,
+			};
+		},
+		/**
+		 * Take back a product's unsaved choices and storage state when its editor opens, or start
+		 * clean. A first open has nothing to take back: its storage state arrives with its data.
+		 *
+		 * @param {Backbone.Model} product
+		 */
+		restore_product_changes: function( product ) {
+			var pending = product && product.pending_changes;
+			var app = this;
+			_.each( this.product_change_keys, function( key ) {
+				app.is_modified[ key ] = !! ( pending && pending.is_modified[ key ] );
+			} );
+			this.modified_content_layer_ids = pending ? pending.modified_content_layer_ids : {};
+			this.modified_choices = pending ? pending.modified_choices : [];
+			if ( pending && pending.pc_storage && this.admin_data ) {
+				this.admin_data.set( 'pc_storage', pending.pc_storage );
+			}
+			if ( product ) product.pending_changes = null;
+		},
 		clearGlobalSessionDirty: function() {
 			this.global_layer_session_dirty = false;
 			if ( this.syncSidebarSaveButtonState ) {
@@ -549,11 +567,25 @@ PC.toJSON = function( item ) {
 			}
 			return { title: fallback_title, description: fallback_description };
 		},
+		/**
+		 * The open editor's modal.
+		 *
+		 * Every product (each variation) gets its own editor, and a closed one stays in the page, so
+		 * a document-wide `.first()` found the first editor opened, hidden or not: on a second
+		 * variation the save button, the sidebar and the nav all acted on the first one. An editor
+		 * still being built is not assigned yet, which returns an empty set.
+		 *
+		 * @return {jQuery}
+		 */
+		get_current_editor_modal: function() {
+			var editor = this.admin && this.admin.get_current_product() ? this.admin.get_current_modal() : null;
+			return editor && editor.$el ? editor.$el.find( '.pc-modal.mkl-pc-admin-ui' ).first() : $();
+		},
 		getSidebarShellElements: function( main_view ) {
-			var $main = main_view && main_view.$el && main_view.$el.length ? main_view.$el : $( '.mkl-pc-admin-ui__main' ).first();
+			var $main = main_view && main_view.$el && main_view.$el.length ? main_view.$el : this.get_current_editor_modal().find( '.mkl-pc-admin-ui__main' ).first();
 			var $modal = $main.closest( '.pc-modal.mkl-pc-admin-ui' );
 			if ( ! $modal.length ) {
-				$modal = $( '.pc-modal.mkl-pc-admin-ui' ).first();
+				$modal = this.get_current_editor_modal();
 			}
 			var $sidebar = $main.find( '.mkl-pc-admin-ui__sidebar' ).first();
 			if ( ! $sidebar.length ) {
@@ -655,7 +687,7 @@ PC.toJSON = function( item ) {
 				this.exitSettings3dSidebarFocus( PC.app && PC.app.states_view );
 				return;
 			}
-			var $modal = $( '.pc-modal.mkl-pc-admin-ui' ).first();
+			var $modal = this.get_current_editor_modal();
 			var $btn = $modal.find( '.mkl-pc-admin-ui__nav-item[data-menu-id="' + return_id + '"]' ).first();
 			if ( $btn.length ) {
 				$btn.trigger( 'click' );
@@ -669,7 +701,7 @@ PC.toJSON = function( item ) {
 				return null;
 			}
 			var found = null;
-			var $scope = $( '.pc-modal.mkl-pc-admin-ui' ).first();
+			var $scope = this.get_current_editor_modal();
 			if ( ! $scope.length ) {
 				$scope = $( document );
 			}
@@ -757,7 +789,7 @@ PC.toJSON = function( item ) {
 			var editingLayer = gl.is_editing_layer( gid );
 			var editingChoices = gl.is_editing_choices( gid );
 			var self = this;
-			var $footer = $( '.mkl-pc-admin-ui__sidebar-footer' ).first();
+			var $footer = this.get_current_editor_modal().find( '.mkl-pc-admin-ui__sidebar-footer' ).first();
 			var finishFooter = function() {
 				$footer.removeClass( 'saving' );
 				if ( self.syncSidebarSaveButtonState ) {
@@ -2031,7 +2063,9 @@ PC.toJSON = function( item ) {
 		 * Site-editor-like sidebar save control: aria-disabled + checkmark when clean (still focusable), Save when dirty, loading on the button while saving.
 		 */
 		syncSidebarSaveButtonState: function() {
-			var $btn = $( '.mkl-pc-admin-ui .mkl-pc-admin-ui__sidebar-primary-save' ).first();
+			// The open editor's own button: an editor still being built finds none, and its template
+			// already shows the clean state.
+			var $btn = this.get_current_editor_modal().find( '.mkl-pc-admin-ui__sidebar-primary-save' ).first();
 			if ( ! $btn.length ) {
 				return;
 			}
