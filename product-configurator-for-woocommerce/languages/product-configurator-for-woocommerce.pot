@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2026-10-24 09:53+0000\n"
+"POT-Creation-Date: 2026-11-04 07:43+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Missing parameters."
 msgstr ""
 
-#: src/inc/ajax.php:592, src/inc/base/configuration.php:1059, src/inc/global-configurators/class-admin-ui.php:506, src/inc/global-configurators/class-data-copier.php:196, src/inc/admin/data-migration/class-legacy-blob-storage.php:97, src/inc/admin/data-migration/class-plugin.php:122, src/inc/admin/data-migration/class-plugin.php:150
+#: src/inc/ajax.php:592, src/inc/base/configuration.php:1091, src/inc/global-configurators/class-admin-ui.php:506, src/inc/global-configurators/class-data-copier.php:196, src/inc/admin/data-migration/class-legacy-blob-storage.php:97, src/inc/admin/data-migration/class-plugin.php:122, src/inc/admin/data-migration/class-plugin.php:150
 msgid "Invalid product."
 msgstr ""
 
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Layers"
 msgstr ""
 
-#: src/inc/class-editor-menu.php:81, src/inc/class-editor-menu.php:96, src/inc/class-editor-menu.php:111, src/inc/class-editor-menu.php:130, src/inc/class-editor-menu.php:172, src/inc/admin/product.php:566, src/inc/admin/views/html-product-configurator-templates.php:241, src/inc/admin/views/html-product-configurator-templates.php:1176
+#: src/inc/class-editor-menu.php:81, src/inc/class-editor-menu.php:96, src/inc/class-editor-menu.php:111, src/inc/class-editor-menu.php:130, src/inc/class-editor-menu.php:172, src/inc/admin/product.php:566, src/inc/admin/views/html-product-configurator-templates.php:241, src/inc/admin/views/html-product-configurator-templates.php:1176, src/inc/quote-requests/admin/class-quote-requests-admin.php:840
 msgid "Save"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgstr ""
 msgid "3D Objects"
 msgstr ""
 
-#: src/inc/class-editor-menu.php:168, src/inc/class-editor-menu.php:186, src/inc/admin/settings-page.php:1541, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:17, src/inc/admin/views/html-product-configurator-templates.php:664, src/inc/admin/views/html-product-configurator-templates.php:822, src/inc/admin/views/html-product-configurator-templates.php:913, src/inc/admin/views/html-product-configurator-templates.php:1012, src/inc/admin/views/html-product-configurator-templates.php:1027, src/inc/admin/views/html-product-configurator-templates.php:1043, src/inc/admin/views/html-product-configurator-templates.php:1269, src/inc/frontend/views/html-product-configurator-templates.php:122
+#: src/inc/class-editor-menu.php:168, src/inc/class-editor-menu.php:186, src/inc/admin/settings-page.php:1541, src/inc/configuration-editor/class-configuration-editor.php:197, src/inc/admin/settings/abstract.php:122, src/inc/admin/views/html-product-configurator-templates.php:17, src/inc/admin/views/html-product-configurator-templates.php:664, src/inc/admin/views/html-product-configurator-templates.php:822, src/inc/admin/views/html-product-configurator-templates.php:913, src/inc/admin/views/html-product-configurator-templates.php:1012, src/inc/admin/views/html-product-configurator-templates.php:1027, src/inc/admin/views/html-product-configurator-templates.php:1043, src/inc/admin/views/html-product-configurator-templates.php:1269, src/inc/frontend/views/html-product-configurator-templates.php:122, src/inc/quote-requests/views/configurator-templates.php:92
 msgid "Cancel"
 msgstr ""
 
@@ -246,6 +246,10 @@ msgstr ""
 msgid "Configuration not found."
 msgstr ""
 
+#: src/inc/functions.php:375, src/inc/quote-requests/class-quote-rest.php:96, src/inc/quote-requests/class-quote-service.php:48
+msgid "Quote requests are not available."
+msgstr ""
+
 #: src/inc/global-layer.php:142
 msgid "View 1"
 msgstr ""
@@ -259,7 +263,7 @@ msgstr ""
 msgid "Images"
 msgstr ""
 
-#: src/inc/global-layer.php:373, src/inc/admin/settings/angle.php:198, src/inc/admin/settings/choice.php:399, src/inc/admin/settings/layer.php:442
+#: src/inc/global-layer.php:373, src/inc/admin/settings/angle.php:208, src/inc/admin/settings/choice.php:399, src/inc/admin/settings/layer.php:442
 msgid "3D"
 msgstr ""
 
@@ -275,11 +279,11 @@ msgstr ""
 msgid "This is not a global layer."
 msgstr ""
 
-#: src/inc/languages.php:46, src/inc/admin/settings-page.php:223, src/inc/frontend/frontend-woocommerce.php:175, src/inc/frontend/frontend-woocommerce.php:302, src/inc/frontend/product.php:108
+#: src/inc/languages.php:46, src/inc/admin/settings-page.php:223, src/inc/configuration-editor/class-order-item-target.php:111, src/inc/frontend/frontend-woocommerce.php:175, src/inc/frontend/frontend-woocommerce.php:302, src/inc/frontend/product.php:108
 msgid "Configure"
 msgstr ""
 
-#: src/inc/languages.php:48, src/inc/admin/settings-page.php:738, src/inc/frontend/cart.php:720, src/inc/admin/settings/choice.php:69
+#: src/inc/languages.php:48, src/inc/admin/settings-page.php:738, src/inc/frontend/cart.php:712, src/inc/admin/settings/choice.php:69
 msgid "SKU"
 msgstr ""
 
@@ -300,7 +304,7 @@ msgstr ""
 msgid "Reset configuration"
 msgstr ""
 
-#: src/inc/languages.php:54, src/inc/admin/settings-page.php:995, src/inc/admin/settings-page.php:1001, src/inc/frontend/cart.php:986, src/inc/frontend/cart.php:1307
+#: src/inc/languages.php:54, src/inc/admin/settings-page.php:995, src/inc/admin/settings-page.php:1001, src/inc/frontend/cart.php:1014
 msgid "Edit configuration"
 msgstr ""
 
@@ -330,7 +334,7 @@ msgstr ""
 msgid "Configuration costs:"
 msgstr ""
 
-#: src/inc/languages.php:61, src/inc/admin/views/html-product-configurator-templates.php:99, src/inc/frontend/views/parts/add-to-cart-modal.php:42
+#: src/inc/languages.php:61, src/inc/configuration-editor/class-configuration-editor.php:297, src/inc/admin/views/html-product-configurator-templates.php:99, src/inc/quote-requests/views/configurator-templates.php:32, src/inc/quote-requests/views/configurator-templates.php:128, src/inc/frontend/views/parts/add-to-cart-modal.php:42
 msgid "Close"
 msgstr ""
 
@@ -344,7 +348,7 @@ msgctxt "Next step button label"
 msgid "Next"
 msgstr ""
 
-#: src/inc/languages.php:309, src/inc/languages.php:309
+#: src/inc/languages.php:309, src/inc/languages.php:309, src/inc/quote-requests/class-quote-fields.php:128
 msgid "Name"
 msgstr ""
 
@@ -372,11 +376,11 @@ msgstr ""
 msgid "The file style.css is missing for the theme %s."
 msgstr ""
 
-#: src/inc/utils.php:258
+#: src/inc/utils.php:281
 msgid "Error:"
 msgstr ""
 
-#: src/inc/utils.php:258
+#: src/inc/utils.php:281
 msgid "template not found"
 msgstr ""
 
@@ -424,7 +428,7 @@ msgstr ""
 msgid "Custom background image"
 msgstr ""
 
-#: src/inc/admin/order.php:107, src/inc/admin/settings-page.php:1031, src/inc/admin/settings-page.php:1037
+#: src/inc/admin/order.php:109, src/inc/admin/settings-page.php:1031, src/inc/admin/settings-page.php:1037
 msgid "View configuration"
 msgstr ""
 
@@ -500,7 +504,7 @@ msgstr ""
 msgid "Enable this option if variation is configurable"
 msgstr ""
 
-#: src/inc/admin/product.php:101, src/inc/admin/product.php:681, src/inc/admin/views/html-product-configurator-templates.php:156
+#: src/inc/admin/product.php:101, src/inc/admin/product.php:680, src/inc/admin/views/html-product-configurator-templates.php:156
 msgid "Configurator"
 msgstr ""
 
@@ -508,7 +512,7 @@ msgstr ""
 msgid "Select if you want this product to be configurable"
 msgstr ""
 
-#: src/inc/admin/product.php:152, src/inc/admin/product.php:712
+#: src/inc/admin/product.php:152, src/inc/admin/product.php:711
 msgid "Configurator type"
 msgstr ""
 
@@ -528,7 +532,7 @@ msgstr ""
 msgid "You are configuring"
 msgstr ""
 
-#: src/inc/admin/product.php:187, src/inc/admin/product.php:934, src/inc/admin/settings-page.php:1480
+#: src/inc/admin/product.php:187, src/inc/admin/product.php:933, src/inc/admin/settings-page.php:1480
 msgid "Documentation"
 msgstr ""
 
@@ -973,7 +977,7 @@ msgstr ""
 msgid "Saved"
 msgstr ""
 
-#: src/inc/admin/product.php:577
+#: src/inc/admin/product.php:577, src/inc/configuration-editor/class-configuration-editor.php:198
 msgid "Saving…"
 msgstr ""
 
@@ -1045,109 +1049,108 @@ msgid "Visible objects"
 msgstr ""
 
 #: src/inc/admin/product.php:598
+msgid "Specific objects…"
+msgstr ""
+
+#: src/inc/admin/product.php:599
 msgid "— Saved camera target —"
 msgstr ""
 
-#: src/inc/admin/product.php:599, src/inc/admin/settings/angle.php:95
+#: src/inc/admin/product.php:600, src/inc/admin/settings/angle.php:105
 msgid "Fit the target in view"
 msgstr ""
 
-#: src/inc/admin/product.php:600
-msgid "Camera position as set"
-msgstr ""
-
 #: src/inc/admin/product.php:601
-msgid "Saves the direction only: the distance adapts to each screen."
+msgid "Camera exactly as saved"
 msgstr ""
 
 #: src/inc/admin/product.php:602
-msgid "Saves the camera position as it is."
+msgid "Saves the direction only: the distance adapts to each screen."
 msgstr ""
 
-#: src/inc/admin/product.php:603, src/inc/admin/settings/angle.php:89
+#: src/inc/admin/product.php:603
+msgid "Saves the camera exactly as it is."
+msgstr ""
+
+#: src/inc/admin/product.php:604, src/inc/admin/settings/angle.php:99
 msgid "Framing"
 msgstr ""
 
-#: src/inc/admin/product.php:604
+#: src/inc/admin/product.php:605, src/inc/admin/settings/angle.php:72
 msgid "Camera target"
 msgstr ""
 
-#: src/inc/admin/product.php:605
+#: src/inc/admin/product.php:606
 msgid "Saved camera target"
 msgstr ""
 
 #. translators: %s: 3D model name
-#: src/inc/admin/product.php:607
+#: src/inc/admin/product.php:608
 msgid "Model: %s"
 msgstr ""
 
-#. translators: %s: object name in the 3D model
-#: src/inc/admin/product.php:609
-msgid "Object: %s"
-msgstr ""
-
 #. translators: %s: comma-separated object names
-#: src/inc/admin/product.php:611
-msgid "Focus: %s"
+#: src/inc/admin/product.php:610
+msgid "Objects: %s"
 msgstr ""
 
 #. translators: %d: number of objects
-#: src/inc/admin/product.php:613
-msgid "Focus: %d objects"
+#: src/inc/admin/product.php:612
+msgid "Objects: %d"
 msgstr ""
 
-#: src/inc/admin/product.php:614
+#: src/inc/admin/product.php:613
 msgid "Saved view"
 msgstr ""
 
-#: src/inc/admin/product.php:615
+#: src/inc/admin/product.php:614
 msgid "Moved, not saved"
 msgstr ""
 
-#: src/inc/admin/product.php:700
+#: src/inc/admin/product.php:699
 msgid "Save the post once to enable the configurator editor."
 msgstr ""
 
-#: src/inc/admin/product.php:713
+#: src/inc/admin/product.php:712
 msgid "Applies to every product currently using this global configurator."
 msgstr ""
 
-#: src/inc/admin/product.php:717
+#: src/inc/admin/product.php:716
 msgid "Configurator type changed. Please update this global configurator to reload the correct editor."
 msgstr ""
 
-#: src/inc/admin/product.php:757, src/inc/admin/settings/layer.php:396
+#: src/inc/admin/product.php:756, src/inc/admin/settings/layer.php:396
 msgid "Layer"
 msgstr ""
 
-#: src/inc/admin/product.php:776
+#: src/inc/admin/product.php:775
 msgid "Save the post once to enable the layer editor."
 msgstr ""
 
 #. translators: %d: number of choices the layer holds.
-#: src/inc/admin/product.php:786
+#: src/inc/admin/product.php:785
 msgid "This layer holds %d choice."
 msgid_plural "This layer holds %d choices."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/inc/admin/product.php:791
+#: src/inc/admin/product.php:790
 msgid "Editing it here changes it for every product that uses this layer."
 msgstr ""
 
-#: src/inc/admin/product.php:792
+#: src/inc/admin/product.php:791
 msgid "Edit the layer"
 msgstr ""
 
-#: src/inc/admin/product.php:854
+#: src/inc/admin/product.php:853
 msgid "Start product's configurator"
 msgstr ""
 
-#: src/inc/admin/product.php:871
+#: src/inc/admin/product.php:870
 msgid "Edit configurator layers"
 msgstr ""
 
-#: src/inc/admin/product.php:933
+#: src/inc/admin/product.php:932
 msgid "Getting started"
 msgstr ""
 
@@ -1635,7 +1638,7 @@ msgstr ""
 msgid "Configuration (meta label in the cart)"
 msgstr ""
 
-#: src/inc/admin/settings-page.php:1049, src/inc/compatibility/yith-quote-request.php:847, src/inc/frontend/cart.php:762, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41
+#: src/inc/admin/settings-page.php:1049, src/inc/compatibility/yith-quote-request.php:847, src/inc/frontend/cart.php:765, src/inc/quote-requests/class-quote-privacy.php:93, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:41, src/inc/quote-requests/admin/class-quote-requests-admin.php:170
 msgid "Configuration"
 msgstr ""
 
@@ -1780,7 +1783,7 @@ msgstr ""
 msgid "Invalid configuration_id ID"
 msgstr ""
 
-#: src/inc/compatibility/elementor-pro-form.php:36
+#: src/inc/compatibility/elementor-pro-form.php:36, src/inc/quote-requests/class-quote-requests.php:340, src/inc/quote-requests/class-quote-requests.php:427, src/inc/quote-requests/views/configurator-templates.php:16, src/inc/quote-requests/views/configurator-templates.php:17
 msgid "Request a quote"
 msgstr ""
 
@@ -1834,7 +1837,7 @@ msgstr ""
 msgid "Added to your quote request"
 msgstr ""
 
-#: src/inc/compatibility/yith-quote-request.php:366
+#: src/inc/compatibility/yith-quote-request.php:366, src/inc/quote-requests/views/configurator-templates.php:118
 msgid "Keep configuring"
 msgstr ""
 
@@ -1863,7 +1866,7 @@ msgstr ""
 msgid "90 days"
 msgstr ""
 
-#: src/inc/compatibility/yith-quote-request.php:635
+#: src/inc/compatibility/yith-quote-request.php:635, src/inc/quote-requests/class-quote-requests.php:489
 msgid "One year"
 msgstr ""
 
@@ -1883,14 +1886,101 @@ msgstr ""
 msgid "The image travels with the email, so it stays readable however long the request takes to answer. 3D configurators only: a 2D configuration has no image file to attach."
 msgstr ""
 
-#: src/inc/frontend/cart.php:67
+#: src/inc/configuration-editor/class-configuration-editor.php:74
+msgid "This cannot be configured."
+msgstr ""
+
+#: src/inc/configuration-editor/class-configuration-editor.php:87, src/inc/configuration-editor/class-order-item-target.php:67, src/inc/quote-requests/class-quote-request-target.php:64
+msgid "Save the configuration"
+msgstr ""
+
+#: src/inc/configuration-editor/class-configuration-editor.php:199
+msgid "The configuration could not be saved."
+msgstr ""
+
+#: src/inc/configuration-editor/class-configuration-editor.php:293
+msgid "Choose a configurable product"
+msgstr ""
+
+#: src/inc/configuration-editor/class-configuration-editor.php:294
+msgid "Search for a configurable product…"
+msgstr ""
+
+#: src/inc/configuration-editor/class-configuration-editor.php:295, src/inc/global-configurators/class-admin-ui.php:598, src/inc/quote-requests/admin/class-quote-requests-admin.php:1049
+msgid "Searching…"
+msgstr ""
+
+#: src/inc/configuration-editor/class-configuration-editor.php:296
+msgid "No configurable product found."
+msgstr ""
+
+#: src/inc/configuration-editor/class-configuration-editor.php:298
+msgid "Close without saving the configuration?"
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-configuration.php:30
+msgid "The product of this line no longer exists."
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-configuration.php:40, src/inc/quote-requests/class-quote-service.php:227, src/inc/quote-requests/stores/class-woo-order-store.php:96
+msgid "The configuration data could not be read."
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-configuration.php:116, src/inc/frontend/order.php:122, src/inc/frontend/order.php:498
+msgctxt "Label for the configuration meta data"
+msgid "Configuration"
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-configuration.php:117, src/inc/frontend/order.php:130
+msgctxt "Label for the SKU meta data"
+msgid "SKU"
+msgstr ""
+
+#. translators: 1: product name, 2: previous line total, 3: new line total, 4: user name
+#: src/inc/configuration-editor/class-order-item-configuration.php:180
+msgid "Configuration of %1$s edited by %4$s. Line total: %2$s → %3$s."
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-configuration.php:177
+msgid "Configured product added: %1$s (%2$s), by %3$s."
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-target.php:42
+msgid "This order line cannot be configured."
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-target.php:47
+msgid "This order cannot be edited."
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-target.php:67
+msgid "Add to the order"
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-target.php:111, src/inc/quote-requests/admin/class-quote-requests-admin.php:259
+msgid "Edit the configuration"
+msgstr ""
+
+#: src/inc/configuration-editor/class-order-item-target.php:125
+msgid "Add a configured product"
+msgstr ""
+
+#: src/inc/frontend/cart.php:72
 msgctxt "Error message when configuration data is invalid on add to cart"
 msgid "The configuration data could not be read, the product could not be added to the cart."
 msgstr ""
 
-#: src/inc/frontend/cart.php:72
+#: src/inc/frontend/cart.php:77
 msgctxt "Error message when configuration data is missing on add to cart"
 msgid "Configuration data is missing, the product could not be added to the cart."
+msgstr ""
+
+#: src/inc/frontend/cart.php:1320
+msgid "URL to edit the configuration of the cart item."
+msgstr ""
+
+#: src/inc/frontend/cart.php:1326
+msgid "Label of the edit configuration link."
 msgstr ""
 
 #: src/inc/frontend/frontend-woocommerce.php:153, src/inc/frontend/frontend-woocommerce.php:271
@@ -2045,24 +2135,14 @@ msgstr ""
 msgid "SKU:"
 msgstr ""
 
-#: src/inc/frontend/order.php:73
+#: src/inc/frontend/order.php:75
 msgctxt "Label for the view configuration link"
 msgid "View configuration"
 msgstr ""
 
-#: src/inc/frontend/order.php:92
+#: src/inc/frontend/order.php:94
 msgctxt "Label for the download configuration image link"
 msgid "Download configuration image"
-msgstr ""
-
-#: src/inc/frontend/order.php:120, src/inc/frontend/order.php:496
-msgctxt "Label for the configuration meta data"
-msgid "Configuration"
-msgstr ""
-
-#: src/inc/frontend/order.php:128
-msgctxt "Label for the SKU meta data"
-msgid "SKU"
 msgstr ""
 
 #: src/inc/frontend/product.php:119
@@ -2233,10 +2313,6 @@ msgstr ""
 
 #: src/inc/global-configurators/class-admin-ui.php:597
 msgid "Copy the global configurator's data onto this product and unlink it? Future changes will only affect this product."
-msgstr ""
-
-#: src/inc/global-configurators/class-admin-ui.php:598
-msgid "Searching…"
 msgstr ""
 
 #: src/inc/global-configurators/class-admin-ui.php:599
@@ -2621,6 +2697,418 @@ msgstr ""
 msgid "The settings of this global layer."
 msgstr ""
 
+#. translators: %s: list of placeholders
+#: src/inc/mailer/class-email.php:142
+msgid "Available placeholders: %s"
+msgstr ""
+
+#: src/inc/mailer/class-email.php:148
+msgid "Recipient(s)"
+msgstr ""
+
+#. translators: %s: admin email
+#: src/inc/mailer/class-email.php:151
+msgid "Enter recipients (comma separated) for this email. Defaults to %s."
+msgstr ""
+
+#: src/inc/mailer/class-email.php:159
+msgid "Email content"
+msgstr ""
+
+#: src/inc/mailer/class-email.php:160
+msgid "Shown above the details of the request."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-account-tab.php:98, src/inc/quote-requests/class-quote-account-tab.php:151, src/inc/quote-requests/class-quote-privacy.php:100, src/inc/quote-requests/class-quote-requests.php:365, src/inc/quote-requests/class-quote-ui.php:115, src/inc/quote-requests/admin/class-quote-requests-admin.php:490, src/inc/quote-requests/stores/class-cpt-store.php:101, src/inc/quote-requests/stores/class-cpt-store.php:103, src/inc/quote-requests/stores/class-cpt-store.php:104
+msgid "Quote requests"
+msgstr ""
+
+#. translators: %s: quote request reference
+#: src/inc/quote-requests/class-quote-account-tab.php:151, src/inc/templates/emails/quote-request-details.php:26, src/inc/templates/quotes/quote.php:33, src/inc/templates/emails/plain/quote-request.php:35
+msgid "Quote request %s"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:139, src/inc/quote-requests/class-quote-customer-actions.php:292
+msgid "This quote can no longer be answered here."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:144, src/inc/quote-requests/class-quote-customer-actions.php:291
+msgid "Please tell us what you would like to change."
+msgstr ""
+
+#. translators: %s: order number
+#: src/inc/quote-requests/class-quote-customer-actions.php:157
+msgid "Quote accepted by the customer. Order #%s created, waiting for payment."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:158, src/inc/quote-requests/class-quote-customer-actions.php:218
+msgid "Quote accepted by the customer."
+msgstr ""
+
+#. translators: %s: what the customer wrote
+#: src/inc/quote-requests/class-quote-customer-actions.php:164
+msgid "Quote declined by the customer: %s"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:165
+msgid "Quote declined by the customer."
+msgstr ""
+
+#. translators: %s: what the customer wrote
+#: src/inc/quote-requests/class-quote-customer-actions.php:170
+msgid "The customer asked for a change: %s"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:215, src/inc/quote-requests/class-quote-customer-actions.php:295
+msgid "Your order could not be created. Please contact us."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:288
+msgid "Thank you, you accepted the quote. We will be in touch to finalize your order."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:289
+msgid "You declined the quote. Thank you for letting us know."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:290
+msgid "Thank you, your message was sent. We will get back to you."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:293, src/inc/templates/quotes/quote-link.php:20, src/inc/templates/quotes/quote-lookup.php:20
+msgid "The form expired. Please try again."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-actions.php:294, src/inc/security/class-rate-limiter.php:107, src/inc/templates/quotes/quote-lookup.php:19
+msgid "Too many requests. Please try again later."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:87, src/inc/quote-requests/stores/class-cpt-store.php:102, src/inc/quote-requests/stores/class-cpt-store.php:107
+msgid "Quote request"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:228
+msgid "Estimated price"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:225
+msgid "Price"
+msgstr ""
+
+#. translators: 1: user name, 2: email address
+#: src/inc/quote-requests/class-quote-customer-view.php:354
+msgid "Added to the customer account %1$s (%2$s) by the customer, from the request's link."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:376
+msgctxt "Quote request status, for the customer"
+msgid "Received"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:377
+msgctxt "Quote request status, for the customer"
+msgid "In progress"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:378
+msgctxt "Quote request status, for the customer"
+msgid "Answered"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:379
+msgctxt "Quote request status, for the customer"
+msgid "Accepted"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:380
+msgctxt "Quote request status, for the customer"
+msgid "Declined"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-customer-view.php:381
+msgctxt "Quote request status, for the customer"
+msgid "Closed"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-fields.php:136
+msgid "Email"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-fields.php:144
+msgid "Phone"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-fields.php:151
+msgid "Company"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-fields.php:159
+msgid "Message"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-fields.php:166
+msgid "I agree to my details being stored to answer this request."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-fields.php:167
+msgid "Privacy policy"
+msgstr ""
+
+#. translators: %s: field label
+#: src/inc/quote-requests/class-quote-fields.php:288
+msgid "%s is required."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-fields.php:305, src/inc/quote-requests/class-quote-requests.php:327
+msgid "Some fields need your attention."
+msgstr ""
+
+#. translators: %s: field label
+#: src/inc/quote-requests/class-quote-fields.php:498
+msgid "%s is not valid."
+msgstr ""
+
+#. translators: 1: field label, 2: number of characters
+#: src/inc/quote-requests/class-quote-fields.php:502
+msgid "%1$s must be %2$d characters or fewer."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-pdf.php:156
+msgid "No PDF can be made for quote requests."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-pdf.php:163
+msgid "The PDF could not be made."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-pdf.php:236
+msgid "This quote is not available."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-privacy.php:32, src/inc/quote-requests/class-quote-privacy.php:44
+msgid "Configurator quote requests"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-privacy.php:84
+msgid "Reference"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-privacy.php:85, src/inc/templates/quotes/quotes.php:31
+msgid "Date"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-privacy.php:86, src/inc/quote-requests/admin/class-quote-requests-admin.php:71, src/inc/templates/quotes/quotes.php:32
+msgid "Product"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-privacy.php:174
+msgid "Product Configurator quote requests"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-privacy.php:175
+msgid "When you request a quote for a product you configured, we collect the details you enter in the request form (such as your name, email address and message) along with your configuration, to answer your request. They are sent to us by email and may be kept on this site until the request is dealt with."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-request-target.php:39
+msgid "This quote request cannot be configured."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-request-target.php:45
+msgid "This quote request cannot be edited."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-request-target.php:64
+msgid "Add to the request"
+msgstr ""
+
+#. translators: %s: product name
+#: src/inc/quote-requests/class-quote-request-target.php:114
+msgid "Configuration of %s edited."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-request-target.php:111
+msgid "Product changed: %1$s → %2$s."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-request-target.php:108
+msgid "Configured product added: %s."
+msgstr ""
+
+#. translators: %s: price
+#: src/inc/quote-requests/class-quote-request-target.php:119
+msgid "Configured price: %s."
+msgstr ""
+
+#. translators: 1: previous price, 2: new price
+#: src/inc/quote-requests/class-quote-request-target.php:121
+msgid "Configured price: %1$s → %2$s."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-request.php:257, src/inc/admin/settings/choice.php:142
+msgid "Yes"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-request.php:257
+msgid "No"
+msgstr ""
+
+#. translators: 1: chosen option, 2: option used instead
+#: src/inc/quote-requests/class-quote-requests.php:246
+msgid "Quote requests are set to be \"%1$s\", which this site cannot do at the moment. They are \"%2$s\" instead."
+msgstr ""
+
+#. translators: %s: field label
+#: src/inc/quote-requests/class-quote-requests.php:323
+msgid "%s is too long"
+msgstr ""
+
+#. translators: %s: field label
+#: src/inc/quote-requests/class-quote-requests.php:325
+msgid "%s is not valid"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:326
+msgid "Please check your configuration."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:328, src/inc/quote-requests/class-quote-service.php:135
+msgid "Your request could not be sent. Please try again later."
+msgstr ""
+
+#. translators: %s: link to the WooCommerce email settings
+#: src/inc/quote-requests/class-quote-requests.php:369
+msgid "Let customers request a quote for what they configured. The emails sent to you and to the customer are set up in <a href=\"%s\">WooCommerce &gt; Settings &gt; Emails</a>."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:378
+msgid "Enable quote requests"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:391
+msgid "Quote requests are"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:404
+msgid "Quote request button"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:411
+msgid "Next to Add to cart"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:412
+msgid "Instead of Add to cart"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:415
+msgid "Products can override this in their Configurator tab, to be quote only or to have no quote request."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:421
+msgid "Quote request button label"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:433, src/inc/compatibility/elementor-fields/elementor-configurator-field-image.php:41
+msgid "Configuration image"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:440
+msgid "Show in the emails and attach it"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:441
+msgid "Show in the emails"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:442
+msgid "Do not include it"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:450
+msgid "Show prices in quote request emails"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:459
+msgid "Created when first needed"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:465
+msgid "Customer page"
+msgstr ""
+
+#. translators: %s: shortcode
+#: src/inc/quote-requests/class-quote-requests.php:474
+msgid "For requests kept in Product Configurator > Quote requests: the page where customers see their request, from the link in their emails, without an account. Signed-in customers see all theirs. It holds the %s shortcode."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:479
+msgid "Keep stored quote requests for"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:486
+msgid "Until deleted"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:487
+msgid "3 months"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:488
+msgid "6 months"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:490
+msgid "Two years"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:493
+msgid "Requests kept in Product Configurator > Quote requests are deleted, with their images, once they are this old."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-requests.php:501
+msgid "Request form"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-rest.php:144
+msgid "Your request was sent. We will get back to you shortly."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-service.php:165, src/inc/quote-requests/stores/class-woo-order-store.php:436
+msgid "Quote request not found."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-service.php:233
+msgid "The configuration is empty."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-service.php:246, src/inc/quote-requests/stores/class-woo-order-store.php:93
+msgid "This product cannot be quoted."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-ui.php:88
+msgid "This product is available on request only. Please request a quote."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-ui.php:117
+msgid "Follow the configurator settings"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-ui.php:118
+msgid "Quote only: no price, no Add to cart"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-ui.php:119
+msgid "No quote requests for this product"
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-ui.php:123
+msgid "Whether customers can request a quote for what they configure."
+msgstr ""
+
+#: src/inc/quote-requests/class-quote-ui.php:124
+msgid "Quote requests are turned off in the configurator settings, so this has no effect for now."
+msgstr ""
+
 #: src/inc/security/class-captcha-adapters.php:36, src/inc/security/class-captcha-adapters.php:53
 msgid "Captcha required."
 msgstr ""
@@ -2647,10 +3135,6 @@ msgstr ""
 
 #: src/inc/security/class-rate-limiter.php:95
 msgid "Invalid rate limit action."
-msgstr ""
-
-#: src/inc/security/class-rate-limiter.php:107
-msgid "Too many requests. Please try again later."
 msgstr ""
 
 #: src/inc/themes-common/customizer-no-form-modal.php:35
@@ -2777,7 +3261,7 @@ msgstr ""
 msgid "Select file"
 msgstr ""
 
-#: src/inc/admin/settings/abstract.php:363, src/inc/admin/settings/abstract.php:572, src/inc/admin/settings/object3d.php:105, src/inc/admin/settings/object3d.php:247, src/inc/admin/settings/object3d.php:270, src/inc/admin/settings/object3d.php:281, src/inc/admin/settings/object3d.php:292, src/inc/admin/settings/object3d.php:303, src/inc/admin/settings/object3d.php:314, src/inc/admin/settings/object3d.php:325, src/inc/admin/settings/object3d.php:336, src/inc/admin/views/3d-settings-sections/display.php:14
+#: src/inc/admin/settings/abstract.php:363, src/inc/admin/settings/abstract.php:572, src/inc/admin/settings/object3d.php:105, src/inc/admin/settings/object3d.php:247, src/inc/admin/settings/object3d.php:270, src/inc/admin/settings/object3d.php:281, src/inc/admin/settings/object3d.php:292, src/inc/admin/settings/object3d.php:303, src/inc/admin/settings/object3d.php:314, src/inc/admin/settings/object3d.php:325, src/inc/admin/settings/object3d.php:336, src/inc/quote-requests/admin/class-quote-requests-admin.php:706, src/inc/admin/views/3d-settings-sections/display.php:14
 msgid "Remove"
 msgstr ""
 
@@ -2801,11 +3285,11 @@ msgstr ""
 msgid "Select a 3D object from the 3D Objects tab."
 msgstr ""
 
-#: src/inc/admin/settings/abstract.php:495, src/inc/admin/settings/abstract.php:581, src/inc/admin/settings/angle.php:82, src/inc/admin/settings/choice.php:190, src/inc/admin/settings/layer.php:305, src/inc/admin/settings/object3d.php:413, src/inc/admin/settings/object3d.php:414, src/inc/admin/views/html-product-configurator-templates.php:1366, src/inc/admin/views/html-product-configurator-templates.php:1373
+#: src/inc/admin/settings/abstract.php:495, src/inc/admin/settings/abstract.php:581, src/inc/admin/settings/angle.php:92, src/inc/admin/settings/choice.php:190, src/inc/admin/settings/layer.php:305, src/inc/admin/settings/object3d.php:413, src/inc/admin/settings/object3d.php:414, src/inc/admin/views/html-product-configurator-templates.php:1366, src/inc/admin/views/html-product-configurator-templates.php:1373
 msgid "Select from list"
 msgstr ""
 
-#: src/inc/admin/settings/abstract.php:496, src/inc/admin/settings/angle.php:83, src/inc/admin/views/html-product-configurator-templates.php:1367
+#: src/inc/admin/settings/abstract.php:496, src/inc/admin/settings/angle.php:93, src/inc/admin/views/html-product-configurator-templates.php:1367
 msgid "Clear"
 msgstr ""
 
@@ -2857,71 +3341,67 @@ msgstr ""
 msgid "Use this view to generate the image in the cart"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:68
-msgid "Camera target (model)"
-msgstr ""
-
-#: src/inc/admin/settings/angle.php:69
-msgid "Camera target (object)"
-msgstr ""
-
-#: src/inc/admin/settings/angle.php:74
-msgid "Camera focus (objects for framing)"
-msgstr ""
-
 #: src/inc/admin/settings/angle.php:80
+msgid "What the view turns around and frames. Visible objects follows the configuration: the view adapts when a choice adds or removes a part."
+msgstr ""
+
+#: src/inc/admin/settings/angle.php:83
+msgid "Objects"
+msgstr ""
+
+#: src/inc/admin/settings/angle.php:90
 msgid "None selected"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:99
-msgid "Use the camera position as set"
+#: src/inc/admin/settings/angle.php:109
+msgid "Use the camera exactly as saved"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:103
-msgid "Fit keeps the viewing direction you set and adjusts the distance so the whole target is visible, and centred, on any screen size. The camera still orbits around the target."
+#: src/inc/admin/settings/angle.php:113
+msgid "Fit keeps the viewing direction you saved and adjusts the distance so the whole target is visible, and centred, on any screen size. Exactly as saved keeps the camera where you saved it, for shots such as one from inside a car: choices do not move it."
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:106
+#: src/inc/admin/settings/angle.php:116
 msgid "Margin around the target (%)"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:121
+#: src/inc/admin/settings/angle.php:131
 msgid "Maximum width (px)"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:132
+#: src/inc/admin/settings/angle.php:142
 msgid "Maximum height (px)"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:141
+#: src/inc/admin/settings/angle.php:151
 msgid "Limits how large the target is drawn on big screens, on top of the margin. Leave empty for no limit. Cart and saved-design images are not limited."
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:144
+#: src/inc/admin/settings/angle.php:154
 msgid "Camera turn when arriving"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:150
+#: src/inc/admin/settings/angle.php:160
 msgid "Shortest way"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:154
+#: src/inc/admin/settings/angle.php:164
 msgid "Clockwise, seen from above"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:158
+#: src/inc/admin/settings/angle.php:168
 msgid "Counter-clockwise, seen from above"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:162
+#: src/inc/admin/settings/angle.php:172
 msgid "Which way the camera goes around the product when switching to this view. Ignored when the orbit is limited horizontally: the camera then takes the only way the limits allow."
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:178, src/inc/admin/settings/choice.php:357, src/inc/admin/settings/layer.php:404
+#: src/inc/admin/settings/angle.php:188, src/inc/admin/settings/choice.php:357, src/inc/admin/settings/layer.php:404
 msgid "General"
 msgstr ""
 
-#: src/inc/admin/settings/angle.php:186, src/inc/admin/settings/choice.php:388, src/inc/admin/settings/layer.php:430
+#: src/inc/admin/settings/angle.php:196, src/inc/admin/settings/choice.php:388, src/inc/admin/settings/layer.php:430
 msgid "Advanced settings"
 msgstr ""
 
@@ -2988,10 +3468,6 @@ msgstr ""
 
 #: src/inc/admin/settings/choice.php:138
 msgid "Use global setting"
-msgstr ""
-
-#: src/inc/admin/settings/choice.php:142
-msgid "Yes"
 msgstr ""
 
 #: src/inc/admin/settings/choice.php:146
@@ -3825,7 +4301,7 @@ msgstr ""
 msgid "Export configuration data"
 msgstr ""
 
-#: src/inc/admin/views/html-product-configurator-templates.php:1087
+#: src/inc/admin/views/html-product-configurator-templates.php:1087, src/inc/quote-requests/admin/class-quote-requests-admin.php:255
 msgid "Choose a product"
 msgstr ""
 
@@ -3990,10 +4466,6 @@ msgstr ""
 msgid "Remove option"
 msgstr ""
 
-#: src/inc/compatibility/elementor-fields/elementor-configurator-field-image.php:41
-msgid "Configuration image"
-msgstr ""
-
 #: src/inc/compatibility/elementor-fields/elementor-configurator-field-image.php:121, src/inc/compatibility/elementor-fields/elementor-configurator-field-price.php:118, src/inc/compatibility/elementor-fields/elementor-configurator-field.php:122
 msgid "Show config in form"
 msgstr ""
@@ -4041,6 +4513,849 @@ msgstr ""
 #: src/inc/frontend/views/html-product-configurator-templates.php:238
 msgctxt "Part of message displayed when the product is successfully added to the cart"
 msgid "Done!"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:80, src/inc/quote-requests/stores/class-woo-order-store.php:379
+msgid "Order"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:81, src/inc/quote-requests/admin/class-quote-fields-settings.php:115
+msgid "Label"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:82
+msgid "Type"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:83, src/inc/quote-requests/admin/class-quote-fields-settings.php:124
+msgid "Shown"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:84, src/inc/quote-requests/admin/class-quote-fields-settings.php:132
+msgid "Required"
+msgstr ""
+
+#. translators: %s: field label
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:106
+msgid "Move %s up"
+msgstr ""
+
+#. translators: %s: field label
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:110
+msgid "Move %s down"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:121
+msgid "Always shown"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:129
+msgid "Always required"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-fields-settings.php:139
+msgid "Drag the rows, or use the arrows, to change the order of the fields. Name and email are always asked for. An empty label uses the default one."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:68, src/inc/templates/quotes/quotes.php:30
+msgid "Request"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:69
+msgid "Image"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:70, src/inc/quote-requests/admin/class-quote-requests-admin.php:171
+msgid "Customer"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:72, src/inc/quote-requests/admin/class-quote-requests-admin.php:172, src/inc/quote-requests/admin/class-quote-requests-admin.php:800, src/inc/templates/quotes/quotes.php:33
+msgid "Status"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:102, src/inc/quote-requests/admin/class-quote-requests-admin.php:693, src/inc/quote-requests/admin/class-quote-requests-admin.php:1048
+msgid "Guest"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:100
+msgid "Account: %s"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:133
+msgid "Open"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:174
+msgid "History"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:202
+msgid "No product configured yet."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:230
+msgid "Configured price:"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:261
+msgid "Change the product"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:323
+msgid "Customer account"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:336
+msgid "Reply by email"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:355
+msgid "Customer link"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:358
+msgid "Shows this request to whoever has the link, without an account. The customer emails carry it."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:359
+msgid "The link the customer has will stop working. Change it?"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:359
+msgid "Change the link"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:374, src/inc/quote-requests/admin/class-quote-requests-admin.php:639, src/inc/quote-requests/stores/class-woo-order-store.php:414
+msgid "You are not allowed to do this."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:377
+msgid "Customer link changed: the previous one no longer works."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:378
+msgid "Customer link changed. Send the customer the new one."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:406
+msgid "—"
+msgstr ""
+
+#. translators: 1: user name, 2: email address
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:449
+msgid "Customer account: %1$s (%2$s)."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:494
+msgid "Linked to this account"
+msgstr ""
+
+#. translators: %d: number of quote requests
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:499
+msgid "%d quote request"
+msgid_plural "%d quote requests"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:508
+msgid "Sent as a guest"
+msgstr ""
+
+#. translators: %d: number of quote requests
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:513
+msgid "%d quote request was sent as a guest with this account's email address:"
+msgid_plural "%d quote requests were sent as a guest with this account's email address:"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of quote requests
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:524
+msgid "and %d more"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:529
+msgid "Link them to this account"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:530
+msgid "Customers can change their account's email to any address without confirming it: link these only if you know they sent them. Customers who open a request's link while signed in can add it to their account themselves."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:531
+msgid "The details on each request stay as they were sent. Its history records the link."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:571
+msgid "Filter by customer"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:573
+msgid "All customers"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:574
+msgid "With an account"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:575
+msgid "Guests"
+msgstr ""
+
+#. translators: %s: user name and email
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:621
+msgid "Quote requests of %s."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:623
+msgid "Show all requests"
+msgstr ""
+
+#. translators: %d: number of quote requests
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:677
+msgid "%d quote request linked to this account."
+msgid_plural "%d quote requests linked to this account."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:695
+msgid "Profile"
+msgstr ""
+
+#. translators: %d: number of quote requests
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:702
+msgid "%d request"
+msgid_plural "All %d requests"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:712
+msgid "An account uses this email. Its holder may have set it without owning the address: link it only if you know it is the same customer."
+msgstr ""
+
+#. translators: %s: user name, id and email
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:717
+msgid "Link to %s"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:725
+msgid "Search accounts by name or email…"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:732
+msgid "Picking an account fills in the empty details below."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:734
+msgid "Orders made from this request belong to it."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:808
+msgid "Internal notes"
+msgstr ""
+
+#. translators: %s: currency symbol
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:816
+msgid "Quoted price (%s)"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:820
+msgid "Total for the quantity, sent with the quote. Leave empty to send the configured price."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:824
+msgid "Message to the customer"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:826
+msgid "Added to the quote email."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:838
+msgid "Move to Trash"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:843
+msgid "Save and send the quote"
+msgstr ""
+
+#. translators: %s: date
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:849
+msgid "Last sent on %s."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:852, src/inc/templates/quotes/quote.php:67
+msgid "Download the quote (PDF)"
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:906
+msgid "The previous value was kept."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:916
+msgid "Customer account removed: the request is a guest's."
+msgstr ""
+
+#. translators: %s: email address
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:948, src/inc/quote-requests/admin/class-quote-requests-admin.php:984
+msgid "Quote sent to %s."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:971
+msgid "Choose and configure a product before sending the quote."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:974
+msgid "Enter the customer's email address before sending the quote."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:977
+msgid "The quote could not be sent. Check that the \"Configurator quote\" email is enabled in WooCommerce > Settings > Emails."
+msgstr ""
+
+#. translators: 1: email address, 2: price
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:982
+msgid "Quote sent to %1$s, for %2$s."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:1005
+msgid "Quote request saved."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:1050
+msgid "No account found."
+msgstr ""
+
+#: src/inc/quote-requests/admin/class-quote-requests-admin.php:1051
+msgid "Account picked. Save the request to keep it."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-admin-email.php:23
+msgid "Configurator quote request"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-admin-email.php:24
+msgid "Sent to the shop when a customer requests a quote for a configured product."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-admin-email.php:29
+msgid "[{site_title}]: Quote request {reference} from {name}"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-admin-email.php:33
+msgid "New quote request: {reference}"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-admin-email.php:37
+msgid "{name} requested a quote for {product}."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-admin-email.php:41, src/inc/quote-requests/emails/class-quote-request-answer-email.php:114
+msgid "Reply to this email to answer the customer."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:42
+msgctxt "Customer answer to a quote"
+msgid "Accepted"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:43
+msgctxt "Customer answer to a quote"
+msgid "Declined"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:44
+msgctxt "Customer answer to a quote"
+msgid "Change requested"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:96
+msgid "Configurator quote answer"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:97
+msgid "Sent to the shop when a customer accepts or declines a quote, or asks for a change, from the page of their request."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:102
+msgid "[{site_title}]: Quote {reference}: {answer}"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:106, src/inc/quote-requests/emails/class-quote-request-answer-email.php:139
+msgid "Quote {reference}: {answer}"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:110
+msgid "{name} answered the quote for {product}."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:129
+msgid "Configurator quote answer, to the customer"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:130
+msgid "Sent to the customer to confirm their answer to a quote: accepted (with the payment link, when an order was made), declined, or a change asked for."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:135
+msgid "Your answer to quote {reference}"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-answer-email.php:143
+msgid ""
+"Hi {name},\n"
+"\n"
+"Thank you, we received your answer."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-customer-email.php:23
+msgid "Configurator quote request received"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-customer-email.php:24
+msgid "Sent to the customer to confirm their quote request for a configured product."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-customer-email.php:29
+msgid "We received your quote request {reference}"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-customer-email.php:33
+msgid "Thank you for your request"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-customer-email.php:37
+msgid ""
+"Hi {name},\n"
+"\n"
+"We received your quote request for {product} and will get back to you shortly. Here is what you sent us."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-lookup-email.php:28
+msgid "Configurator quote request links"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-lookup-email.php:29
+msgid "Sent to a customer who asks for the links of their quote requests on the customer page."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-lookup-email.php:36
+msgid "Your quote requests on {site_title}"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-lookup-email.php:40
+msgid "Your quote requests"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-lookup-email.php:44
+msgid "Here are the quote requests sent with this email address. Each link shows the request."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-lookup-email.php:48
+msgid "If you did not ask for this email, you can ignore it."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-quote-email.php:30
+msgid "Configurator quote"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-quote-email.php:31
+msgid "Sent to the customer when you send them a quote from Product Configurator > Quote requests."
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-quote-email.php:36
+msgid "Your quote {reference} from {site_title}"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-quote-email.php:40
+msgid "Your quote"
+msgstr ""
+
+#: src/inc/quote-requests/emails/class-quote-request-quote-email.php:44
+msgid ""
+"Hi {name},\n"
+"\n"
+"Here is our quote for {product}."
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:39
+msgid "Sent by email and kept in Product Configurator > Quote requests"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:61
+msgctxt "Quote request status"
+msgid "New"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:62
+msgctxt "Quote request status"
+msgid "In progress"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:63
+msgctxt "Quote request status"
+msgid "Answered"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:64
+msgctxt "Quote request status"
+msgid "Accepted"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:65
+msgctxt "Quote request status"
+msgid "Declined"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:66
+msgctxt "Quote request status"
+msgid "Closed"
+msgstr ""
+
+#. translators: %s: number of quote requests
+#: src/inc/quote-requests/stores/class-cpt-store.php:78
+msgid "New <span class=\"count\">(%s)</span>"
+msgid_plural "New <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of quote requests
+#: src/inc/quote-requests/stores/class-cpt-store.php:80
+msgid "In progress <span class=\"count\">(%s)</span>"
+msgid_plural "In progress <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of quote requests
+#: src/inc/quote-requests/stores/class-cpt-store.php:82
+msgid "Answered <span class=\"count\">(%s)</span>"
+msgid_plural "Answered <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of quote requests
+#: src/inc/quote-requests/stores/class-cpt-store.php:84
+msgid "Accepted <span class=\"count\">(%s)</span>"
+msgid_plural "Accepted <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of quote requests
+#: src/inc/quote-requests/stores/class-cpt-store.php:86
+msgid "Declined <span class=\"count\">(%s)</span>"
+msgid_plural "Declined <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of quote requests
+#: src/inc/quote-requests/stores/class-cpt-store.php:88
+msgid "Closed <span class=\"count\">(%s)</span>"
+msgid_plural "Closed <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:105
+msgid "Add request"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:106
+msgid "New quote request"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:108
+msgid "View quote request"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:109
+msgid "Search quote requests"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:110
+msgid "No quote requests found."
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-cpt-store.php:111
+msgid "No quote requests found in trash."
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-email-only-store.php:18
+msgid "Send by email only"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-woo-order-store.php:41
+msgid "Sent by email and created as WooCommerce orders with the \"Quote request\" status"
+msgstr ""
+
+#. translators: %s: quote request reference
+#: src/inc/quote-requests/stores/class-woo-order-store.php:143
+msgid "Quote request %s received from the configurator."
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-woo-order-store.php:259, src/inc/quote-requests/stores/class-woo-order-store.php:278, src/inc/quote-requests/stores/class-woo-order-store.php:282
+msgctxt "Order status"
+msgid "Quote request"
+msgstr ""
+
+#. translators: %s: number of orders
+#: src/inc/quote-requests/stores/class-woo-order-store.php:265
+msgid "Quote request <span class=\"count\">(%s)</span>"
+msgid_plural "Quote requests <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/inc/quote-requests/stores/class-woo-order-store.php:314
+msgid "Send the quote to the customer (pending payment)"
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-woo-order-store.php:327
+msgid "Quote sent to the customer."
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-woo-order-store.php:330
+msgid "Quote and payment link emailed to the customer."
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-woo-order-store.php:354
+msgid "Quote request:"
+msgstr ""
+
+#. translators: 1: link to the order, 2: order status
+#: src/inc/quote-requests/stores/class-woo-order-store.php:393
+msgid "Order %1$s, %2$s."
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-woo-order-store.php:401
+msgid "Make a WooCommerce order of the saved request, with the \"Quote request\" status, to price it there and send the customer a payment link."
+msgstr ""
+
+#: src/inc/quote-requests/stores/class-woo-order-store.php:402
+msgid "Create an order from this request"
+msgstr ""
+
+#: src/inc/quote-requests/views/configurator-templates.php:18
+msgid "Send my request"
+msgstr ""
+
+#: src/inc/quote-requests/views/configurator-templates.php:85, src/inc/templates/quotes/quote-lookup.php:34
+msgid "Leave this field empty"
+msgstr ""
+
+#: src/inc/quote-requests/views/configurator-templates.php:100
+msgid "Sending your request"
+msgstr ""
+
+#: src/inc/quote-requests/views/configurator-templates.php:109
+msgid "Request sent"
+msgstr ""
+
+#: src/inc/quote-requests/views/configurator-templates.php:114
+msgid "Reference:"
+msgstr ""
+
+#: src/inc/quote-requests/views/configurator-templates.php:130
+msgid "Back to the form"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:66, src/inc/templates/emails/plain/quote-request-answer.php:48
+msgid "The request is back in progress, for you to send a new quote."
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:66, src/inc/templates/emails/plain/quote-request-answer.php:48
+msgid "We will get back to you with a new quote."
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:64, src/inc/templates/emails/plain/quote-request-answer.php:46
+msgid "You declined this quote. If you change your mind, reply to this email."
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:61, src/inc/templates/emails/plain/quote-request-answer.php:43
+msgid "We will be in touch to finalize your order."
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:57, src/inc/templates/emails/plain/quote-request-answer.php:41
+msgid "Your order #%s was made."
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:49, src/inc/templates/emails/plain/quote-request-answer.php:38
+msgid "Your order #%s is ready. If you have not paid for it yet, you can pay here:"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:52, src/inc/templates/quotes/quote-answer.php:40
+msgid "Pay for your order"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:44, src/inc/templates/emails/plain/quote-request-answer.php:35
+msgid "Get in touch with the customer to finalize the order."
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:38
+msgid "Order %s was made at the quoted price, and waits for payment."
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:75, src/inc/templates/emails/plain/quote-request-answer.php:55
+msgid "Their message"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:75, src/inc/templates/emails/plain/quote-request-answer.php:55
+msgid "Your message"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:73, src/inc/templates/emails/plain/quote-request-answer.php:53
+msgid "Their reason"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-answer.php:73, src/inc/templates/emails/plain/quote-request-answer.php:53
+msgid "Your reason"
+msgstr ""
+
+#. translators: %s: quote reference
+#: src/inc/templates/emails/quote-request-details.php:26, src/inc/templates/emails/plain/quote-request-answer.php:63, src/inc/templates/emails/plain/quote-request.php:35
+msgid "Quote %s"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-details.php:32
+msgid "View your quote online"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-details.php:32
+msgid "View your request online"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-details.php:30
+msgid "Open the request in your dashboard"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-details.php:62, src/inc/templates/emails/plain/quote-request.php:48
+msgid "Estimated price:"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-details.php:57, src/inc/templates/emails/plain/quote-request-answer.php:74, src/inc/templates/emails/plain/quote-request.php:46
+msgid "Price:"
+msgstr ""
+
+#: src/inc/templates/emails/quote-request-details.php:73, src/inc/templates/emails/plain/quote-request.php:53
+msgid "Contact details"
+msgstr ""
+
+#. translators: 1: order number, 2: order status
+#: src/inc/templates/quotes/quote-answer.php:45
+msgid "Order #%1$s: %2$s."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:37
+msgid "Your order #%s waits for payment."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:51
+msgid "Your answer"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:53
+msgid "Happy with this quote? Accept it to go to the payment page."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:53
+msgid "Happy with this quote? Accept it, and we will be in touch to finalize your order."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:56
+msgid "Accept and pay"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:56
+msgid "Accept the quote"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:62
+msgid "Ask for a change"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:66
+msgid "What would you like to change?"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:68
+msgid "Send"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:75, src/inc/templates/quotes/quote-answer.php:81
+msgid "Decline the quote"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-answer.php:79
+msgid "Why? (optional)"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-link.php:19
+msgid "This request is now in your account."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-link.php:21
+msgid "This request could not be added to your account. Please try again."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-link.php:32
+msgid "You sent this request without signing in. Add it to your account to find it with your other requests."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-link.php:37
+msgid "Add to my account"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-lookup.php:17
+msgid "If we have quote requests sent with this address, we have emailed you their links."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-lookup.php:18
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-lookup.php:24
+msgid "Find my requests"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-lookup.php:25
+msgid "Lost the email? Enter the address you sent your request with, and we will email you the links."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-lookup.php:37
+msgid "Email address"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-lookup.php:40
+msgid "Email me the links"
+msgstr ""
+
+#: src/inc/templates/quotes/quote-not-found.php:15
+msgid "This quote request link is not valid any more. Please contact us if you need it."
+msgstr ""
+
+#: src/inc/templates/quotes/quote-not-found.php:17
+msgid "See all your requests"
+msgstr ""
+
+#: src/inc/templates/quotes/quote.php:27
+msgid "← All your requests"
+msgstr ""
+
+#. translators: %s: date
+#: src/inc/templates/quotes/quote.php:39
+msgid "Requested on %s"
+msgstr ""
+
+#: src/inc/templates/quotes/quote.php:76
+msgid "Your details"
+msgstr ""
+
+#: src/inc/templates/quotes/quotes.php:25
+msgid "You have no quote requests yet."
+msgstr ""
+
+#: src/inc/templates/quotes/quotes.php:21
+msgid "To see a quote request, open the link in the email we sent you about it."
+msgstr ""
+
+#: src/inc/templates/quotes/quotes.php:22
+msgid "Have an account? Sign in to see all your requests."
 msgstr ""
 
 #: src/inc/themes/clean/theme.php:35
@@ -4593,4 +5908,20 @@ msgstr ""
 #: src/inc/frontend/views/parts/toolbar.php:45
 msgctxt "Screen reader text, next step button prefix"
 msgid "Next step: "
+msgstr ""
+
+#: src/inc/templates/emails/plain/quote-request-answer.php:33
+msgid "Order #%s was made at the quoted price, and waits for payment."
+msgstr ""
+
+#: src/inc/templates/emails/plain/quote-request-answer.php:67, src/inc/templates/emails/plain/quote-request.php:39
+msgid "View your quote online:"
+msgstr ""
+
+#: src/inc/templates/emails/plain/quote-request-answer.php:65, src/inc/templates/emails/plain/quote-request.php:37
+msgid "Open the request in your dashboard:"
+msgstr ""
+
+#: src/inc/templates/emails/plain/quote-request.php:39
+msgid "View your request online:"
 msgstr ""

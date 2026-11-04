@@ -531,7 +531,7 @@ Description:  Default theme, with sliding menu
   border-bottom: 1px solid var(--mkl_pc_color-light-gray);
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li ul li.choice.active > button {
-  background: rgb(234.25, 234.25, 234.25);
+  background: rgb(91.862745098%, 91.862745098%, 91.862745098%);
 }
 .mkl_pc .mkl_pc_container .mkl_pc_toolbar section.choices > ul li ul.choices-list--children {
   border: 1px solid var(--mkl_pc_color-light-gray);

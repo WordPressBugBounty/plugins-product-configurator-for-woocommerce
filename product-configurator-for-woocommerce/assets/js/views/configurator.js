@@ -30,6 +30,8 @@ PC.fe.views.add_to_cart_modal = Backbone.View.extend({
 	className: 'adding-to-cart--modal',
 	template: wp.template( 'mkl-pc-configurator-add-to-cart--modal' ),
 	initialize: function( options ) {
+		this.busy = false;
+		this.return_focus = null;
 		this.render();
 		$( document.body ).on( 'adding_to_cart', this.on_adding.bind( this ) );
 		$( document.body ).on( 'added_to_cart', this.on_added.bind( this ) );
@@ -51,16 +53,89 @@ PC.fe.views.add_to_cart_modal = Backbone.View.extend({
 		}
 	},
 	/**
+	 * @return {boolean}
+	 */
+	is_open: function() {
+		return $( document.body ).hasClass( 'show-add-to-cart-modal' );
+	},
+	/**
+	 * Show the modal, remembering where the focus goes back to when it closes
+	 *
+	 * @param {Element} [return_focus] Defaults to the focused element.
+	 */
+	open: function( return_focus ) {
+		if ( ! this.is_open() ) {
+			var target = return_focus || document.activeElement;
+			this.return_focus = target && target !== document.body && ! $.contains( this.el, target ) ? target : null;
+		}
+		$( document.body ).addClass( 'show-add-to-cart-modal' );
+	},
+	/**
 	 * Close modal
 	 */
 	close: function() {
+		var was_open = this.is_open();
 		$( document.body ).removeClass( 'show-add-to-cart-modal' );
+		this.set_busy( false );
+		if ( ! was_open ) return;
+
+		var target = this.return_focus;
+		this.return_focus = null;
+		if ( target && document.body.contains( target ) && $( target ).is( ':visible' ) ) {
+			PC.fe.a11y.focus_without_scroll( $( target ) );
+		}
+		this.trigger( 'close', this );
+	},
+	/**
+	 * A busy modal (sending a quote request) does not close on Escape, as its result would not be seen
+	 *
+	 * @param {boolean} busy
+	 */
+	set_busy: function( busy ) {
+		this.busy = !! busy;
+		this.$el.attr( 'aria-busy', this.busy ? 'true' : null );
+	},
+	/**
+	 * Keyboard while the modal is open, called by the configurator which listens on the document:
+	 * Escape closes the modal and leaves the configurator open, Tab stays in the modal.
+	 *
+	 * @param {KeyboardEvent} event
+	 */
+	keydown: function( event ) {
+		if ( 'Escape' === event.key ) {
+			event.preventDefault();
+			if ( ! this.busy ) this.close();
+			return;
+		}
+		if ( 'Tab' !== event.key ) return;
+
+		// The honeypot of the quote request form, and other inputs taken out of the tab order.
+		var $focusable = PC.fe.a11y.filter_focusable( this.$( PC.fe.a11y.modal_focusable_selector ) ).not( '[tabindex="-1"]' );
+		var active = document.activeElement;
+		if ( ! $focusable.length ) {
+			event.preventDefault();
+			return;
+		}
+		var first = $focusable[0];
+		var last = $focusable[ $focusable.length - 1 ];
+		// Outside the modal, or on an element focused by script such as a title.
+		var astray = ! $.contains( this.el, active ) || -1 === $focusable.index( active );
+		// A radio group is one tab stop.
+		var on_first = active === first || ( 'radio' === active.type && 'radio' === first.type && active.name === first.name );
+		if ( event.shiftKey && ( astray || on_first ) ) {
+			event.preventDefault();
+			PC.fe.a11y.focus_without_scroll( $( last ) );
+		} else if ( ! event.shiftKey && ( astray || active === last ) ) {
+			event.preventDefault();
+			PC.fe.a11y.focus_without_scroll( $( first ) );
+		}
 	},
 	/**
 	 * Show messages
 	 */
 	on_adding: function() {
-		$( document.body ).addClass( 'show-add-to-cart-modal' );
+		// Not busy: a failed request leaves the modal on this message, and Escape is the way out.
+		this.open();
 		this.show_message( 'adding' );
 	},
 	on_added: function( event, fragments, cart_hash, button, response ) {
@@ -78,6 +153,7 @@ PC.fe.views.add_to_cart_modal = Backbone.View.extend({
 	 * @param {string} messages
 	 */
 	show_message: function( type, messages ) {
+		this.set_busy( false );
 		this.$el.empty().append( wp.template( 'mkl-pc-atc-' + type )( { messages: messages || '' } ) );
 	},
 	/**
@@ -87,12 +163,14 @@ PC.fe.views.add_to_cart_modal = Backbone.View.extend({
 	 * @param {Object} data        Template data.
 	 */
 	show_template: function( template_id, data ) {
-		$( document.body ).addClass( 'show-add-to-cart-modal' );
+		this.open();
+		this.set_busy( false );
 		this.$el.empty().append( wp.template( template_id )( data || {} ) );
 		// The first action takes the focus, so a keyboard user lands on the choices it offers.
 		this.$( 'button, a.button' ).first().trigger( 'focus' );
 	}
 } )
+
 PC.fe.views.angles = Backbone.View.extend({ 
 	tagName: 'div', 
 	className: 'angles-select',
@@ -833,6 +911,11 @@ PC.fe.views.configurator = Backbone.View.extend({
 	},
 	handle_configurator_keydown: function( event ) {
 		if ( ! this.$el.is( ':visible' ) ) return;
+		// The add to cart modal, which also shows the quote request form, is in front of everything but the SYD modals.
+		if ( PC.fe.add_to_cart_modal && PC.fe.add_to_cart_modal.is_open() && ! $( 'body' ).is( '.syd-modal-opened, .syd-share-modal-opened' ) ) {
+			PC.fe.add_to_cart_modal.keydown( event );
+			return;
+		}
 		if ( 'Escape' === event.key ) {
 			// Nested SYD/Share modals handle Escape themselves.
 			if ( $( 'body' ).hasClass( 'syd-modal-opened' ) || $( 'body' ).hasClass( 'syd-share-modal-opened' ) ) {
@@ -1184,7 +1267,8 @@ PC.fe.views.form = Backbone.View.extend({
 	},
 	events: {
 		'click .configurator-add-to-cart': 'add_to_cart',
-		'click .add-to-quote': 'add_to_quote'
+		// The native quote request shares the class for its styles, and handles its own clicks.
+		'click .add-to-quote:not(.mkl-pc-request-quote)': 'add_to_quote'
 	},
 	render: function() {
 		if ( ! PC.fe.config.cart_item_key ) {
@@ -1224,10 +1308,10 @@ PC.fe.views.form = Backbone.View.extend({
 		// The YITH button is printed only for a product YITH would quote, and sends its own request, so it
 		// does not depend on YITH's markup being on the page. The other quote plugins still do.
 		if ( ! this.$cart.find( '.afrfqbt_single_page' ).length ) {
-			this.$( '.add-to-quote' ).not( '.yith-raq' ).remove();
+			this.$( '.add-to-quote' ).not( '.yith-raq, .mkl-pc-request-quote' ).remove();
 		}
 		if ( ! this.$cart.find( '.afrfqbt_single_page' ).length ) {
-			this.$( '.add-to-quote' ).not( '.yith-raq' ).html( this.$cart.find( '.afrfqbt_single_page' ).html() );
+			this.$( '.add-to-quote' ).not( '.yith-raq, .mkl-pc-request-quote' ).html( this.$cart.find( '.afrfqbt_single_page' ).html() );
 		}
 		if ( this.$( '.yith-raq.add-to-quote' ).length && PC_config.config.ywraq_hide_add_to_cart ) {
 			this.$( '.configurator-add-to-cart' ).remove();
@@ -1253,18 +1337,8 @@ PC.fe.views.form = Backbone.View.extend({
 	},
 
 	validate_configuration: async function() {
-		var data = await PC.fe.save_data.getSaveDataAsync();
-		var errors = wp.hooks.applyFilters( 'PC.fe.validate_configuration', PC.fe.errors );
-		if ( errors.length ) {
-			if ( PC.fe.show_validation_errors ) {
-				PC.fe.show_validation_errors( errors );
-			}
-			return false;
-		}
-		if ( PC.fe.clear_validation_errors ) {
-			PC.fe.clear_validation_errors();
-		}
-		return data;
+		var result = await PC.fe.validate_configuration( { context: 'cart' } );
+		return result.valid ? result.data : false;
 	},
 	
 	populate_form_input: function( data, e ) {
@@ -2342,7 +2416,12 @@ PC.fe.errors = PC.fe.validation.errors;
 
 PC.fe.save_data = {
 	choices: [],
-	save: function( reset_errors ) {
+	/**
+	 * What the data is saved for, read by add-ons while choices are parsed: 'cart', 'quote', or '' (steps, designs...).
+	 */
+	context: '',
+	save: function( reset_errors, context ) {
+		this.context = context || '';
 		if ( false !== reset_errors ) this.reset_errors();
 		this.choices = [];
 		PC.fe.layers.each( this.parse_choices, this ); 
@@ -2360,10 +2439,10 @@ PC.fe.save_data = {
 	 * Async variant: runs "before save" promises (plugins inject via PC.fe.save_data.before_save.promises),
 	 * then calls save(). Use for add-to-cart / add-to-quote so plugins can e.g. export base64 first.
 	 */
-	getSaveDataAsync: async function( reset_errors ) {
+	getSaveDataAsync: async function( reset_errors, context ) {
 		var promises = wp.hooks.applyFilters( 'PC.fe.save_data.before_save.promises', [] );
 		await Promise.all( promises );
-		return this.save( reset_errors );
+		return this.save( reset_errors, context );
 	},
 	get_choices: function( reset_errors ) {
 		this.save( reset_errors );
@@ -2391,6 +2470,7 @@ PC.fe.save_data = {
 		}
 	},
 	is_layer_valid: function( layer ) {
+		this.context = '';
 		this.reset_errors();
 		this.validate_layer( layer );
 		return ! PC.fe.validation.errors.length;

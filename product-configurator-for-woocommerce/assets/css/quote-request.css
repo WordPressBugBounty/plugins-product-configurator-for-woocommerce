@@ -1,0 +1,463 @@
+/**
+ * Quote request in the configurator. Loaded only when quote requests are enabled.
+ *
+ * The form and its messages are shown in the add to cart modal and keep its look (box, buttons); this
+ * makes the form a dialog: a head and actions that stay in view, and the fields scrolling between them.
+ * The accent follows the configurator theme's primary colour.
+ */
+.mkl-pc-quote-only .pc-total-price,
+.mkl-pc-quote-only .pc-total--regular-price {
+  display: none !important;
+}
+
+.mkl-pc-request-quote {
+  cursor: pointer;
+}
+
+.adding-to-cart--modal .mkl-pc-quote-request {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+.adding-to-cart--modal .mkl-pc-quote-request .has-box {
+  width: 100%;
+  max-width: 560px;
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.adding-to-cart--modal .mkl-pc-quote-request [tabindex="-1"]:focus {
+  outline: none;
+}
+@media (max-width: 600px) {
+  .adding-to-cart--modal .mkl-pc-quote-request {
+    align-items: flex-end;
+    padding: 8px;
+  }
+  .adding-to-cart--modal .mkl-pc-quote-request .has-box {
+    margin: 0;
+  }
+}
+
+/**
+ * The form
+ */
+.adding-to-cart--modal .mkl-pc-quote-form.has-box {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 0 0 auto;
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__head .header {
+  padding: 0 !important;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  margin: -4px -8px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-close:hover {
+  background: rgba(0, 0, 0, 0.06);
+  opacity: 1;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-close:focus-visible {
+  outline: 2px solid var(--mkl_pc_color-primary, #2a2a2a);
+  outline-offset: 0;
+  opacity: 1;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-close svg {
+  max-width: none;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-close svg * {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  animation: none;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 22px 28px 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__notice {
+  margin-bottom: 18px;
+  padding: 12px 14px !important;
+  border: 1px solid rgba(179, 45, 46, 0.25);
+  border-radius: 8px;
+  background: #fcf0f1;
+  color: #8a1f20;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field {
+  margin-bottom: 18px;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field > label,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field legend {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 0.95em;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=text],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=email],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=tel],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=number],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=date],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field textarea,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field select {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  line-height: 1.4;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=text]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=email]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=tel]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=number]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=date]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field textarea::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field select::placeholder {
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 1;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=text]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=email]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=tel]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=number]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=date]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field textarea:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field select:hover {
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=text]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=email]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=tel]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=number]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=date]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field textarea:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field select:focus {
+  border-color: var(--mkl_pc_color-primary, #2a2a2a);
+  outline: 2px solid var(--mkl_pc_color-primary, #2a2a2a);
+  outline-offset: -1px;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=text][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=email][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=tel][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=number][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=date][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field textarea[aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field select[aria-invalid=true] {
+  border-color: #b32d2e;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=checkbox],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field input[type=radio] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--mkl_pc_color-primary, #2a2a2a);
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field fieldset label {
+  display: block;
+  position: relative;
+  padding-left: 28px;
+  font-weight: normal;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field fieldset label input[type=checkbox],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field fieldset label input[type=radio] {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  margin: 0;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field fieldset label {
+  margin-bottom: 8px;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field .required {
+  color: #b32d2e;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field--checkbox > label {
+  display: block;
+  position: relative;
+  padding-left: 28px;
+  font-weight: normal;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field--checkbox > label input[type=checkbox],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field--checkbox > label input[type=radio] {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  margin: 0;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=text],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=email],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=tel],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=number],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=date],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) textarea,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) select {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  line-height: 1.4;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=text]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=email]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=tel]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=number]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=date]::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) textarea::placeholder,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) select::placeholder {
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 1;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=text]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=email]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=tel]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=number]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=date]:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) textarea:hover,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) select:hover {
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=text]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=email]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=tel]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=number]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=date]:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) textarea:focus,
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) select:focus {
+  border-color: var(--mkl_pc_color-primary, #2a2a2a);
+  outline: 2px solid var(--mkl_pc_color-primary, #2a2a2a);
+  outline-offset: -1px;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=text][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=email][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=tel][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=number][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=date][aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) textarea[aria-invalid=true],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) select[aria-invalid=true] {
+  border-color: #b32d2e;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=checkbox],
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__fields > :not(.mkl-pc-quote-field) input[type=radio] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--mkl_pc_color-primary, #2a2a2a);
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field__description {
+  margin-top: 6px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.875em;
+  line-height: 1.45;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field__error {
+  margin-top: 6px;
+  color: #b32d2e;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-field--website {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .adding-to-cart--adding-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 16px 28px;
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+  background: rgba(0, 0, 0, 0.025);
+}
+.adding-to-cart--modal .mkl-pc-quote-form .adding-to-cart--adding-cta button.button {
+  min-height: 44px;
+}
+.adding-to-cart--modal .mkl-pc-quote-form .adding-to-cart--adding-cta button.mkl-pc-quote-cancel {
+  background: transparent;
+  color: inherit;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22);
+}
+.adding-to-cart--modal .mkl-pc-quote-form .adding-to-cart--adding-cta button.mkl-pc-quote-cancel:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+@media (max-width: 600px) {
+  .adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__head {
+    padding: 18px 20px 14px;
+  }
+  .adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__head .header {
+    font-size: 20px;
+  }
+  .adding-to-cart--modal .mkl-pc-quote-form .mkl-pc-quote-form__body {
+    padding: 18px 20px 4px;
+  }
+  .adding-to-cart--modal .mkl-pc-quote-form .adding-to-cart--adding-cta {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    padding: 14px 20px;
+  }
+  .adding-to-cart--modal .mkl-pc-quote-form .adding-to-cart--adding-cta button.button {
+    width: 100%;
+  }
+}
+
+/**
+ * Sending, sent and error screens
+ */
+.adding-to-cart--modal .mkl-pc-quote-sending {
+  width: 100%;
+  max-width: 420px;
+  padding: 36px 32px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+.adding-to-cart--modal .mkl-pc-quote-sending .header {
+  padding-bottom: 18px;
+  font-size: 20px;
+  font-weight: 600;
+}
+.adding-to-cart--modal .mkl-pc-quote-sending .spinner {
+  margin-top: 0;
+  border-radius: 2px;
+  background: var(--mkl_pc_color-primary, #2a2a2a);
+}
+
+.adding-to-cart--modal .mkl-pc-quote-sent.has-box,
+.adding-to-cart--modal .mkl-pc-quote-error.has-box {
+  max-width: 460px;
+  padding: 36px 32px 28px;
+  text-align: center;
+}
+.adding-to-cart--modal .mkl-pc-quote-sent.has-box .adding-to-cart--adding-cta,
+.adding-to-cart--modal .mkl-pc-quote-error.has-box .adding-to-cart--adding-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .adding-to-cart--modal .mkl-pc-quote-sent.has-box,
+  .adding-to-cart--modal .mkl-pc-quote-error.has-box {
+    padding: 28px 20px 20px;
+  }
+}
+
+.adding-to-cart--modal .mkl-pc-quote-sent .header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 14px !important;
+}
+.adding-to-cart--modal .mkl-pc-quote-sent .header svg {
+  width: 64px;
+}
+.adding-to-cart--modal .mkl-pc-quote-sent .header .title {
+  font-size: 24px;
+  font-weight: 600;
+}
+.adding-to-cart--modal .mkl-pc-quote-sent .messages p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+.adding-to-cart--modal .mkl-pc-quote-sent .mkl-pc-quote-reference {
+  display: inline-block;
+  margin-top: 14px !important;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.05);
+  color: inherit !important;
+  font-size: 0.9em;
+}
+
+.adding-to-cart--modal .mkl-pc-quote-error .error.messages {
+  padding: 14px 16px !important;
+  margin-bottom: 20px;
+  border: 1px solid rgba(179, 45, 46, 0.25);
+  border-radius: 8px;
+  background: #fcf0f1;
+  color: #8a1f20;
+}

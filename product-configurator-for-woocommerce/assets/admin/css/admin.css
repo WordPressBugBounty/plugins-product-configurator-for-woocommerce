@@ -160,12 +160,12 @@ html .mkl-pc-admin-ui.pc-modal .button-primary.delete {
   box-shadow: 0 1px 0 #a00;
 }
 html .mkl-pc-admin-ui.pc-modal .button-primary.delete:hover, html .mkl-pc-admin-ui.pc-modal .button-primary.delete:focus {
-  background: rgb(224.3774058577, 82.3225941423, 82.3225941423);
+  background: rgb(87.9911395521%, 32.2833702519%, 32.2833702519%);
   border-color: #DB3434;
   box-shadow: 0 1px 0 #DB3434;
 }
 html .mkl-pc-admin-ui.pc-modal .button-primary.delete:active {
-  background: rgb(224.3774058577, 82.3225941423, 82.3225941423);
+  background: rgb(87.9911395521%, 32.2833702519%, 32.2833702519%);
   border-color: #DB3434;
   box-shadow: inset 0 2px 5px -3px rgba(0, 0, 0, 0.5);
   transform: translateY(1px);
