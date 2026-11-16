@@ -159,6 +159,25 @@ PC.fe.save_data = {
 		var angle = PC.fe.save_data.get_cart_angle();
 		return wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.angle_id', angle ? angle.id : undefined );
 	},
+	/**
+	 * The mask a layer cuts its images with on an angle (docs/layer-masks-spec.md).
+	 *
+	 * Saved with each choice, next to its image, so the order keeps the mask it was placed
+	 * with when the layer's masks change later.
+	 *
+	 * @param {Backbone.Model} layer
+	 * @param {Number|String}  angle_id
+	 * @return {Number} Attachment id, 0 for none.
+	 */
+	get_mask_id: function( layer, angle_id ) {
+		var masks = layer.get( 'masks' );
+		if ( ! _.isArray( masks ) || undefined === angle_id ) return 0;
+		var mask = _.find( masks, function( item ) {
+			return item && String( item.angleId ) === String( angle_id );
+		} );
+		var id = mask && mask.image ? parseInt( mask.image.id, 10 ) : 0;
+		return id > 0 ? id : 0;
+	},
 	// get choices for one layer
 	parse_choices: function( model ) {
 		var is_required = parseInt( model.get( 'required' ) );
@@ -175,10 +194,13 @@ PC.fe.save_data = {
 		// Save where the layer sits in the merged image, so the stacking order of a saved
 		// configuration survives the layers being reordered later. `image_order` is only set on
 		// the layers that are composited out of the layer order.
-		var image_order = parseInt( model_data.image_order, 10 );
+		// The cart view's own order when it has one (canvas viewer): the server composes that view.
+		var view_order = PC.fe.viewer_state ? PC.fe.viewer_state.view_image_order( model, angle_id ) : null;
+		var image_order = null !== view_order ? view_order : parseInt( model_data.image_order, 10 );
 		if ( isNaN( image_order ) ) image_order = parseInt( model_data.order, 10 );
 		if ( isNaN( image_order ) ) image_order = 0;
 		image_order = wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.image_order', image_order, model );
+		var mask_id = PC.fe.save_data.get_mask_id( model, angle_id );
 
 		if ( 'group' == type ) {
 			if ( ! this.count_selected_choices_in_group( model.id ) ) return;
@@ -242,7 +264,8 @@ PC.fe.save_data = {
 						} );
 					}
 
-					var img_id = choice.get_image( 'image', 'id', angle_id );
+					// An image id, or the choice's colour (docs/solid-colour-choices-spec.md).
+					var img_id = PC.fe.choice_color.saved_image( choice, angle_id );
 					var choice_data = {
 						is_choice: true,
 						layer_id: model.id,
@@ -254,6 +277,7 @@ PC.fe.save_data = {
 						name: choice.get_name(),
 					};
 					if ( choice.get( 'sku' ) ) choice_data.sku = choice.get( 'sku' );
+					if ( mask_id && img_id ) choice_data.mask = mask_id;
 					if ( wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.add_choice', true, choice ) ) this.choices.push( 
 						wp.hooks.applyFilters(
 							'PC.fe.save_data.parse_choices.added_choice',
@@ -269,7 +293,8 @@ PC.fe.save_data = {
 				var is_active = choice.get( 'active' );
 				if ( is_active || ( 'simple' != model.get( 'type' ) && 'multiple' != model.get( 'type' ) && 'form' != model.get( 'type' ) ) ) {
 					if ( false === choice.get( 'cshow' ) ) return;
-					var img_id = choice.get_image( 'image', 'id', angle_id ); 
+					// An image id, or the choice's colour (docs/solid-colour-choices-spec.md).
+					var img_id = PC.fe.choice_color.saved_image( choice, angle_id );
 					const choice_data = {
 						is_choice: true,
 						layer_id: model.id, 
@@ -279,7 +304,8 @@ PC.fe.save_data = {
 						image: img_id,
 						layer_name: model_data.name,
 						name: choice.get_name(),
-					};	
+					};
+					if ( mask_id && img_id ) choice_data.mask = mask_id;
 				
 					if ( wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.add_choice', true, choice ) ) this.choices.push(
 						wp.hooks.applyFilters(
@@ -305,18 +331,20 @@ PC.fe.save_data = {
 			// Not a choice
 			var choice = choices.first();
 			var img_id = choice.get_image( 'image', 'id', angle_id );
+			var static_data = {
+				is_choice: false,
+				layer_id: model.id,
+				choice_id: choice.id,
+				angle_id: angle_id,
+				image_order: image_order,
+				image: img_id,
+				name: choice.get_name(),
+			};
+			if ( mask_id && img_id ) static_data.mask = mask_id;
 			if ( wp.hooks.applyFilters( 'PC.fe.save_data.parse_choices.add_choice', true, choice ) ) this.choices.push(
 				wp.hooks.applyFilters(
 					'PC.fe.save_data.parse_choices.added_choice',
-					{
-						is_choice: false,
-						layer_id: model.id,
-						choice_id: choice.id,
-						angle_id: angle_id,
-						image_order: image_order,
-						image: img_id,
-						name: choice.get_name(),
-					}
+					static_data
 				)
 			);
 		}

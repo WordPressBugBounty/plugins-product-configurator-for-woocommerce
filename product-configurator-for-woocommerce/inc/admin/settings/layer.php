@@ -147,6 +147,31 @@ if ( ! class_exists('MKL\PC\Layer_Settings') ) {
 				),
 
 
+				// One mask per view: see docs/layer-masks-spec.md. The pickers are a view of their
+				// own (views/layer-masks.js), mounted in this container.
+				'masks' => array(
+					'label' => __( 'Mask', 'product-configurator-for-woocommerce' ),
+					'type' => 'custom',
+					'overridable' => true,
+					'html' => '<div class="mkl-pc-layer-masks"></div>',
+					'hide_label' => true,
+					'priority' => 10,
+					'section' => 'mask',
+					'condition' => '"simple" == data.type || "multiple" == data.type',
+					'help' => __( 'An image per view, the same size as this layer\'s images on that view. The layer only shows where the mask is opaque; leave a view empty to show the layer whole.', 'product-configurator-for-woocommerce' ),
+				),
+
+				// Choices without an image fill the mask with their colour (docs/solid-colour-choices-spec.md).
+				'draw_choice_color' => array(
+					'label' => __( 'Draw the choice colour in the viewer', 'product-configurator-for-woocommerce' ),
+					'help' => __( 'A choice with no image on a view fills this layer\'s mask with its colour hex code instead. Views without a mask draw nothing.', 'product-configurator-for-woocommerce' ),
+					'type' => 'checkbox',
+					'overridable' => true,
+					'priority' => 20,
+					'section' => 'mask',
+					'condition' => '"simple" == data.type || "multiple" == data.type',
+				),
+
 				'display_mode' => array(
 					'label' => __( 'Display mode', 'product-configurator-for-woocommerce' ),
 					'type' => 'image_select',
@@ -288,6 +313,7 @@ if ( ! class_exists('MKL\PC\Layer_Settings') ) {
 					'type'      => 'html',
 					'section'   => 'threed',
 					'priority'  => 10,
+					'overridable' => true,
 					'html'      => Abstract_Settings::get_objects3d_select_html( array(
 						'setting'     => 'object_3d_id',
 						'placeholder' => __( '— None —', 'product-configurator-for-woocommerce' ),
@@ -299,6 +325,7 @@ if ( ! class_exists('MKL\PC\Layer_Settings') ) {
 					'type'      => 'html',
 					'section'   => 'threed',
 					'priority'  => 12,
+					'overridable' => true,
 					'help'      => __( 'Optional. Narrows the layer to one object of the model: its choices show, hide, recolour or move this object instead of the whole model. Choices can pick their own. On a layer without choices, the object is shown while the layer is shown: use conditional logic to show or hide it.', 'product-configurator-for-woocommerce' ),
 					'html'      => '<div class="mkl-pc-setting--container">'
 						. '<input type="text" class="components-select-control__input" data-setting="target_object_id" value="<# if ( data.target_object_id ) { #>{{data.target_object_id}}<# } #>" placeholder="' . esc_attr__( 'Whole model', 'product-configurator-for-woocommerce' ) . '"> '
@@ -380,6 +407,12 @@ if ( ! class_exists('MKL\PC\Layer_Settings') ) {
 				}
 			}
 
+			// Masks are 2D only; without its section the field would land in General.
+			if ( $post && '3d' === mkl_pc_get_configurator_type( $post->ID ) ) {
+				unset( $settings['masks'] );
+				unset( $settings['draw_choice_color'] );
+			}
+
 			return apply_filters( 'mkl_pc_layer_default_settings', $settings );
 		}
 
@@ -416,6 +449,15 @@ if ( ! class_exists('MKL\PC\Layer_Settings') ) {
 					'fields' => [
 					],
 				),
+				'_mask' => array(
+					'id' => 'mask',
+					'label' => __( 'Mask', 'product-configurator-for-woocommerce' ),
+					// After Selection settings (25), before Translations (140) and Advanced (150).
+					'priority' => 30,
+					'collapsible' => true,
+					'fields' => [
+					],
+				),
 				'_selection' => array(
 					'id' => 'selection',
 					'label' => __( 'Selection settings', 'product-configurator-for-woocommerce' ),
@@ -437,6 +479,8 @@ if ( ! class_exists('MKL\PC\Layer_Settings') ) {
 
 			global $post;
 			if ( '3d' === mkl_pc_get_configurator_type( $post->ID ) ) {
+				// Masks are 2D only: a 3D product has no stacked images to cut.
+				unset( $sections['_mask'] );
 				$sections['_threed'] = array(
 					'id' => 'threed',
 					'label' => __( '3D', 'product-configurator-for-woocommerce' ),

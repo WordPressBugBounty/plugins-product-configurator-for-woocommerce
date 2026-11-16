@@ -19,6 +19,13 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 		private $variable;
 		private $three_d;
 		private $should_update_cache = false;
+		/**
+		 * True while the configuration cache is being written. Building it can save the product
+		 * (e.g. the storage integrity flag), and that nested save must not start another write.
+		 *
+		 * @var bool
+		 */
+		private $writing_cache = false;
 		public function __construct() {
 			$this->_hooks();
 			$this->variable = new Admin_Variable_Product();
@@ -331,7 +338,10 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 					'mkl_pc-data-migration-overlay',
 					'mkl_pc/js/admin/backbone/views/mobile_admin_stack_router',
 				) ),
+				array( 'backbone/views/layer_overrides', 'views/layer-overrides.js', array( 'mkl_pc/js/admin/backbone/views/layers' ) ),
+				array( 'backbone/views/layer_masks', 'views/layer-masks.js', array( 'mkl_pc/js/admin/backbone/views/layers', 'mkl_pc/js/admin/backbone/views/layer_overrides' ) ),
 				array( 'backbone/views/choices', 'views/choices.js', array( 'mkl_pc/js/admin/backbone/views/mobile_admin_stack_router' ) ),
+				array( 'backbone/views/choice_color', 'views/choice-color.js', array( 'mkl_pc/js/admin/backbone/views/choices' ) ),
 				array( 'backbone/views/image_order_preview', 'views/image-order-preview.js' ),
 				array( 'backbone/views/image_order', 'views/image-order.js', array(
 					'mkl_pc/js/admin/backbone/views/layers',
@@ -353,6 +363,7 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 				array( 'backbone/views/content', 'views/content.js', array( 'mkl_pc/js/admin/backbone/views/mobile_admin_stack_router' ) ),
 				array('backbone/views/import', 'views/import.js'),
 				array( 'backbone/views/admin_dialog', 'views/admin-dialog.js', array( 'wp-hooks' ) ),
+				array( 'backbone/views/zone_editor', 'views/zone-editor.js', array( 'mkl_pc/js/admin/backbone/views/admin_dialog', 'mkl_pc/js/admin/backbone/views/image_order_preview' ) ),
 				array(
 					'backbone/views/import_global_layer',
 					'views/import-global-layer.js',
@@ -427,6 +438,70 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 					'list_filter_placeholder' => esc_html__( 'Filter list…', 'product-configurator-for-woocommerce' ),
 					'group_with_content_warning' => esc_html__( 'Changing the type to group will discard the content you already added to this layer.', 'product-configurator-for-woocommerce' ) . ' ' . esc_html__( 'Do you want to continue?', 'product-configurator-for-woocommerce' ),
 					'angles_no_delete_message' => esc_html__( 'This item cannot be deleted: at least one view is required for the configurator to work', 'product-configurator-for-woocommerce' ),
+					/* translators: 1: sizes of the layer's images, e.g. "2000 × 2000", 2: size of the mask */
+					'mask_size_mismatch' => esc_html__( 'Images of this layer on this view are %1$s, the mask is %2$s. A mask must be the same size as the images it cuts.', 'product-configurator-for-woocommerce' ),
+					// Solid-colour choices (docs/solid-colour-choices-spec.md).
+					'mask_missing_for_color' => esc_html__( 'No mask on this view: choice colours are not drawn here.', 'product-configurator-for-woocommerce' ),
+					'choice_color_not_drawn' => esc_html__( 'This layer draws choice colours in the viewer, but only hex codes such as #1e90ff or #19f can be drawn. This colour is only used for the swatch.', 'product-configurator-for-woocommerce' ),
+					'choice_color_image_wins' => esc_html__( 'On views where this choice has an image, the image is shown instead of the colour.', 'product-configurator-for-woocommerce' ),
+					// Linked global layers (docs/global-layer-overrides-spec.md).
+					'override_on' => esc_html__( 'Override for this link', 'product-configurator-for-woocommerce' ),
+					'override_off' => esc_html__( 'Use the global layer\'s value', 'product-configurator-for-woocommerce' ),
+					'override_badge' => esc_html__( 'This link only', 'product-configurator-for-woocommerce' ),
+					/* translators: %d: number of times the global layer is used in this product */
+					'override_name_hint' => esc_html__( 'This global layer is used %d times in this product: override the name to tell them apart.', 'product-configurator-for-woocommerce' ),
+					'override_html_id_hint' => esc_html__( 'This global layer is used more than once in this product: override the ID on each link, or the page will have the same ID twice.', 'product-configurator-for-woocommerce' ),
+					/* translators: %d: number of times the global layer is already used in this product */
+					'import_global_layer_links' => esc_html__( 'Already in this product: %d', 'product-configurator-for-woocommerce' ),
+					'layer_override_groups' => $this->get_layer_override_groups(),
+					// The zone editor (views/zone-editor.js, docs/image-overlay-spec.md). Not
+					// escaped here: the dialog escapes what it inserts.
+					'zone_editor' => array(
+						'title'        => __( 'Zone', 'product-configurator-for-woocommerce' ),
+						'choose_image' => __( 'Choose the view\'s image', 'product-configurator-for-woocommerce' ),
+						'no_image'     => __( 'Choose the view\'s image to draw the zone on it.', 'product-configurator-for-woocommerce' ),
+						'x'            => __( 'X (centre)', 'product-configurator-for-woocommerce' ),
+						'y'            => __( 'Y (top)', 'product-configurator-for-woocommerce' ),
+						'width'        => __( 'Width', 'product-configurator-for-woocommerce' ),
+						'height'       => __( 'Height', 'product-configurator-for-woocommerce' ),
+						'rotation'     => __( 'Rotation (°)', 'product-configurator-for-woocommerce' ),
+						'help'         => __( 'Drag the zone to move it, its handles to resize it. Arrow keys move it by one pixel, with Shift by ten.', 'product-configurator-for-woocommerce' ),
+						'zone'         => __( 'Zone', 'product-configurator-for-woocommerce' ),
+						'done'         => __( 'Done', 'product-configurator-for-woocommerce' ),
+						'cancel'       => __( 'Cancel', 'product-configurator-for-woocommerce' ),
+						'remove'       => __( 'Remove the zone', 'product-configurator-for-woocommerce' ),
+					),
+					// Views' own image orders: canvas viewer only (docs/canvas-viewer-spec.md, Order).
+					'image_order_views' => $this->view_image_orders_enabled(),
+					// The bar's state (image-order.js, sync_bar()).
+					'image_order_status_follows' => esc_html__( 'The images follow the layer list', 'product-configurator-for-woocommerce' ),
+					'image_order_status_custom' => esc_html__( 'The images have their own order', 'product-configurator-for-woocommerce' ),
+					'image_order_status_default_follows' => esc_html__( 'Default order · follows the layer list', 'product-configurator-for-woocommerce' ),
+					'image_order_status_default_custom' => esc_html__( 'Default order · custom', 'product-configurator-for-woocommerce' ),
+					'image_order_status_own' => esc_html__( 'Own order for this view', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view names, e.g. "Front, Side" */
+					'image_order_scope_shared' => esc_html__( 'Also used by %s.', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_scope_own_one' => esc_html__( '%s has its own order.', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view names, e.g. "Back, Side" */
+					'image_order_scope_own_many' => esc_html__( '%s have their own order.', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_scope_only' => esc_html__( 'Changes here only affect %s.', 'product-configurator-for-woocommerce' ),
+					'image_order_scope_dom' => esc_html__( 'Only the canvas viewer uses the orders of the views: with the image stack viewer, every view uses the default order.', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_view_fork' => esc_html__( 'Give %s its own order', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_view_reset' => esc_html__( 'Use the default order for %s', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_view_forked' => esc_html__( '%s now has its own order.', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_view_reset_confirm' => esc_html__( '%s will use the default order again. Continue?', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_view_reset_done' => esc_html__( '%s uses the default order.', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_view_refork_confirm' => esc_html__( 'The order of %s will be replaced by the default order. Continue?', 'product-configurator-for-woocommerce' ),
+					/* translators: %s: view name */
+					'image_order_view_reforked' => esc_html__( '%s starts again from the default order.', 'product-configurator-for-woocommerce' ),
 					'reset_image_order_confirm' => esc_html__( 'The images will be stacked in the layer order again. Continue?', 'product-configurator-for-woocommerce' ),
 					/* translators: %s: layer name */
 					'image_order_move_front' => esc_attr__( 'Move %s forward', 'product-configurator-for-woocommerce' ),
@@ -632,6 +707,45 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 		 * @param string $name - The screen post tyme
 		 * @return boolean
 		 */
+		/**
+		 * Whether views can have their own image order here: the product's 2D viewer is the
+		 * canvas viewer, which keeps a stack per view. Not on 3D configurators.
+		 *
+		 * @return bool
+		 */
+		private function view_image_orders_enabled() {
+			global $post;
+			$product_id = ( $post && isset( $post->ID ) ) ? (int) $post->ID : 0;
+			if ( $product_id && '3d' === mkl_pc_get_configurator_type( $product_id ) ) return false;
+			return 'canvas' === mkl_pc_get_viewer_2d_renderer( $product_id );
+		}
+
+		/**
+		 * Layer fields that follow another field's override switch on a linked global layer: its
+		 * translations (docs/global-layer-overrides-spec.md).
+		 *
+		 * @return array field => fields following it
+		 */
+		private function get_layer_override_groups() {
+			$groups    = array( 'name' => array(), 'description' => array() );
+			$languages = mkl_pc( 'languages' );
+			if ( $languages && ! empty( $languages->get_languages() ) ) {
+				$default = $languages->get_default_language();
+				foreach ( (array) $languages->get_languages() as $language ) {
+					if ( $language == $default ) continue;
+					$language = str_replace( '-', '_', $language );
+					$groups['name'][]        = 'name_' . $language;
+					$groups['description'][] = 'description_' . $language;
+				}
+			}
+			/**
+			 * Filter the layer fields switched together on a linked global layer.
+			 *
+			 * @param array $groups field => fields following it
+			 */
+			return apply_filters( 'mkl_pc_layer_override_groups', $groups );
+		}
+
 		private function _current_screen_is( $name ) {
 			$screen = get_current_screen();
 			
@@ -891,9 +1005,14 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 		 * @return void
 		 */
 		public function write_configuration_cache_on_product_save( $obj ) {
-			if ( $this->should_update_cache ) {
+			if ( $this->should_update_cache && ! $this->writing_cache ) {
 				$this->should_update_cache = false;
-				$this->write_configuration_cache( $obj->get_id() );
+				$this->writing_cache       = true;
+				try {
+					$this->write_configuration_cache( $obj->get_id() );
+				} finally {
+					$this->writing_cache = false;
+				}
 			}
 		}
 
@@ -904,8 +1023,15 @@ if ( ! class_exists('MKL\PC\Admin_Product') ) {
 		 * @return void
 		 */
 		public function check_before_product_save( $obj ) {
+			// A save made while the cache is being written comes from that write: don't re-arm.
+			if ( $this->writing_cache ) {
+				return;
+			}
 			if ( $obj->get_id() ) {
-				$changes = $obj->get_changes();
+				// Only real product props count. Some plugins inject their own keys into `changes`
+				// (Advanced Dynamic Pricing adds `adpCustomInitialPrice` to every product it loads),
+				// which would make every save look like an edit.
+				$changes = array_intersect_key( $obj->get_changes(), $obj->get_data() );
 				if ( ! empty( $changes ) ) {
 					$this->should_update_cache = true;
 				}

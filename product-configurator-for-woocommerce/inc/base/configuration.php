@@ -271,12 +271,17 @@ class Configuration {
 		if ( ! property_exists( $this, 'content' ) || ! is_array( $this->content ) || empty( $this->content ) ) return false;
 
 		$images = [];
+		$masked = false;
 		foreach ( $this->content as $layer ) {
-			$image = apply_filters( 'mkl-pc-serve-image-process-layer-image', $this->get_image_path_for_merging( $layer->image ), $layer );
-			if ( $image ) {
+			if ( $this->layer_draws( $layer ) ) {
 				$images[] = $layer->image;
+				// A colour is no attachment at all: it is always merged.
+				if ( self::get_layer_mask_id( $layer ) || self::parse_color_image( $layer->image ) ) $masked = true;
 			}
 		}
+
+		// A masked image is not the attachment as it is: it has to be merged, to be cut.
+		if ( $masked ) return false;
 
 		if ( 1 === count( $images ) && $image_url = wp_get_attachment_url( $images[0] ) ) {
 			if ( 'id' == $return ) return $images[0];
@@ -311,7 +316,7 @@ class Configuration {
 
 		foreach ( $this->content as $layer ) {
 			if ( ! $layer->image ) continue;
-			$image_file_name .= '-'.$layer->image;
+			$image_file_name .= '-' . self::get_layer_token( $layer );
 		}
 
 		if ( $dimensions = $this->resolve_size( $size ) ) {
@@ -417,7 +422,9 @@ class Configuration {
 		if ( ! is_dir( $dir ) ) return false;
 
 		$images = $this->collect_layer_images();
-		if ( count( $images ) < 2 ) return false;
+		// A masked image or a colour is merged even alone: it is not an attachment as it is.
+		$must_merge = (bool) array_filter( $images, 'is_array' );
+		if ( count( $images ) < 2 && ! $must_merge ) return false;
 
 		$image_manager = $this->_get_image_manager();
 		if ( ! $image_manager ) return false;
@@ -462,9 +469,13 @@ class Configuration {
 	}
 
 	/**
-	 * The layer images to composite, keyed by attachment id
+	 * The layer images to composite, bottom first
 	 *
-	 * @return array
+	 * Keyed by the layer's token: the attachment id, plus its mask when it has one. The same
+	 * image under two masks (one fabric on two areas of a shirt) is two entries; the same
+	 * image twice without a mask is still one, as it always was.
+	 *
+	 * @return array Paths, or { path, mask } for a masked image.
 	 */
 	private function collect_layer_images() {
 		$images = array();
@@ -472,13 +483,136 @@ class Configuration {
 		if ( empty( $this->content ) || ! is_array( $this->content ) ) return $images;
 
 		foreach ( $this->content as $layer ) {
-			$image = apply_filters( 'mkl-pc-serve-image-process-layer-image', $this->get_image_path_for_merging( $layer->image ), $layer );
-			if ( $image ) {
-				$images[ $layer->image ] = $image;
+			// A solid colour fills its mask (docs/solid-colour-choices-spec.md).
+			if ( $color = self::parse_color_image( $layer->image ) ) {
+				$mask_id = self::get_layer_mask_id( $layer );
+				$mask = $mask_id ? $this->get_image_path_for_merging( $mask_id ) : '';
+				if ( ! $mask || ! is_file( $mask ) ) {
+					if ( function_exists( 'wc_get_logger' ) ) {
+						wc_get_logger()->warning(
+							sprintf( 'MKL Product Configurator: the layer mask %d could not be read, the colour %s is merged unmasked.', $mask_id, $color ),
+							array( 'source' => 'mkl-pc' )
+						);
+					}
+					$mask = '';
+				}
+				$images[ self::get_layer_token( $layer ) ] = array( 'color' => $color, 'mask' => $mask );
+				continue;
 			}
+
+			$image = apply_filters( 'mkl-pc-serve-image-process-layer-image', $this->get_image_path_for_merging( $layer->image ), $layer );
+			if ( ! $image ) continue;
+
+			$mask_id = self::get_layer_mask_id( $layer );
+			if ( $mask_id ) {
+				$mask = $this->get_image_path_for_merging( $mask_id );
+				// A mask that cannot be read leaves the image unmasked (docs/layer-masks-spec.md).
+				if ( ! $mask || ! is_file( $mask ) ) {
+					if ( function_exists( 'wc_get_logger' ) ) {
+						wc_get_logger()->warning(
+							sprintf( 'MKL Product Configurator: the layer mask %d could not be read, the image %s is merged unmasked.', $mask_id, $layer->image ),
+							array( 'source' => 'mkl-pc' )
+						);
+					}
+					$mask = '';
+				}
+				$images[ self::get_layer_token( $layer ) ] = $mask ? array( 'path' => $image, 'mask' => $mask ) : $image;
+				continue;
+			}
+
+			$images[ $layer->image ] = $image;
 		}
 
 		return $images;
+	}
+
+	/**
+	 * The mask of an entry of `content`, 0 for none.
+	 *
+	 * @param object|array $layer
+	 * @return int
+	 */
+	public static function get_layer_mask_id( $layer ) {
+		if ( is_object( $layer ) ) return isset( $layer->mask ) ? absint( $layer->mask ) : 0;
+		if ( is_array( $layer ) ) return isset( $layer['mask'] ) ? absint( $layer['mask'] ) : 0;
+		return 0;
+	}
+
+	/**
+	 * An entry of `content` as it appears in file names and merge URLs: the image, and
+	 * `m<mask id>` when it is masked. Ids are digits and add-on tokens are hex (text
+	 * overlay's are md5), so the `m` cannot be part of either.
+	 *
+	 * @param object|array $layer
+	 * @return string
+	 */
+	public static function get_layer_token( $layer ) {
+		$image = is_object( $layer ) ? $layer->image : ( is_array( $layer ) && isset( $layer['image'] ) ? $layer['image'] : '' );
+		$mask_id = self::get_layer_mask_id( $layer );
+		return $mask_id ? $image . 'm' . $mask_id : (string) $image;
+	}
+
+	/**
+	 * Read a token back (see get_layer_token()). Only an attachment id carries a mask.
+	 *
+	 * @param string $token
+	 * @return array { image, mask? }
+	 */
+	public static function parse_layer_token( $token ) {
+		if ( preg_match( '/^(\d+|s[0-9a-f]{6})m(\d+)$/', (string) $token, $matches ) ) {
+			return array( 'image' => $matches[1], 'mask' => (int) $matches[2] );
+		}
+		return array( 'image' => $token );
+	}
+
+	/**
+	 * The colour a layer's `image` stands for, when it is a solid colour: `s<rrggbb>`
+	 * (docs/solid-colour-choices-spec.md). `s` is not a hex digit, so no add-on token (text
+	 * overlay's md5, the upload preview's `u<md5>`) can read as one.
+	 *
+	 * @param mixed $image
+	 * @return string '#rrggbb', or '' when the image is not a colour.
+	 */
+	public static function parse_color_image( $image ) {
+		if ( is_string( $image ) && preg_match( '/^s([0-9a-f]{6})$/', $image, $matches ) ) return '#' . $matches[1];
+		return '';
+	}
+
+	/**
+	 * The `image` value of a solid colour (see parse_color_image()).
+	 *
+	 * @param string $color '#rgb' or '#rrggbb'.
+	 * @return string `s<rrggbb>`, or '' when the colour is not a hex code.
+	 */
+	public static function color_image( $color ) {
+		$color = self::normalize_color( $color );
+		return $color ? 's' . substr( $color, 1 ) : '';
+	}
+
+	/**
+	 * '#rgb' or '#rrggbb' as '#rrggbb' in lower case, else ''. Same rule as the viewers'
+	 * PC.fe.choice_color.normalize().
+	 *
+	 * @param mixed $color
+	 * @return string
+	 */
+	public static function normalize_color( $color ) {
+		if ( ! is_string( $color ) ) return '';
+		$color = strtolower( trim( $color ) );
+		if ( preg_match( '/^#[0-9a-f]{6}$/', $color ) ) return $color;
+		if ( preg_match( '/^#([0-9a-f])([0-9a-f])([0-9a-f])$/', $color, $m ) ) return '#' . $m[1] . $m[1] . $m[2] . $m[2] . $m[3] . $m[3];
+		return '';
+	}
+
+	/**
+	 * Whether a layer of `content` draws something: an image file, or a solid colour.
+	 *
+	 * @param object $layer
+	 * @return bool
+	 */
+	private function layer_draws( $layer ) {
+		if ( self::parse_color_image( $layer->image ) ) return true;
+		return (bool) apply_filters( 'mkl-pc-serve-image-process-layer-image', $this->get_image_path_for_merging( $layer->image ), $layer );
 	}
 
 	/**
@@ -647,7 +781,7 @@ class Configuration {
 
 			// collect images
 			foreach ( $this->content as $layer ) {
-				$images[] = $layer->image;
+				$images[] = self::get_layer_token( $layer );
 			}
 
 			// No images, return an empty one
@@ -719,14 +853,16 @@ class Configuration {
 
 				// Check if we have images
 				$images = array();
+				$must_merge = false;
 				foreach ($content as $layer) {
-					$image = apply_filters( 'mkl-pc-serve-image-process-layer-image', $this->get_image_path_for_merging( $layer->image ), $layer );
-					if ( $image ) {
+					if ( $this->layer_draws( $layer ) ) {
 						$images[] =  $layer->image;
+						// A colour is no attachment: even alone, it is merged.
+						if ( self::parse_color_image( $layer->image ) ) $must_merge = true;
 					}
 				}
 
-				if ( count( $images ) > 1 ) {
+				if ( count( $images ) > 1 || ( $must_merge && count( $images ) ) ) {
 					// prepare return values 
 					$save_image = array(
 						'should_save' => true,
@@ -751,19 +887,20 @@ class Configuration {
 
 				// collect images
 				$images = array();
+				$must_merge = false;
 
 				foreach ( $content as $layer ) {
-					$image = apply_filters( 'mkl-pc-serve-image-process-layer-image', $this->get_image_path_for_merging( $layer->image ), $layer );
-
-					if ( $image ) {
-						$images[$layer->image] = $image;
+					if ( $this->layer_draws( $layer ) ) {
+						$images[$layer->image] = true;
+						// A colour is no attachment: even alone, it is merged.
+						if ( self::parse_color_image( $layer->image ) ) $must_merge = true;
 					}
 				}
 
-				if ( count( $images ) > 1 && $image_file_name && Utils::check_image_requirements() ) {
+				if ( ( count( $images ) > 1 || ( $must_merge && count( $images ) ) ) && $image_file_name && Utils::check_image_requirements() ) {
 					$fimage = $this->get_image_file();
 					return $this->save_attachment( $fimage, $this->ID );
-				} elseif ( 1 == count( $images ) ) {
+				} elseif ( 1 == count( $images ) && ! $must_merge ) {
 					return array_keys( $images )[0];
 				} else {
 					return false;
@@ -897,13 +1034,8 @@ class Configuration {
 		}
 
 		// Nothing could be written: a stack of a single image, or a folder that cannot be
-		// written to. Merge in memory, as before.
-		$images = array();
-		// collect images
-		foreach ($this->content as $layer) {
-			$image = apply_filters( 'mkl-pc-serve-image-process-layer-image', $this->get_image_path_for_merging( $layer->image ), $layer );
-			$images[] = $image;
-		}
+		// written to. Merge in memory, as before (masks and colours included).
+		$images = $this->collect_layer_images();
 
 		if ( count( $images ) && $image_manager = $this->_get_image_manager() ) {
 			$image_manager->merge( $images, 'print', '', '', $this->resolve_size( $size ) );

@@ -230,6 +230,11 @@ class DB {
 	}
 
 	/**
+	 * Skips the write when the stored value already matches. This runs on read paths (the editor's
+	 * storage state, the config cache rebuild), and saving the product fires
+	 * woocommerce_after_product_object_save, which rebuilds the config cache and lands here again.
+	 * On data that never verifies (legacy blobs) an unconditional save loops until memory runs out.
+	 *
 	 * @param int $parent_id
 	 * @param int $value      1 = ok cache, 0 = invalidate / recompute.
 	 * @return void
@@ -237,6 +242,10 @@ class DB {
 	private function set_integrity_cache_value( $parent_id, $value ) {
 		$parent = $this->get_owner( (int) $parent_id );
 		if ( ! $parent ) {
+			return;
+		}
+		// Missing and 0 mean the same thing ("recompute"), so neither needs a write for 0.
+		if ( (int) $parent->get_meta( self::META_INTEGRITY_CACHE, true ) === (int) $value ) {
 			return;
 		}
 		$parent->update_meta_data( self::META_INTEGRITY_CACHE, (int) $value );
@@ -2334,6 +2343,16 @@ class DB {
 		
 		if ( ! $product ) return [];
 
+		// A link's layer already holds its own values; which ones they are, and the values kept
+		// behind switched-off overrides, are the editor's (docs/global-layer-overrides-spec.md).
+		if ( ! empty( $init_data['layers'] ) && is_array( $init_data['layers'] ) ) {
+			foreach ( $init_data['layers'] as $index => $layer ) {
+				if ( is_array( $layer ) && isset( $layer['overrides'] ) ) {
+					unset( $init_data['layers'][ $index ]['overrides'] );
+				}
+			}
+		}
+
 		$product_type = apply_filters( 'mkl_product_configurator_get_front_end_data/product_type', $product->get_type(), $product );
 		// get the products 'title' attribute
 		$parent_id_for_type = ( 'variation' === $product_type ) ? $product->get_parent_id() : $id;
@@ -2550,6 +2569,23 @@ class DB {
 			if ( empty( $item ) || ! is_array( $item['choices'] ) ) continue;
 			$changed = false;
 			foreach ( $item['choices'] as $choice_key => $choice ) {
+				/**
+				 * Filter mkl_pc/db/scan_images/choice: remap the images an add-on keeps in a choice
+				 * (Form builder's upload zones and zone masks, say), after an import. Return the
+				 * choice changed to have it saved. DB::remap_image_reference() remaps one image
+				 * the way layer masks are remapped.
+				 *
+				 * @param array $choice
+				 * @param DB    $db
+				 * @param int   $product_id
+				 * @param int   $layer_id
+				 */
+				$fixed = apply_filters( 'mkl_pc/db/scan_images/choice', $choice, $this, $product_id, $layer_id );
+				if ( is_array( $fixed ) && $fixed !== $choice ) {
+					$item['choices'][ $choice_key ] = $fixed;
+					$choice = $fixed;
+					$changed = true;
+				}
 				if ( ! isset( $choice['images'] ) || ! is_array( $choice['images'] ) ) continue;
 				foreach ( $choice['images'] as $ik => $image ) {
 					if ( isset( $image['image'] ) && ! empty( $image['image']['url'] ) ) {
@@ -2613,23 +2649,101 @@ class DB {
 				}
 			}
 			if ( empty( $chunk ) || ! is_array( $chunk ) ) continue;
+			$layer_changed = false;
 			if ( isset( $chunk['image'] ) && ! empty( $chunk['image']['url'] ) ) {
 				$new_layer_id = $this->_find_image_id( $chunk['image']['url'], isset( $chunk['image']['id'] ) ? $chunk['image']['id'] : 0 );
 				if ( $new_layer_id && ( ! isset( $chunk['image']['id'] ) || $new_layer_id != $chunk['image']['id'] ) ) {
 					$chunk['image']['id'] = $new_layer_id;
 					$chunk['image']['url'] = wp_get_attachment_url( $new_layer_id );
-					if ( ! $this->write_structured_meta( $product, '_mkl_product_configurator_layer_' . $layer_id, $chunk ) ) {
-						continue;
-					}
-					$product->save();
-					do_action( 'wpml_sync_custom_field', $product_id, '_mkl_product_configurator_layer_' . $layer_id );
+					$layer_changed = true;
 				}
+			}
+			// Layer masks, one image per view, remapped like a choice's images
+			// (docs/layer-masks-spec.md).
+			if ( ! empty( $chunk['masks'] ) && is_array( $chunk['masks'] ) && $this->remap_layer_masks( $chunk['masks'] ) ) {
+				$layer_changed = true;
+			}
+			// A link to a global layer keeps its own values in `overrides` (switched-off ones too,
+			// docs/global-layer-overrides-spec.md): the global layer's images are its own business.
+			if ( ! empty( $chunk['overrides']['values'] ) && is_array( $chunk['overrides']['values'] ) ) {
+				$values = &$chunk['overrides']['values'];
+				if ( ! empty( $values['image']['url'] ) ) {
+					$new_layer_id = $this->_find_image_id( $values['image']['url'], isset( $values['image']['id'] ) ? $values['image']['id'] : 0 );
+					if ( $new_layer_id && ( ! isset( $values['image']['id'] ) || $new_layer_id != $values['image']['id'] ) ) {
+						$values['image']['id']  = $new_layer_id;
+						$values['image']['url'] = wp_get_attachment_url( $new_layer_id );
+						$layer_changed = true;
+					}
+				}
+				if ( ! empty( $values['masks'] ) && is_array( $values['masks'] ) && $this->remap_layer_masks( $values['masks'] ) ) {
+					$layer_changed = true;
+				}
+				unset( $values );
+			}
+			if ( $layer_changed ) {
+				if ( ! $this->write_structured_meta( $product, '_mkl_product_configurator_layer_' . $layer_id, $chunk ) ) {
+					continue;
+				}
+				$product->save();
+				do_action( 'wpml_sync_custom_field', $product_id, '_mkl_product_configurator_layer_' . $layer_id );
 			}
 		}
 
 		$this->scan_3d_files( $product_id );
 
 		return $this->changed_items_count;
+	}
+
+	/**
+	 * Point a layer's masks at this site's attachments, found by file name, in place.
+	 *
+	 * The stored id is kept when it still serves the stored URL; otherwise an attachment with the
+	 * same file name takes its place, id and URL. Nothing found leaves the mask as it is: the id
+	 * _find_image_id() falls back to may be an unrelated attachment on this site, so a match only
+	 * counts when its file name is the stored one.
+	 *
+	 * @param array $masks [ { angleId, image: { id, url, dimensions } } ], changed in place.
+	 * @return bool Whether a mask changed.
+	 */
+	private function remap_layer_masks( &$masks ) {
+		$changed = false;
+		foreach ( $masks as $key => $mask ) {
+			if ( ! is_array( $mask ) || empty( $mask['image'] ) || ! is_array( $mask['image'] ) ) continue;
+			$remapped = $this->remap_image_reference( $mask['image'] );
+			if ( null !== $remapped ) {
+				$masks[ $key ]['image'] = $remapped;
+				$changed = true;
+			}
+		}
+		return $changed;
+	}
+
+	/**
+	 * Point one image reference ({ id, url, ... }) at this site's attachment, found by file name.
+	 *
+	 * The stored id is kept when it still serves the stored URL; otherwise an attachment with the
+	 * same file name takes its place, id and URL. Nothing found leaves it as it is: the id
+	 * _find_image_id() falls back to may be an unrelated attachment on this site, so a match only
+	 * counts when its file name is the stored one. Other keys (dimensions, width...) are kept.
+	 *
+	 * @param array $image
+	 * @return array|null The remapped image, or null when nothing changes.
+	 */
+	public function remap_image_reference( $image ) {
+		if ( ! is_array( $image ) || empty( $image['url'] ) ) return null;
+		$file_name = function( $url ) {
+			return strtolower( wp_basename( (string) wp_parse_url( $url, PHP_URL_PATH ) ) );
+		};
+		$url = $image['url'];
+		$old_id = isset( $image['id'] ) ? (int) $image['id'] : 0;
+		if ( $old_id && wp_get_attachment_url( $old_id ) === $url ) return null;
+		$new_id = (int) $this->_find_image_id( $url, $old_id );
+		$new_url = $new_id ? wp_get_attachment_url( $new_id ) : '';
+		if ( ! $new_url || $file_name( $new_url ) !== $file_name( $url ) ) return null;
+		if ( $new_id === $old_id && $new_url === $url ) return null;
+		$image['id'] = $new_id;
+		$image['url'] = $new_url;
+		return $image;
 	}
 
 	/**

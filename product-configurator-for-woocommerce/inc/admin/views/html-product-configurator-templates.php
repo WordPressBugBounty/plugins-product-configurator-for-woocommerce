@@ -451,19 +451,45 @@ STRUCTURE / VIEWS TEMPLATES (They will share the same views, using different mod
 			<# if ( data.description ) { #><p class="mkl-pc-image-order__intro">{{data.description}}</p><# } #>
 		</div>
 
-		<div class="mkl-pc-image-order__bar">
-			<span class="mkl-pc-order-state">
-				<span class="mkl-pc-order-state__dot" aria-hidden="true"></span>
-				<span class="mkl-pc-order-state__chip mkl-pc-order-state__chip--follows"><?php echo esc_html_x( 'The images follow the layer order', 'Image order screen: state', 'product-configurator-for-woocommerce' ); ?></span>
-				<span class="mkl-pc-order-state__chip mkl-pc-order-state__chip--custom"><?php echo esc_html_x( 'The images have their own order', 'Image order screen: state', 'product-configurator-for-woocommerce' ); ?></span>
-			</span>
-			<button type="button" class="button-link mkl-pc-order-reset">
-				<?php echo esc_html_x( 'Reset to the layer order', 'Image order screen: action', 'product-configurator-for-woocommerce' ); ?>
-			</button>
-		</div>
-
 		<div class="mkl-pc-image-order__body">
 		<div class="mkl-pc-image-order__main">
+		<?php
+		// What the list is editing: the view (when views can have their own order), its order's
+		// state, and the actions that apply, in one menu. Texts and items: image-order.js, sync_bar().
+		?>
+		<div class="mkl-pc-image-order__bar">
+			<span class="mkl-pc-order-view" hidden>
+				<label for="mkl-pc-order-view-select" class="mkl-pc-order-view__label"><?php echo esc_html_x( 'Order for', 'Image order screen: view selector', 'product-configurator-for-woocommerce' ); ?></label>
+				<select id="mkl-pc-order-view-select" class="mkl-pc-order-view__select"></select>
+			</span>
+			<span class="mkl-pc-order-state">
+				<span class="mkl-pc-order-state__dot" aria-hidden="true"></span>
+				<span class="mkl-pc-order-state__text"></span>
+			</span>
+			<div class="mkl-pc-order-menu">
+				<button type="button" class="button mkl-pc-order-menu__toggle" aria-haspopup="true" aria-expanded="false" aria-controls="mkl-pc-order-menu-list" aria-label="<?php echo esc_attr_x( 'Image order actions', 'Image order screen: menu', 'product-configurator-for-woocommerce' ); ?>" title="<?php echo esc_attr_x( 'Image order actions', 'Image order screen: menu', 'product-configurator-for-woocommerce' ); ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z" /></svg>
+				</button>
+				<div class="mkl-pc-order-menu__list" id="mkl-pc-order-menu-list" role="menu" hidden>
+					<button type="button" role="menuitem" class="mkl-pc-order-menu__item" data-action="fork">
+						<span class="mkl-pc-order-menu__label"></span>
+						<span class="mkl-pc-order-menu__hint"><?php echo esc_html_x( 'Starts from the default order. Other views don\'t change.', 'Image order screen: menu', 'product-configurator-for-woocommerce' ); ?></span>
+					</button>
+					<button type="button" role="menuitem" class="mkl-pc-order-menu__item" data-action="reset-view">
+						<span class="mkl-pc-order-menu__label"></span>
+					</button>
+					<button type="button" role="menuitem" class="mkl-pc-order-menu__item" data-action="refork">
+						<span class="mkl-pc-order-menu__label"><?php echo esc_html_x( 'Copy the default order again', 'Image order screen: menu', 'product-configurator-for-woocommerce' ); ?></span>
+					</button>
+					<span class="mkl-pc-order-menu__sep" role="separator"></span>
+					<button type="button" role="menuitem" class="mkl-pc-order-menu__item" data-action="reset-default">
+						<span class="mkl-pc-order-menu__label"><?php echo esc_html_x( 'Reset the default order to the layer list', 'Image order screen: menu', 'product-configurator-for-woocommerce' ); ?></span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<p class="mkl-pc-image-order__scope" hidden></p>
+
 		<div class="mkl-pc-image-order__filter">
 			<input type="search" class="mkl-pc-list-filter-input mkl-pc-image-order__filter-input" placeholder="<?php echo esc_attr_x( 'Filter layers…', 'Image order screen: filter', 'product-configurator-for-woocommerce' ); ?>" autocomplete="off" />
 		</div>
@@ -685,7 +711,7 @@ STRUCTURE / VIEWS TEMPLATES (They will share the same views, using different mod
 	</div>
 
 	<# if ( 'summary' != data.type ) { #>
-		<div class="mkl-pc-image-settings">
+		<div class="mkl-pc-image-settings" data-override-field="image">
 			<h2><?php esc_html_e('Layer\'s icon', 'product-configurator-for-woocommerce' ) ?></h2>
 			<div class="thumbnail thumbnail-image">
 				<# if ( data.image.url != '' ) { #>
@@ -941,6 +967,62 @@ CONTENT TEMPLATES
 	</div>
 </script>
 
+<script type="text/html" id="tmpl-mkl-pc-layer-mask">
+	<# if ( data.compact ) { #>
+	<div class="mkl-pc-layer-mask mkl-pc-layer-mask--compact" data-angle="{{data.angle_id}}">
+		<span class="mkl-pc-layer-mask__tile">
+			<button type="button" class="mkl-pc-layer-mask__picture edit-mask"<# if ( data.url ) { #> title="{{data.file_name}} ({{data.size}})"<# } #><# if ( data.locked ) { #> disabled<# } #>>
+				<# if ( data.url ) { #>
+					<img src="{{data.url}}" alt="">
+					<span class="screen-reader-text"><?php esc_html_e( 'Change the mask of this view', 'product-configurator-for-woocommerce' ); ?></span>
+				<# } else { #>
+					<span class="dashicons dashicons-plus" aria-hidden="true"></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Add a mask for this view', 'product-configurator-for-woocommerce' ); ?></span>
+				<# } #>
+			</button>
+			<# if ( data.url && ! data.locked ) { #>
+				<button type="button" class="mkl-pc-layer-mask__remove remove-mask" title="<?php esc_attr_e( 'Remove the mask', 'product-configurator-for-woocommerce' ); ?>">
+					<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Remove the mask', 'product-configurator-for-woocommerce' ); ?></span>
+				</button>
+			<# } #>
+		</span>
+		<span class="mkl-pc-layer-mask__caption">{{ data.label || '<?php echo esc_js( __( 'Mask', 'product-configurator-for-woocommerce' ) ); ?>' }}</span>
+		<# if ( data.size_warning ) { #>
+			<p class="mkl-pc-setting--warning mkl-pc-layer-mask__warning">{{data.size_warning}}</p>
+		<# } #>
+	</div>
+	<# } else { #>
+	<div class="mkl-pc-layer-mask" data-angle="{{data.angle_id}}">
+		<span class="mkl-pc-layer-mask__view">{{data.angle_name}}</span>
+		<button type="button" class="mkl-pc-layer-mask__picture edit-mask"<# if ( data.locked ) { #> disabled<# } #>>
+			<# if ( data.url ) { #>
+				<img src="{{data.url}}" alt="">
+				<span class="screen-reader-text"><?php esc_html_e( 'Change the mask of this view', 'product-configurator-for-woocommerce' ); ?></span>
+			<# } else { #>
+				<span class="dashicons dashicons-plus" aria-hidden="true"></span>
+				<span class="screen-reader-text"><?php esc_html_e( 'Add a mask for this view', 'product-configurator-for-woocommerce' ); ?></span>
+			<# } #>
+		</button>
+		<# if ( data.url ) { #>
+			<span class="mkl-pc-layer-mask__details">
+				<span class="mkl-pc-layer-mask__file" title="{{data.file_name}}">{{data.file_name}}</span>
+				<span class="mkl-pc-layer-mask__size">{{data.size}}</span>
+			</span>
+			<# if ( ! data.locked ) { #>
+				<button type="button" class="button-link remove-mask"><?php esc_html_e( 'Remove', 'product-configurator-for-woocommerce' ); ?></button>
+			<# } #>
+		<# } #>
+		<# if ( data.size_warning ) { #>
+			<p class="mkl-pc-setting--warning mkl-pc-layer-mask__warning">{{data.size_warning}}</p>
+		<# } #>
+		<# if ( ! data.url && data.missing_notice ) { #>
+			<p class="mkl-pc-setting--warning mkl-pc-layer-mask__warning">{{data.missing_notice}}</p>
+		<# } #>
+	</div>
+	<# } #>
+</script>
+
 <script type="text/html" id="tmpl-mkl-pc-content-choice-pictures">
 	<div class="pictures">
 		<# if ( ! data.is_group ) { #>
@@ -1157,11 +1239,15 @@ IMPORT / EXPORT
 		<# if ( data.conditions ) { #>
 			<div class="preview-content--collection">
 				<h4><?php esc_html_e( 'Conditions', 'product-configurator-for-woocommerce' ); ?></h4>
-				<ul class="ul-disc">
-					<# PC._us.each( data.conditions, function( condition ) { #>
-						<li>{{condition.name}}</li>
-					<# }); #>
-				</ul>
+				<# if ( data.conditions.length ) { #>
+					<ul class="ul-disc">
+						<# PC._us.each( data.conditions, function( condition ) { #>
+							<li>{{condition.name}}</li>
+						<# }); #>
+					</ul>
+				<# } else { #>
+					<p><?php esc_html_e( 'None. Any conditions this product already has will be removed.', 'product-configurator-for-woocommerce' ); ?></p>
+				<# } #>
 			</div>
 		<# } #>
 	</div>

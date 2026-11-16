@@ -123,7 +123,8 @@ class Frontend_Woocommerce {
 		}
 		$content = [];
 		foreach( $images as $image ) {
-			$content[] = [ 'image' => $image ];
+			// `<image>m<mask>` for a masked image (Configuration::get_layer_token()).
+			$content[] = Configuration::parse_layer_token( $image );
 		}
 		$configuration = new Configuration( NULL, array( 'product_id' => $product_id, 'content' => json_encode( $content ) ) );
 
@@ -626,6 +627,12 @@ class Frontend_Woocommerce {
 			$configurator_deps[] = 'mkl_pc/fe_3d_viewer';
 		}
 
+		$viewer_product_id = $prod ? ( $prod->get_parent_id() ? $prod->get_parent_id() : $prod->get_id() ) : 0;
+		$viewer_2d_renderer = mkl_pc_get_viewer_2d_renderer( $viewer_product_id );
+		// The canvas viewer draws with Pixi, and loads it itself (pixi_url below): it is not a
+		// dependency, so it never blocks the page. Add-ons needing it at once still can depend on
+		// the `pixijs` handle; the viewer then uses that copy.
+
 		wp_enqueue_script( 'mkl_pc/js/views/configurator', MKL_PC_ASSETS_URL.'js/views/configurator' . $file_suffix . '.js', $configurator_deps, filemtime( MKL_PC_ASSETS_PATH . 'js/views/configurator' . $file_suffix . '.js' ) , true );
 		wp_enqueue_script( 'mkl_pc/js/product_configurator', MKL_PC_ASSETS_URL.'js/product_configurator' . $file_suffix . '.js', $deps, filemtime( MKL_PC_ASSETS_PATH . 'js/product_configurator' . $file_suffix . '.js' ) , true );
 
@@ -700,6 +707,10 @@ class Frontend_Woocommerce {
 				'image_loading_mode' => mkl_pc( 'settings')->get( 'image_loading_mode', 'lazy' ),
 				// Render an image per selection instead of one per choice.
 				'viewer_active_images_only' => (bool) mkl_pc( 'settings' )->get( 'viewer_active_images_only' ),
+				// 'dom' or 'canvas'; the front end can still override it (PC.fe.viewer.renderer).
+				'viewer_2d_renderer' => $viewer_2d_renderer,
+				// Pixi, loaded on demand by the canvas viewer and by add-ons drawing with it (2D only).
+				'pixi_url' => $is_3d_configurator ? '' : mkl_pc_pixi_url(),
 				'show_choice_description' => (bool) mkl_pc( 'settings')->get( 'show_choice_description' ),
 				'show_layer_description' => (bool) mkl_pc( 'settings')->get( 'show_layer_description' ),
 				'show_active_choice_in_layer' => (bool) mkl_pc( 'settings')->get( 'show_active_choice_in_layer' ),

@@ -19,11 +19,40 @@ PC.fe.views.viewer_static_layer = Backbone.View.extend({
 	loaded: function(event) {
 		this.$el.removeClass( 'loading' );
 		wp.hooks.doAction( 'PC.fe.viewer.layer.preload.complete', this );
+		this.release();
+	},
+	/**
+	 * Count this image off the viewer's tally of images being loaded.
+	 *
+	 * The layer renders on every `change` of the angles collection - twice per
+	 * angle switch - but the browser reports one load for the src it ends up
+	 * with. So it is counted once while it loads, and counted off once: see
+	 * viewer_layer.release(). Counting it per render left a count behind on
+	 * every angle switch, and the viewer kept `is-loading-image` for good.
+	 */
+	release: function() {
+		if ( ! this.counted ) return;
+		this.counted = false;
+
 		this.parent.imagesLoading --;
 		if( this.parent.imagesLoading == 0 ) {
 			this.parent.$el.removeClass('is-loading-image');
 			wp.hooks.doAction( 'PC.fe.viewer.layers.preload.complete', this );
 		}
+	},
+	/**
+	 * Release a load that will never complete, like viewer_layer.remove().
+	 */
+	remove: function() {
+		if ( this.counted && this.parent ) {
+			this.counted = false;
+			this.parent.imagesLoading --;
+			if ( 0 >= this.parent.imagesLoading ) {
+				this.parent.imagesLoading = 0;
+				this.parent.$el.removeClass( 'is-loading-image' );
+			}
+		}
+		return Backbone.View.prototype.remove.apply( this, arguments );
 	},
 	render: function() {
 		var img = this.model.get_image();
@@ -39,7 +68,7 @@ PC.fe.views.viewer_static_layer = Backbone.View.extend({
 
 		wp.hooks.doAction( 'PC.fe.viewer.static_layer.render', this );
 
-		var classes = [ 'active', 'static', 'loading' ];
+		var classes = [ 'active', 'static' ];
 		
 		classes.push( this.model.collection.getType() );
 		
@@ -55,9 +84,26 @@ PC.fe.views.viewer_static_layer = Backbone.View.extend({
 		 */
 		classes = wp.hooks.applyFilters( 'PC.fe.viewer.static_layer.classes', classes, this );
 		this.$el.addClass( classes.join( ' ' ) );
-		if ( img ) {
-			this.el.src = img;
-			this.parent.imagesLoading ++;
+		// Only a new src means a new load. Setting the one it already has would
+		// wait for a load event that may never come.
+		var layer = PC.fe.layers.get( this.model.get( 'layerId' ) );
+		var new_src = img && img !== this.el.getAttribute( 'src' );
+		if ( new_src ) {
+			this.$el.addClass( 'loading' );
+			// Masked layers get their src once the mask is ready (layer-masks.js).
+			PC.fe.layer_masks.set_src( this, layer, img );
+			// Already counted if the previous src is still loading: the browser
+			// drops that request and reports the new one only.
+			if ( ! this.counted ) {
+				this.counted = true;
+				this.parent.imagesLoading ++;
+			}
+		} else if ( img && PC.fe.layer_masks.mask_changed( this, layer ) ) {
+			// The same file under another mask (another view): only the mask
+			// changes, and no load is counted.
+			PC.fe.layer_masks.set_src( this, layer, img, true );
+		}
+		if ( new_src ) {
 			this.parent.$el.addClass('is-loading-image');
 		}
 		this.$el.data( 'dimensions', this.model.get_image( 'image', 'dimensions' ) );
@@ -100,6 +146,10 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 		if ( width && PC.fe.config.large_image_breakpoint && width >= PC.fe.config.large_image_breakpoint && this.model.get_image( 'image', 'url_large' ) ) {
 			img = this.model.get_image( 'image', 'url_large' );
 		}
+		// No image on this view: the choice may fill its layer's mask with its colour
+		// (choice-color.js). capture() draws the fill from `color_fill`.
+		this.color_fill = img ? null : PC.fe.choice_color.fill( this.model );
+		if ( this.color_fill ) img = PC.fe.choice_color.svg_url( this.color_fill );
 		var classes = [];
 		
 		classes.push( this.model.collection.getType() );
@@ -125,22 +175,23 @@ PC.fe.views.viewer_layer = Backbone.View.extend({
 				this.counted = true;
 				this.parent.$el.addClass('is-loading-image');
 				this.$el.addClass( 'loading' );
-				this.el.src = img
+				// Masked layers get their src once the mask is ready (layer-masks.js).
+				PC.fe.layer_masks.set_src( this, this.layer, img );
 			} 
 			this.$el.addClass( 'active' );
 		} else {
 			if ( ! this.is_loaded ) {
 				this.$el.addClass( 'loading' );
 				if ( 'lazy' == PC.fe.config.image_loading_mode && ! force ) {
-					this.el.src = this.empty_img;
+					PC.fe.layer_masks.set_src( this, this.layer, this.empty_img );
 				} else {
-					this.el.src = img;	
+					PC.fe.layer_masks.set_src( this, this.layer, img );
 				}
 			}
 			this.$el.removeClass( 'active' );
 		}
-		
-		this.$el.data( 'dimensions', this.model.get_image( 'image', 'dimensions' ) );
+
+		this.$el.data( 'dimensions', this.color_fill ? { width: this.color_fill.width, height: this.color_fill.height } : this.model.get_image( 'image', 'dimensions' ) );
 		
 		// a11y - hide images from being read
 		if ( ! this.$el.attr( 'data-layer' ) ) {
@@ -413,14 +464,9 @@ PC.fe.views.viewer_layer_pool = Backbone.View.extend({
 	 * @return {Array} choice models
 	 */
 	get_visible_choices: function() {
-		if ( this.parent.is_hidden_by_conditions_layer( this.layer ) ) return [];
-
-		var that = this;
-		return this.choices.filter( function( choice ) {
-			if ( ! choice.get( 'active' ) ) return false;
-			if ( choice.get( 'is_group' ) ) return false;
-			if ( that.parent.is_hidden_by_conditions( choice ) ) return false;
-			return choice.has_image() || wp.hooks.applyFilters( 'PC.fe.viewer.item.render.empty.images', false, choice );
+		var state = PC.fe.viewer_state;
+		return _.filter( state.shown_choices( this.layer ), function( choice ) {
+			return state.has_drawable( choice );
 		} );
 	},
 

@@ -2466,9 +2466,27 @@ html .pc-modal-container {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	justify-content: space-between;
 	gap: 8px 12px;
 	margin-bottom: 12px;
+}
+
+// "Order for [view]": what the list is editing.
+.mkl-pc-order-view {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: #646970;
+
+	&[hidden] {
+		display: none;
+	}
+
+	.mkl-pc-order-view__select {
+		min-height: 30px;
+		font-weight: 600;
+		color: #1d2327;
+	}
 }
 
 .mkl-pc-order-state {
@@ -2487,20 +2505,8 @@ html .pc-modal-container {
 		background: #c3c4c7;
 	}
 
-	.mkl-pc-order-state__chip--custom {
-		display: none;
-	}
-
 	&.is-custom {
 		color: #1d2327;
-
-		.mkl-pc-order-state__chip--follows {
-			display: none;
-		}
-
-		.mkl-pc-order-state__chip--custom {
-			display: inline;
-		}
 
 		.mkl-pc-order-state__dot {
 			background: var(--wp-admin-theme-color, #2271b1);
@@ -2508,14 +2514,110 @@ html .pc-modal-container {
 	}
 }
 
-.mkl-pc-image-order .mkl-pc-order-reset {
-	display: none;
-	flex: 0 0 auto;
-	font-size: 13px;
+// The actions that apply, in one menu (the look of the Layers screen's "More actions").
+.mkl-pc-order-menu {
+	position: relative;
+	margin-left: auto;
+
+	&[hidden] {
+		display: none;
+	}
+
+	.mkl-pc-order-menu__toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 30px;
+		min-height: 30px;
+		padding: 0;
+
+		svg {
+			fill: currentColor;
+		}
+	}
+
+	.mkl-pc-order-menu__list {
+		position: absolute;
+		top: calc(100% + 4px);
+		right: 0;
+		min-width: 260px;
+		max-width: min(340px, 92vw);
+		padding: 6px 0;
+		background: #fff;
+		border: 1px solid #dcdcde;
+		border-radius: 4px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+		z-index: 30;
+		box-sizing: border-box;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	.mkl-pc-order-menu__item {
+		display: block;
+		width: 100%;
+		margin: 0;
+		padding: 8px 14px;
+		font-size: 13px;
+		line-height: 1.4;
+		text-align: left;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+		cursor: pointer;
+		color: #1d2327;
+
+		&[hidden] {
+			display: none;
+		}
+
+		&:hover,
+		&:focus {
+			background: #f6f7f7;
+			color: var(--wp-admin-theme-color, #2271b1);
+			outline: none;
+		}
+
+		&:focus-visible {
+			box-shadow: inset 0 0 0 2px var(--wp-admin-theme-color, #2271b1);
+		}
+	}
+
+	.mkl-pc-order-menu__label,
+	.mkl-pc-order-menu__hint {
+		display: block;
+	}
+
+	.mkl-pc-order-menu__hint {
+		margin-top: 2px;
+		font-size: 12px;
+		color: #646970;
+	}
+
+	.mkl-pc-order-menu__sep {
+		display: block;
+		height: 1px;
+		margin: 6px 0;
+		background: #dcdcde;
+
+		&[hidden] {
+			display: none;
+		}
+	}
 }
 
-.mkl-pc-image-order__bar.is-custom .mkl-pc-order-reset {
-	display: inline;
+// What else shares the order on screen.
+.mkl-pc-image-order__scope {
+	margin: -4px 0 12px;
+	font-size: 12px;
+	color: #646970;
+
+	&[hidden] {
+		display: none;
+	}
 }
 
 /* ------------------------------------------------------------------ filter */
@@ -2927,6 +3029,7 @@ html .pc-modal-container {
 .mkl-pc-image-order--empty {
 	.mkl-pc-stack,
 	.mkl-pc-image-order__bar,
+	.mkl-pc-image-order__scope,
 	.mkl-pc-image-order__filter,
 	.mkl-pc-image-order__selection {
 		display: none;
@@ -3571,6 +3674,113 @@ label.euler-axis {
 }
 .mkl-pc-setting--container {
 	width: 100%;
+}
+
+// Layer form, Mask section: one row per view (views/layer-masks.js)
+.mkl-pc-layer-masks__list {
+	display: grid;
+	gap: 12px;
+}
+.mkl-pc-layer-mask {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 10px;
+	&__view {
+		flex: 1 1 100%;
+		font-weight: 500;
+		overflow-wrap: anywhere;
+	}
+	&__picture {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 64px;
+		height: 64px;
+		padding: 2px;
+		border: 1px solid $light-border-color;
+		border-radius: 2px;
+		cursor: pointer;
+		// A checkerboard, so the mask's transparent parts read as transparent
+		background: repeating-conic-gradient( #dcdcde 0% 25%, #fff 0% 50% ) 50% / 12px 12px;
+		img {
+			display: block;
+			max-width: 100%;
+			max-height: 100%;
+		}
+		&:disabled {
+			cursor: default;
+		}
+	}
+	&__details {
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 0;
+		min-width: 0;
+	}
+	&__file {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	&__size {
+		color: #757575;
+		font-size: 12px;
+	}
+	&__warning {
+		flex: 1 1 100%;
+		margin: 0;
+	}
+	// A tile, its caption under it (the `compact` option).
+	&--compact {
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-items: center;
+		gap: 4px;
+		.mkl-pc-layer-mask__picture {
+			width: 72px;
+			height: 72px;
+		}
+		.mkl-pc-layer-mask__caption {
+			color: #646970;
+			font-size: 12px;
+		}
+		.mkl-pc-layer-mask__warning {
+			flex: 0 0 auto;
+			max-width: 160px;
+			font-size: 12px;
+		}
+	}
+	&__tile {
+		position: relative;
+		display: block;
+	}
+	&__remove {
+		position: absolute;
+		top: -6px;
+		right: -6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		padding: 0;
+		border: 1px solid $light-border-color;
+		border-radius: 50%;
+		background: #fff;
+		color: #50575e;
+		cursor: pointer;
+		.dashicons {
+			width: 16px;
+			height: 16px;
+			font-size: 16px;
+		}
+		&:hover,
+		&:focus-visible {
+			color: #b32d2e;
+			border-color: #b32d2e;
+		}
+	}
 }
 .mkl-pc-admin-ui--content-mode {
 	.mkl-pc-admin-ui__content.content {
@@ -4523,6 +4733,228 @@ html .mkl-pc-admin-dialog-mount {
 	}
 }
 
+/*
+ * Zone editor (views/zone-editor.js): a zone drawn on a view's image.
+ */
+.mkl-pc-admin-dialog--zone-editor {
+	--zone-editor-height: min(94vh, 1000px);
+	.mkl-pc-admin-dialog__panel {
+		width: min(100%, 1400px);
+		height: var(--zone-editor-height);
+		max-height: var(--zone-editor-height);
+	}
+	// The picture on the left, taking the room; the settings in a column on the right.
+	.mkl-pc-zone-editor {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 280px;
+		grid-template-rows: minmax(0, 1fr) auto;
+		flex: 1;
+		min-height: 0;
+		.mkl-pc-admin-dialog__footer-actions {
+			grid-column: 1 / -1;
+		}
+		// Apart from Done and Cancel, on the left.
+		.mkl-pc-zone-editor__remove {
+			margin-right: auto;
+		}
+	}
+	.mkl-pc-zone-editor__toolbar {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		padding: 16px;
+		border-left: 1px solid $light-border-color;
+		overflow-y: auto;
+		.description {
+			margin: 0;
+		}
+	}
+	.mkl-pc-zone-editor__view {
+		margin: 0;
+		font-weight: 600;
+		font-size: 14px;
+	}
+	.mkl-pc-zone-editor__image-picker {
+		margin-top: auto;
+		padding-top: 12px;
+		border-top: 1px solid $light-border-color;
+	}
+	.mkl-pc-zone-editor__image-name {
+		margin: 6px 0 0;
+		color: #646970;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.mkl-pc-zone-editor__fields {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+	}
+	.mkl-pc-zone-editor__field {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		font-size: 11px;
+		color: #646970;
+		input {
+			width: 100%;
+		}
+	}
+	.mkl-pc-zone-editor__viewport {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 0;
+		overflow: auto;
+		padding: 16px;
+		background: #f0f0f1;
+	}
+	.mkl-pc-zone-editor__empty {
+		margin: 40px auto;
+		text-align: center;
+		color: #646970;
+	}
+	// One checkerboard, behind the image only: layer images are transparent.
+	.mkl-pc-zone-editor__stage {
+		display: none;
+		position: relative;
+		width: fit-content;
+		max-width: 100%;
+		margin: auto;
+		user-select: none;
+		touch-action: none;
+		background-color: #fff;
+		background-image:
+			linear-gradient(45deg, #eaeaea 25%, transparent 25%, transparent 75%, #eaeaea 75%),
+			linear-gradient(45deg, #eaeaea 25%, transparent 25%, transparent 75%, #eaeaea 75%);
+		background-size: 16px 16px;
+		background-position: 0 0, 8px 8px;
+	}
+	&.has-image {
+		.mkl-pc-zone-editor__empty {
+			display: none;
+		}
+		.mkl-pc-zone-editor__stage {
+			display: block;
+		}
+	}
+	.mkl-pc-zone-editor__picture {
+		display: block;
+		max-width: 100%;
+		// The dialog's height, less its header, footer and the viewport's padding.
+		max-height: calc(var(--zone-editor-height) - 150px);
+		height: auto;
+	}
+	// The view's default configuration (the Image order preview), over the reference
+	// image's box; the image stays for the size.
+	.mkl-pc-zone-editor__background {
+		display: none;
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		.mkl-pc-preview,
+		.mkl-pc-preview__inner,
+		.mkl-pc-preview__canvas-wrap {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			// The stage's checkerboard shows through.
+			background: none;
+			border: 0;
+			box-shadow: none;
+		}
+		.mkl-pc-preview__canvas {
+			display: block;
+			width: 100% !important;
+			height: 100% !important;
+			max-width: none;
+			max-height: none !important;
+			// The stage has the checkerboard.
+			background: none;
+			border-radius: 0;
+		}
+		.mkl-pc-preview__side {
+			display: none;
+		}
+	}
+	&.has-background {
+		.mkl-pc-zone-editor__picture {
+			visibility: hidden;
+		}
+		.mkl-pc-zone-editor__background {
+			display: block;
+		}
+	}
+	// The mask, shown faintly: where the zone's content can show.
+	.mkl-pc-zone-editor__mask {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		opacity: 0.35;
+		pointer-events: none;
+	}
+	.mkl-pc-zone-editor__zone {
+		position: absolute;
+		box-sizing: border-box;
+		transform-origin: 50% 0;
+		border: 2px solid var(--global-layer-primary, #642077);
+		background: rgba(100, 32, 119, 0.12);
+		cursor: move;
+		&:focus-visible {
+			outline: 2px solid #2271b1;
+			outline-offset: 2px;
+		}
+	}
+	// The zone's whole box, border included: an absolute child starts inside the border, and a
+	// preview drawn there (text overlay's text) was off by the border's width.
+	.mkl-pc-zone-editor__inner {
+		position: absolute;
+		inset: -2px;
+		overflow: hidden;
+		pointer-events: none;
+	}
+	.mkl-pc-zone-editor__handle {
+		position: absolute;
+		width: 12px;
+		height: 12px;
+		margin: -6px 0 0 -6px;
+		box-sizing: border-box;
+		border: 2px solid var(--global-layer-primary, #642077);
+		background: #fff;
+		border-radius: 2px;
+		&--nw { left: 0; top: 0; cursor: nwse-resize; }
+		&--n { left: 50%; top: 0; cursor: ns-resize; }
+		&--ne { left: 100%; top: 0; cursor: nesw-resize; }
+		&--e { left: 100%; top: 50%; cursor: ew-resize; }
+		&--se { left: 100%; top: 100%; cursor: nwse-resize; }
+		&--s { left: 50%; top: 100%; cursor: ns-resize; }
+		&--sw { left: 0; top: 100%; cursor: nesw-resize; }
+		&--w { left: 0; top: 50%; cursor: ew-resize; }
+	}
+	&.is-dragging {
+		cursor: grabbing;
+	}
+	@media (max-width: 782px) {
+		--zone-editor-height: 94vh;
+		.mkl-pc-zone-editor {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: minmax(0, 1fr) auto auto;
+		}
+		.mkl-pc-zone-editor__toolbar {
+			border-left: 0;
+			border-top: 1px solid $light-border-color;
+			max-height: 40vh;
+		}
+		.mkl-pc-zone-editor__picture {
+			max-height: calc(var(--zone-editor-height) * 0.5);
+		}
+	}
+}
+
 .mkl-pc-admin-dialog--import-global-layer {
 	.mkl-pc-import-global-layer {
 		display: flex;
@@ -4713,10 +5145,11 @@ html .mkl-pc-admin-dialog-mount {
 	}
 }
 
-html .pc-modal .pc-sidebar .is-global-locked .setting-section.is-opened {
+// The layer form of a linked layer locks field by field instead (`.is-locked`, below).
+html .pc-modal .pc-sidebar .is-global-locked:not(.layer-form) .setting-section.is-opened {
     position: relative;
 }
-html .pc-modal .pc-sidebar .is-global-locked .setting-section.is-opened::before {
+html .pc-modal .pc-sidebar .is-global-locked:not(.layer-form) .setting-section.is-opened::before {
     content: '';
     display: block;
     position: absolute;
@@ -4728,11 +5161,119 @@ html .pc-modal .pc-sidebar .is-global-locked .setting-section.is-opened::before 
     background: #ffffff6e;
 }
 
-.layer-form.is-global.is-global-locked .setting-section .section-fields, 
-.layer-form.is-global.is-global-locked .mkl-pc-image-settings,
 .is-global-locked.is-global-layer .mkl-pc-image-settings {
     pointer-events: none;
     cursor: no-drop;
+}
+
+/*
+ * Linked global layers lock field by field (docs/global-layer-overrides-spec.md): the form marks
+ * each locked field `.is-locked` (layer_form.update_global_lock_state(), layer_overrides), so an
+ * overridden field and every override switch stay usable.
+ */
+.layer-form.is-global .is-locked {
+	cursor: no-drop;
+	> :not(.mkl-pc-override-switch):not(h2) {
+		pointer-events: none;
+		opacity: 0.6;
+	}
+}
+.layer-form.is-global {
+	// A bar in the margin, outside the field's box: overriding a field moves nothing.
+	.setting.is-overridden,
+	.mkl-pc-image-settings.is-overridden {
+		position: relative;
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: -8px;
+			width: 3px;
+			border-radius: 2px;
+			background: var(--global-layer-primary, #642077);
+		}
+	}
+}
+// The switch sits in the field's top-right corner, on the label line.
+.layer-form .has-override-switch {
+	position: relative;
+	> label.name,
+	> h2 {
+		padding-right: 30px;
+	}
+	&.is-overridden > label.name,
+	&.is-overridden > h2 {
+		padding-right: 120px;
+	}
+}
+.mkl-pc-override-switch {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.mkl-pc-override-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border: 0;
+	border-radius: 2px;
+	background: none;
+	color: #757575;
+	cursor: pointer;
+	.dashicons {
+		width: 16px;
+		height: 16px;
+		font-size: 16px;
+	}
+	&:hover,
+	&:focus-visible {
+		color: var(--global-layer-primary, #642077);
+		background: var(--global-layer-bg, #f3ecff);
+	}
+	&:focus-visible {
+		outline: 2px solid var(--global-layer-primary, #642077);
+		outline-offset: 1px;
+	}
+	.is-overridden > .mkl-pc-override-switch & {
+		color: var(--global-layer-primary, #642077);
+	}
+}
+.mkl-pc-override-badge {
+	display: inline-block;
+	padding: 1px 6px;
+	border-radius: 3px;
+	background: var(--global-layer-bg, #f3ecff);
+	color: var(--global-layer-primary, #642077);
+	font-size: 11px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+// Half-width fields: the coloured border says it, the badge would cover the label.
+.layer-form .col-half.is-overridden {
+	.mkl-pc-override-badge {
+		display: none;
+	}
+	> label.name {
+		padding-right: 30px;
+	}
+}
+.mkl-pc-override-hint {
+	margin: 6px 0 0;
+	font-size: 12px;
+	color: #996800;
+}
+.mkl-pc-global-layer-links {
+	display: inline-block;
+	font-size: 12px;
+	color: var(--global-layer-primary, #7b2ff7);
 }
 
 .layer-form.is-saving {
@@ -5266,5 +5807,23 @@ html .pc-modal .pc-sidebar .is-global-locked .setting-section.is-opened::before 
 	.mkl-pc--anchor-follow {
 		display: block;
 		margin-top: 8px;
+	}
+}
+
+// The settings' checkboxes copy the block editor's markup (settings/abstract.php), where React only
+// adds the tick when checked; ours is always there. WordPress 7.2 colours the tick with `color`, so
+// it is drawn in currentColor, and hidden here while unchecked.
+.components-checkbox-control__input:not(:checked) ~ svg.components-checkbox-control__checked {
+	display: none;
+}
+
+// An add-on's own settings in the zone editor's side column (text overlay's text settings).
+.mkl-pc-zone-editor__settings {
+	margin-top: 16px;
+	padding-top: 12px;
+	border-top: 1px solid #dcdcde;
+
+	&:empty {
+		display: none;
 	}
 }

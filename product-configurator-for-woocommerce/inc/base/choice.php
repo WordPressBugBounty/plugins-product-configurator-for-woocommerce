@@ -305,12 +305,33 @@ class Choice {
 	 *                    exists and the configuration pre-dates the saving of `image_order`.
 	 */
 	public function get_image_order() {
+		// A stored configuration saved its view's order already (save-data.js).
+		$saved = $this->is_stored() ? $this->get_saved( 'image_order' ) : null;
+		if ( null === $saved ) {
+			$own = $this->get_view_image_order();
+			if ( null !== $own ) return $own;
+		}
+
 		$order = $this->get_layer( 'image_order' );
 
 		// `image_order` is false on layers that follow the layer order instead.
 		if ( ! is_numeric( $order ) ) $order = $this->get_layer( 'order' );
 
 		return is_numeric( $order ) ? (int) $order : null;
+	}
+
+	/**
+	 * This view's own position for the layer (`image_order_by_angle`, set on the Image order
+	 * screen), or null when the view follows the configurator's order. Canvas viewer only:
+	 * the image stack keeps one order for every view.
+	 *
+	 * @return int|null
+	 */
+	public function get_view_image_order() {
+		$by_angle = $this->get_layer( 'image_order_by_angle' );
+		if ( ! is_array( $by_angle ) || ! isset( $by_angle[ $this->angle_id ] ) || ! is_numeric( $by_angle[ $this->angle_id ] ) ) return null;
+		if ( 'canvas' !== mkl_pc_get_viewer_2d_renderer( $this->product_id ) ) return null;
+		return (int) $by_angle[ $this->angle_id ];
 	}
 
 	public function set_choice( $key, $value ) {
@@ -384,6 +405,8 @@ class Choice {
 		if ( null === $image_id ) {
 			$image = $this->get_image( $type );
 			$image_id = $image && isset( $image['id'] ) ? $image['id'] : '';
+			// No image on this view: the choice may fill its layer's mask with its colour.
+			if ( '' === $image_id && 'image' === $type ) $image_id = $this->get_live_color_image();
 		}
 
 		/**
@@ -395,6 +418,95 @@ class Choice {
 		 * @return int|string
 		 */
 		return apply_filters( 'mkl_pc/choice/image_id', $image_id, $type, $this );
+	}
+
+	/**
+	 * The mask cutting this choice's image in the merged picture: the layer's mask for the
+	 * angle the image comes from. See docs/layer-masks-spec.md.
+	 *
+	 * A stored configuration keeps the mask it was saved with (`layer_data->mask`), like its
+	 * image, so changing the layer's masks later does not change past orders. Configurations
+	 * saved before masks existed have none saved and fall back to the layer.
+	 *
+	 * @return int Attachment ID of the mask, or 0 when the image is not masked.
+	 */
+	public function get_mask_id() {
+		$mask_id = null;
+
+		if ( $this->is_stored() ) {
+			$saved = $this->get_saved( 'mask' );
+			if ( null !== $saved ) $mask_id = absint( $saved );
+		}
+
+		if ( null === $mask_id ) {
+			$mask_id = self::find_mask_id( $this->get_layer( 'masks' ), $this->angle_id );
+		}
+
+		/**
+		 * mkl_pc/choice/mask_id - Filters the mask resolved for a choice's image
+		 *
+		 * @param int    $mask_id Attachment ID, 0 for none.
+		 * @param Choice $choice
+		 * @return int
+		 */
+		return absint( apply_filters( 'mkl_pc/choice/mask_id', $mask_id, $this ) );
+	}
+
+	/**
+	 * The solid colour this choice draws, if any (docs/solid-colour-choices-spec.md).
+	 *
+	 * Read from the image: a colour travels as `s<rrggbb>` wherever an image id does, and a
+	 * stored configuration keeps it in `layer_data->image`, so past orders keep their colour
+	 * when the choice's hex code changes later.
+	 *
+	 * @return string '#rrggbb', or ''.
+	 */
+	public function get_color() {
+		return Configuration::parse_color_image( $this->get_image_id( 'image' ) );
+	}
+
+	/**
+	 * The colour image of a choice as the product is now, or '': the layer draws choice
+	 * colours, the choice has no image on its view, its colour is a hex code, and the layer
+	 * has a mask on that view (the fill takes the mask's size). Same rule as
+	 * PC.fe.choice_color.fill().
+	 *
+	 * @return string `s<rrggbb>`, or ''.
+	 */
+	private function get_live_color_image() {
+		if ( ! $this->get_layer( 'draw_choice_color' ) || $this->get_layer( 'not_a_choice' ) ) return '';
+		if ( ! in_array( $this->get_layer( 'type' ), array( 'simple', 'multiple' ), true ) ) return '';
+		if ( $this->get_choice( 'is_group' ) ) return '';
+		if ( ! self::find_mask_id( $this->get_layer( 'masks' ), $this->angle_id ) ) return '';
+
+		/**
+		 * mkl_pc/choice/color - Filters the colour a choice without an image draws in the merged picture
+		 *
+		 * @param string $color  The choice's colour hex code, as entered.
+		 * @param Choice $choice
+		 * @return string '#rgb' or '#rrggbb'; anything else draws nothing.
+		 */
+		$color = apply_filters( 'mkl_pc/choice/color', $this->get_choice( 'color' ), $this );
+		return Configuration::color_image( $color );
+	}
+
+	/**
+	 * The mask of an angle in a layer's `masks` list.
+	 *
+	 * @param mixed      $masks    [ { angleId, image: { id, url, dimensions } } ], as arrays or objects.
+	 * @param int|string $angle_id
+	 * @return int Attachment ID, or 0.
+	 */
+	public static function find_mask_id( $masks, $angle_id ) {
+		if ( ! is_array( $masks ) || '' === (string) $angle_id ) return 0;
+		foreach ( $masks as $mask ) {
+			if ( is_object( $mask ) ) $mask = (array) $mask;
+			if ( ! is_array( $mask ) || ! isset( $mask['angleId'] ) || (string) $mask['angleId'] !== (string) $angle_id ) continue;
+			$image = isset( $mask['image'] ) ? $mask['image'] : null;
+			if ( is_object( $image ) ) $image = (array) $image;
+			return is_array( $image ) && ! empty( $image['id'] ) ? absint( $image['id'] ) : 0;
+		}
+		return 0;
 	}
 
 	/**
