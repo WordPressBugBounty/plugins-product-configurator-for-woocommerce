@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: @Mklacroix\n"
 "Last-Translator: @marcusig\n"
-"POT-Creation-Date: 2026-11-16 09:36+0000\n"
+"POT-Creation-Date: 2026-11-18 10:31+0000\n"
 "Report-Msgid-Bugs-To: https://github.com/marcusig/woocommerce-product-customizer/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -17,19 +17,19 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/woocommerce-mkl-product-configurator.php:66
+#: src/woocommerce-mkl-product-configurator.php:68
 msgid "The plugin Product Configurator for WooCommerce requires a PHP version of 5.4+."
 msgstr ""
 
-#: src/woocommerce-mkl-product-configurator.php:74
+#: src/woocommerce-mkl-product-configurator.php:76
 msgid "WooCommerce has to be active for WooCommerce Product configurator to work."
 msgstr ""
 
-#: src/woocommerce-mkl-product-configurator.php:82
+#: src/woocommerce-mkl-product-configurator.php:84
 msgid "Your WooCommerce version is too old for WooCommerce Product Configurator to work."
 msgstr ""
 
-#: src/woocommerce-mkl-product-configurator.php:82
+#: src/woocommerce-mkl-product-configurator.php:84
 msgid "WooCommerce Version 3+ required."
 msgstr ""
 
@@ -41,7 +41,7 @@ msgstr ""
 msgid "You are not allowed to view this product."
 msgstr ""
 
-#: src/inc/ajax.php:113, src/inc/ajax.php:108, src/inc/ajax.php:390, src/inc/ajax.php:595, src/inc/ajax.php:676, src/inc/ajax.php:771, src/inc/admin/data-migration/class-plugin.php:125, src/inc/admin/data-migration/class-plugin.php:153
+#: src/inc/ajax.php:113, src/inc/ajax.php:108, src/inc/ajax.php:595, src/inc/ajax.php:676, src/inc/ajax.php:771, src/inc/admin/data-migration/class-plugin.php:125, src/inc/admin/data-migration/class-plugin.php:153
 msgid "The session seems to have expired."
 msgstr ""
 
@@ -49,8 +49,8 @@ msgstr ""
 msgid "You are not allowed to edit this global configurator."
 msgstr ""
 
-#: src/inc/ajax.php:390, src/inc/ajax.php:438, src/inc/ajax.php:431, src/inc/ajax.php:464
-msgid "Error saving the data:"
+#: src/inc/ajax.php:390, src/inc/admin/product.php:622
+msgid "The configuration could not be saved because the session has expired. Reload the page and try again."
 msgstr ""
 
 #: src/inc/ajax.php:394, src/inc/ajax.php:598, src/inc/admin/data-migration/class-plugin.php:128, src/inc/admin/data-migration/class-plugin.php:156
@@ -71,6 +71,10 @@ msgstr ""
 
 #: src/inc/ajax.php:414
 msgid "No data was received"
+msgstr ""
+
+#: src/inc/ajax.php:438, src/inc/ajax.php:431, src/inc/ajax.php:464
+msgid "Error saving the data:"
 msgstr ""
 
 #: src/inc/ajax.php:438
@@ -130,12 +134,17 @@ msgstr ""
 msgid "You are not allowed to get the configurable products."
 msgstr ""
 
-#: src/inc/ajax.php:945, src/inc/languages.php:64, src/inc/admin/settings-page.php:1126
+#: src/inc/ajax.php:945, src/inc/languages.php:205, src/inc/admin/settings-page.php:1126
 msgid "Successfully added to cart, now redirecting..."
 msgstr ""
 
 #: src/inc/ajax.php:1058
 msgid "This global layer was saved from somewhere else since you opened it, so nothing was saved."
+msgstr ""
+
+#. translators: 1: add-on name, 2: add-on version
+#: src/inc/class-addon-update-compat.php:223
+msgid "%1$s v%2$s is only compatible with the latest version of the core plugin. Please update."
 msgstr ""
 
 #: src/inc/class-editor-menu.php:57
@@ -150,7 +159,7 @@ msgstr ""
 msgid "Layers"
 msgstr ""
 
-#: src/inc/class-editor-menu.php:81, src/inc/class-editor-menu.php:96, src/inc/class-editor-menu.php:111, src/inc/class-editor-menu.php:130, src/inc/class-editor-menu.php:172, src/inc/admin/product.php:641, src/inc/admin/views/html-product-configurator-templates.php:241, src/inc/admin/views/html-product-configurator-templates.php:1262, src/inc/quote-requests/admin/class-quote-requests-admin.php:840
+#: src/inc/class-editor-menu.php:81, src/inc/class-editor-menu.php:96, src/inc/class-editor-menu.php:111, src/inc/class-editor-menu.php:130, src/inc/class-editor-menu.php:172, src/inc/admin/product.php:646, src/inc/admin/views/html-product-configurator-templates.php:241, src/inc/admin/views/html-product-configurator-templates.php:1262, src/inc/quote-requests/admin/class-quote-requests-admin.php:840
 msgid "Save"
 msgstr ""
 
@@ -279,80 +288,80 @@ msgstr ""
 msgid "This is not a global layer."
 msgstr ""
 
-#: src/inc/languages.php:46, src/inc/admin/settings-page.php:223, src/inc/configuration-editor/class-order-item-target.php:111, src/inc/frontend/frontend-woocommerce.php:176, src/inc/frontend/frontend-woocommerce.php:303, src/inc/frontend/product.php:108
+#: src/inc/languages.php:187, src/inc/admin/settings-page.php:223, src/inc/configuration-editor/class-order-item-target.php:111, src/inc/frontend/frontend-woocommerce.php:176, src/inc/frontend/frontend-woocommerce.php:303, src/inc/frontend/product.php:108
 msgid "Configure"
 msgstr ""
 
-#: src/inc/languages.php:48, src/inc/admin/settings-page.php:738, src/inc/frontend/cart.php:712, src/inc/admin/settings/choice.php:69
+#: src/inc/languages.php:189, src/inc/admin/settings-page.php:738, src/inc/frontend/cart.php:712, src/inc/admin/settings/choice.php:69
 msgid "SKU"
 msgstr ""
 
-#: src/inc/languages.php:49
+#: src/inc/languages.php:190
 msgid "You have reached the maximum number of selectable items"
 msgstr ""
 
-#: src/inc/languages.php:50
+#: src/inc/languages.php:191
 msgid "You have reached the maximum number of selectable items for this product"
 msgstr ""
 
 #. translators: %i: number of items, %s: layer name
-#: src/inc/languages.php:52
+#: src/inc/languages.php:193
 msgid "Select at least %i items in %s"
 msgstr ""
 
-#: src/inc/languages.php:53, src/inc/admin/settings-page.php:1000, src/inc/admin/settings-page.php:1006
+#: src/inc/languages.php:194, src/inc/admin/settings-page.php:1000, src/inc/admin/settings-page.php:1006
 msgid "Reset configuration"
 msgstr ""
 
-#: src/inc/languages.php:54, src/inc/admin/settings-page.php:1012, src/inc/admin/settings-page.php:1018, src/inc/frontend/cart.php:1014
+#: src/inc/languages.php:195, src/inc/admin/settings-page.php:1012, src/inc/admin/settings-page.php:1018, src/inc/frontend/cart.php:1014
 msgid "Edit configuration"
 msgstr ""
 
-#: src/inc/languages.php:55, src/inc/admin/settings-page.php:1024, src/inc/admin/settings-page.php:1030
+#: src/inc/languages.php:196, src/inc/admin/settings-page.php:1024, src/inc/admin/settings-page.php:1030
 msgid "Edit item in cart"
 msgstr ""
 
-#: src/inc/languages.php:56
+#: src/inc/languages.php:197
 msgctxt "Label displayed in the cart / order"
 msgid "Configuration"
 msgstr ""
 
-#: src/inc/languages.php:57, src/inc/admin/settings-page.php:1078, src/inc/frontend/frontend-woocommerce.php:307
+#: src/inc/languages.php:198, src/inc/admin/settings-page.php:1078, src/inc/frontend/frontend-woocommerce.php:307
 msgid "Loading the configurator..."
 msgstr ""
 
-#: src/inc/languages.php:58, src/inc/admin/settings-page.php:1036, src/inc/admin/settings-page.php:1042
+#: src/inc/languages.php:199, src/inc/admin/settings-page.php:1036, src/inc/admin/settings-page.php:1042
 msgid "Download configuration image"
 msgstr ""
 
-#: src/inc/languages.php:59
+#: src/inc/languages.php:200
 msgctxt "Label of the link to view a configuration, in the cart or an order"
 msgid "View configuration"
 msgstr ""
 
-#: src/inc/languages.php:60
+#: src/inc/languages.php:201
 msgid "Configuration costs:"
 msgstr ""
 
-#: src/inc/languages.php:61, src/inc/configuration-editor/class-configuration-editor.php:297, src/inc/admin/views/html-product-configurator-templates.php:99, src/inc/quote-requests/views/configurator-templates.php:32, src/inc/quote-requests/views/configurator-templates.php:128, src/inc/frontend/views/parts/add-to-cart-modal.php:42
+#: src/inc/languages.php:202, src/inc/configuration-editor/class-configuration-editor.php:297, src/inc/admin/views/html-product-configurator-templates.php:99, src/inc/quote-requests/views/configurator-templates.php:32, src/inc/quote-requests/views/configurator-templates.php:128, src/inc/frontend/views/parts/add-to-cart-modal.php:42
 msgid "Close"
 msgstr ""
 
-#: src/inc/languages.php:62, src/inc/admin/settings-page.php:1102, src/inc/frontend/views/parts/toolbar.php:27
+#: src/inc/languages.php:203, src/inc/admin/settings-page.php:1102, src/inc/frontend/views/parts/toolbar.php:27
 msgctxt "Previous step button label"
 msgid "Previous"
 msgstr ""
 
-#: src/inc/languages.php:63, src/inc/admin/settings-page.php:1114, src/inc/frontend/views/parts/toolbar.php:41
+#: src/inc/languages.php:204, src/inc/admin/settings-page.php:1114, src/inc/frontend/views/parts/toolbar.php:41
 msgctxt "Next step button label"
 msgid "Next"
 msgstr ""
 
-#: src/inc/languages.php:309, src/inc/languages.php:309, src/inc/quote-requests/class-quote-fields.php:128
+#: src/inc/languages.php:450, src/inc/languages.php:450, src/inc/quote-requests/class-quote-fields.php:128
 msgid "Name"
 msgstr ""
 
-#: src/inc/languages.php:315, src/inc/languages.php:315, src/inc/admin/settings/angle.php:40, src/inc/admin/settings/choice.php:87, src/inc/admin/settings/layer.php:142
+#: src/inc/languages.php:456, src/inc/languages.php:456, src/inc/admin/settings/angle.php:40, src/inc/admin/settings/choice.php:87, src/inc/admin/settings/layer.php:142
 msgid "Description"
 msgstr ""
 
@@ -504,7 +513,7 @@ msgstr ""
 msgid "Enable this option if variation is configurable"
 msgstr ""
 
-#: src/inc/admin/product.php:108, src/inc/admin/product.php:794, src/inc/admin/views/html-product-configurator-templates.php:156
+#: src/inc/admin/product.php:108, src/inc/admin/product.php:799, src/inc/admin/views/html-product-configurator-templates.php:156
 msgid "Configurator"
 msgstr ""
 
@@ -512,7 +521,7 @@ msgstr ""
 msgid "Select if you want this product to be configurable"
 msgstr ""
 
-#: src/inc/admin/product.php:159, src/inc/admin/product.php:825
+#: src/inc/admin/product.php:159, src/inc/admin/product.php:830
 msgid "Configurator type"
 msgstr ""
 
@@ -532,7 +541,7 @@ msgstr ""
 msgid "You are configuring"
 msgstr ""
 
-#: src/inc/admin/product.php:194, src/inc/admin/product.php:1059, src/inc/admin/settings-page.php:1497
+#: src/inc/admin/product.php:194, src/inc/admin/product.php:1064, src/inc/admin/settings-page.php:1497
 msgid "Documentation"
 msgstr ""
 
@@ -891,7 +900,7 @@ msgstr ""
 msgid "Animation"
 msgstr ""
 
-#: src/inc/admin/product.php:556, src/inc/admin/product.php:659, src/inc/admin/views/3d-settings-sections/renderer-output.php:12
+#: src/inc/admin/product.php:556, src/inc/admin/product.php:664, src/inc/admin/views/3d-settings-sections/renderer-output.php:12
 msgid "None"
 msgstr ""
 
@@ -1075,244 +1084,253 @@ msgstr ""
 msgid "Save anyway and overwrite those changes? Cancel keeps them; reload the editor to see the latest version."
 msgstr ""
 
-#: src/inc/admin/product.php:626
+#: src/inc/admin/product.php:621, src/inc/configuration-editor/class-configuration-editor.php:199
+msgid "The configuration could not be saved."
+msgstr ""
+
+#. translators: %s: HTTP status code
+#: src/inc/admin/product.php:624
+msgid "The configuration could not be saved (HTTP %s)."
+msgstr ""
+
+#: src/inc/admin/product.php:631
 msgid "Import Global Layer"
 msgstr ""
 
-#: src/inc/admin/product.php:627
+#: src/inc/admin/product.php:632
 msgid "Importing…"
 msgstr ""
 
-#: src/inc/admin/product.php:628, src/inc/admin/views/html-product-configurator-templates.php:1354
+#: src/inc/admin/product.php:633, src/inc/admin/views/html-product-configurator-templates.php:1354
 msgid "Import Selected"
 msgstr ""
 
-#: src/inc/admin/product.php:632, src/inc/admin/views/html-product-configurator-templates.php:136
+#: src/inc/admin/product.php:637, src/inc/admin/views/html-product-configurator-templates.php:136
 msgid "Any changes you make will affect every product using it."
 msgstr ""
 
-#: src/inc/admin/product.php:634, src/inc/admin/views/html-product-configurator-templates.php:129
+#: src/inc/admin/product.php:639, src/inc/admin/views/html-product-configurator-templates.php:129
 msgid "Back to product"
 msgstr ""
 
-#: src/inc/admin/product.php:638
+#: src/inc/admin/product.php:643
 msgid "Close the layer editor"
 msgstr ""
 
-#: src/inc/admin/product.php:640
+#: src/inc/admin/product.php:645
 msgid "Close menu"
 msgstr ""
 
-#: src/inc/admin/product.php:642
+#: src/inc/admin/product.php:647
 msgid "Save global layer"
 msgstr ""
 
-#: src/inc/admin/product.php:643, src/inc/admin/views/html-product-configurator-templates.php:687, src/inc/admin/views/html-product-configurator-templates.php:847
+#: src/inc/admin/product.php:648, src/inc/admin/views/html-product-configurator-templates.php:687, src/inc/admin/views/html-product-configurator-templates.php:847
 msgid "Global layer"
 msgstr ""
 
-#: src/inc/admin/product.php:644
+#: src/inc/admin/product.php:649
 msgid "You are editing a global layer. Changes will affect all configurators using this data."
 msgstr ""
 
-#: src/inc/admin/product.php:645, src/inc/admin/product.php:647
+#: src/inc/admin/product.php:650, src/inc/admin/product.php:652
 msgid "Back"
 msgstr ""
 
-#: src/inc/admin/product.php:646
+#: src/inc/admin/product.php:651
 msgid "Exit global layer editing"
 msgstr ""
 
-#: src/inc/admin/product.php:648
+#: src/inc/admin/product.php:653
 msgid "Exit 3D settings"
 msgstr ""
 
-#: src/inc/admin/product.php:649
+#: src/inc/admin/product.php:654
 msgid "You have unsaved 3D settings. Leave without saving?"
 msgstr ""
 
-#: src/inc/admin/product.php:650
+#: src/inc/admin/product.php:655
 msgid "You have unsaved changes to this global layer. Leave without saving?"
 msgstr ""
 
-#: src/inc/admin/product.php:651, src/inc/admin/views/html-product-configurator-templates.php:212, src/inc/admin/views/html-product-configurator-templates.php:233
+#: src/inc/admin/product.php:656, src/inc/admin/views/html-product-configurator-templates.php:212, src/inc/admin/views/html-product-configurator-templates.php:233
 msgid "Saved"
 msgstr ""
 
-#: src/inc/admin/product.php:652, src/inc/configuration-editor/class-configuration-editor.php:198
+#: src/inc/admin/product.php:657, src/inc/configuration-editor/class-configuration-editor.php:198
 msgid "Saving…"
 msgstr ""
 
-#: src/inc/admin/product.php:653
+#: src/inc/admin/product.php:658
 msgid "Configuration copied to clipboard. Go to \"Edit > Paste\" or \"Ctrl/Cmd + V\" to paste."
 msgstr ""
 
-#: src/inc/admin/product.php:654
+#: src/inc/admin/product.php:659
 msgid "The configuration cannot be pasted here, unlock the global layer to paste it."
 msgstr ""
 
-#: src/inc/admin/product.php:655
+#: src/inc/admin/product.php:660
 msgid "Could not load the configurator. Check your connection and try again."
 msgstr ""
 
-#: src/inc/admin/product.php:656
+#: src/inc/admin/product.php:661
 msgid "The configurator did not finish loading. Close anyway?"
 msgstr ""
 
 #. translators: %s: name of the 3D model or object set on the layer
-#: src/inc/admin/product.php:658
+#: src/inc/admin/product.php:663
 msgid "Inherit from layer: %s"
 msgstr ""
 
-#: src/inc/admin/product.php:660, src/inc/admin/settings/choice.php:189, src/inc/admin/settings/layer.php:331
+#: src/inc/admin/product.php:665, src/inc/admin/settings/choice.php:189, src/inc/admin/settings/layer.php:331
 msgid "Whole model"
 msgstr ""
 
 #. translators: %s: model name
-#: src/inc/admin/product.php:662
+#: src/inc/admin/product.php:667
 msgid "Whole model: %s"
 msgstr ""
 
 #. translators: %s: object or model, e.g. "Suzanne (Chair model)"
-#: src/inc/admin/product.php:664
+#: src/inc/admin/product.php:669
 msgid "This choice's object: %s"
 msgstr ""
 
-#: src/inc/admin/product.php:665, src/inc/admin/settings/abstract.php:498, src/inc/admin/views/html-product-configurator-templates.php:1457
+#: src/inc/admin/product.php:670, src/inc/admin/settings/abstract.php:498, src/inc/admin/views/html-product-configurator-templates.php:1457
 msgid "No anchor selected"
 msgstr ""
 
-#: src/inc/admin/product.php:666
+#: src/inc/admin/product.php:671
 msgid "Show all objects, not only empties"
 msgstr ""
 
-#: src/inc/admin/product.php:667
+#: src/inc/admin/product.php:672
 msgid "— Select a layout —"
 msgstr ""
 
-#: src/inc/admin/product.php:668
+#: src/inc/admin/product.php:673
 msgid "— Select a variant —"
 msgstr ""
 
-#: src/inc/admin/product.php:669
+#: src/inc/admin/product.php:674
 msgid "No layouts yet. Add one in 3D Objects."
 msgstr ""
 
-#: src/inc/admin/product.php:670
+#: src/inc/admin/product.php:675
 msgid "Variant"
 msgstr ""
 
-#: src/inc/admin/product.php:671
+#: src/inc/admin/product.php:676
 msgid "No 3D model is set on this choice or its layer."
 msgstr ""
 
-#: src/inc/admin/product.php:672
+#: src/inc/admin/product.php:677
 msgid "Visible objects"
 msgstr ""
 
-#: src/inc/admin/product.php:673
+#: src/inc/admin/product.php:678
 msgid "Specific objects…"
 msgstr ""
 
-#: src/inc/admin/product.php:674
+#: src/inc/admin/product.php:679
 msgid "— Saved camera target —"
 msgstr ""
 
-#: src/inc/admin/product.php:675, src/inc/admin/settings/angle.php:105
+#: src/inc/admin/product.php:680, src/inc/admin/settings/angle.php:105
 msgid "Fit the target in view"
 msgstr ""
 
-#: src/inc/admin/product.php:676
+#: src/inc/admin/product.php:681
 msgid "Camera exactly as saved"
 msgstr ""
 
-#: src/inc/admin/product.php:677
+#: src/inc/admin/product.php:682
 msgid "Saves the direction only: the distance adapts to each screen."
 msgstr ""
 
-#: src/inc/admin/product.php:678
+#: src/inc/admin/product.php:683
 msgid "Saves the camera exactly as it is."
 msgstr ""
 
-#: src/inc/admin/product.php:679, src/inc/admin/settings/angle.php:99
+#: src/inc/admin/product.php:684, src/inc/admin/settings/angle.php:99
 msgid "Framing"
 msgstr ""
 
-#: src/inc/admin/product.php:680, src/inc/admin/settings/angle.php:72
+#: src/inc/admin/product.php:685, src/inc/admin/settings/angle.php:72
 msgid "Camera target"
 msgstr ""
 
-#: src/inc/admin/product.php:681
+#: src/inc/admin/product.php:686
 msgid "Saved camera target"
 msgstr ""
 
 #. translators: %s: 3D model name
-#: src/inc/admin/product.php:683
+#: src/inc/admin/product.php:688
 msgid "Model: %s"
 msgstr ""
 
 #. translators: %s: comma-separated object names
-#: src/inc/admin/product.php:685
+#: src/inc/admin/product.php:690
 msgid "Objects: %s"
 msgstr ""
 
 #. translators: %d: number of objects
-#: src/inc/admin/product.php:687
+#: src/inc/admin/product.php:692
 msgid "Objects: %d"
 msgstr ""
 
-#: src/inc/admin/product.php:688
+#: src/inc/admin/product.php:693
 msgid "Saved view"
 msgstr ""
 
-#: src/inc/admin/product.php:689
+#: src/inc/admin/product.php:694
 msgid "Moved, not saved"
 msgstr ""
 
-#: src/inc/admin/product.php:813
+#: src/inc/admin/product.php:818
 msgid "Save the post once to enable the configurator editor."
 msgstr ""
 
-#: src/inc/admin/product.php:826
+#: src/inc/admin/product.php:831
 msgid "Applies to every product currently using this global configurator."
 msgstr ""
 
-#: src/inc/admin/product.php:830
+#: src/inc/admin/product.php:835
 msgid "Configurator type changed. Please update this global configurator to reload the correct editor."
 msgstr ""
 
-#: src/inc/admin/product.php:870, src/inc/admin/settings/layer.php:429
+#: src/inc/admin/product.php:875, src/inc/admin/settings/layer.php:429
 msgid "Layer"
 msgstr ""
 
-#: src/inc/admin/product.php:889
+#: src/inc/admin/product.php:894
 msgid "Save the post once to enable the layer editor."
 msgstr ""
 
 #. translators: %d: number of choices the layer holds.
-#: src/inc/admin/product.php:899
+#: src/inc/admin/product.php:904
 msgid "This layer holds %d choice."
 msgid_plural "This layer holds %d choices."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/inc/admin/product.php:904
+#: src/inc/admin/product.php:909
 msgid "Editing it here changes it for every product that uses this layer."
 msgstr ""
 
-#: src/inc/admin/product.php:905
+#: src/inc/admin/product.php:910
 msgid "Edit the layer"
 msgstr ""
 
-#: src/inc/admin/product.php:967
+#: src/inc/admin/product.php:972
 msgid "Start product's configurator"
 msgstr ""
 
-#: src/inc/admin/product.php:984
+#: src/inc/admin/product.php:989
 msgid "Edit configurator layers"
 msgstr ""
 
-#: src/inc/admin/product.php:1058
+#: src/inc/admin/product.php:1063
 msgid "Getting started"
 msgstr ""
 
@@ -2070,10 +2088,6 @@ msgstr ""
 
 #: src/inc/configuration-editor/class-configuration-editor.php:87, src/inc/configuration-editor/class-order-item-target.php:67, src/inc/quote-requests/class-quote-request-target.php:64
 msgid "Save the configuration"
-msgstr ""
-
-#: src/inc/configuration-editor/class-configuration-editor.php:199
-msgid "The configuration could not be saved."
 msgstr ""
 
 #: src/inc/configuration-editor/class-configuration-editor.php:293

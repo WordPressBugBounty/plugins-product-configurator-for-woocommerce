@@ -4,7 +4,7 @@ Tags: 3D configurator, product customizer, product builder, woocommerce, request
 Donate link: https://paypal.me/marclacro1x
 Requires at least: 6.0
 Tested up to: 7.2
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 Requires PHP: 7.4
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -54,6 +54,7 @@ Have feedback, ideas, or found a bug? Report issues on [GitHub](https://github.c
 * **Fast Loading** – 3D scripts only load on products that use them, and secondary models can load on demand.
 * **Configuration Image in the Cart** – The cart, orders and quotes show a picture of the configured product, in 2D or 3D.
 * **Live Text Overlay** *(via add-on)* – Let customers preview custom text with your fonts and colors—ideal for engraving, embroidery, and personalization.
+* **Live image upload preview** *(via add-on)* – Let customers preview their uploaded image on the product for printing, engraving and personalization.
 * **3D Premium** *(via add-on)* – Clickable hotspots, model animations, augmented reality ("View in your space"), parts that snap onto anchors, and photo-style postprocessing.
 
 ==== Reuse configurators across your catalog ====
@@ -251,6 +252,11 @@ Open Source SVG icons:
 
 
 == Changelog ==
+
+= 2.2.1 - 18/Nov/2026 =
+
+* FIX: Chunked storage compatibility with WPML
+* TWEAK: Better handling of session errors in the admin
 
 = 2.2.0 - 16/Nov/2026 =
 

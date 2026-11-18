@@ -6,11 +6,11 @@
 * Description: Allow customers to configure and customize their products with a live 2D or 3D preview, built from image layers or 3D models
 * Author: Marc Lacroix
 * Author URI: http://mklacroix.com
-* Version: 2.2.0
+* Version: 2.2.1
 * Requires PHP: 7.4
 * Requires Plugins: woocommerce
 * WC requires at least: 8
-* WC tested up to: 11.2
+* WC tested up to: 11.3
 *
 * Text Domain: product-configurator-for-woocommerce
 * Domain Path: /languages/
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-define( 'MKL_PC_VERSION', '2.2.0' );
+define( 'MKL_PC_VERSION', '2.2.1' );
 define( 'MKL_PC_PREFIX', '_mkl_pc_' );
 define( 'MKL_PC_EXTENDS', 'woocommerce' ); 
 define( 'MKL_PC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
@@ -34,9 +34,11 @@ define( 'MKL_PC_ASSETS_URL', plugin_dir_url( __FILE__ ) . 'assets/' );
 define( 'MKL_PC_PLUGIN_BASE_NAME', plugin_basename( __FILE__ ) );
 
 require_once MKL_PC_INCLUDE_PATH . 'plugin.php';
+require_once MKL_PC_INCLUDE_PATH . 'class-addon-update-compat.php';
 
 add_action( 'init', 'mkl_pc_load_plugin_textdomain', 30 );
 add_action( 'plugins_loaded', 'mkl_pc_init', 90 );
+add_action( 'plugins_loaded', [ 'MKL\\PC\\Addon_Update_Compat', 'boot' ], 99 );
 add_action( 'plugins_loaded', 'mkl_pc_maybe_deactivate_variable_addon', 5 );
 
 /**
